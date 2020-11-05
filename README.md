@@ -1,2 +1,2 @@
 # COMP2012H_Project
-Landlord Game
+UST Landlord Game
