@@ -19,7 +19,7 @@ public:
     bool is_valid() const;//check whether this is a legal group to play
     int calculate_value() const;//calculate cards value
     void arrange();//sort and calculate cards type
-    int size_of_cardsgroup();//return the number of cards in current cardgroups
+    int get_size_of_cardsgroup();//return the number of cards in current cardgroups
 };
 
 //Please add the mutators and accessors yourself
