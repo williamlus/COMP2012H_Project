@@ -19,6 +19,7 @@ class Card {
       COLOR color;
     public:
       Card(char figure, COLOR _color) : value(trans_val(figure)), color(_color){};
+      Card(const Card& c);//copy constructor
       int trans_val(char figure) {
         for(int i = 0; figures_to_int[i]; i++) {
           if(figures_to_int[i] == figure) return i;
