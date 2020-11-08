@@ -10,7 +10,7 @@ private:
     CardsType card_type;
     int reference_value;//the value to compare with the same type
 public:
-    CardsGroup();
+    CardsGroup(vector<Card*> cards);//conversion constructor, deep copy of cards
     ~CardsGroup();
     Card* operator[](int i);
     CardsType get_card_type() const;
