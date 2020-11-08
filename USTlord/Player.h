@@ -6,13 +6,14 @@
 #include "CardsGroup.h"
 #include "Deck.h"
 
-class Player : Deck {
+class Player {
     private:
+      Deck* deck;
       string name;
       bool is_landlord = false;
     public:
       //constructor
-      Player(string _name) : name(_name), Deck() {}
+      Player(string _name) : name(_name), deck(new Deck()) {}
       ~Player();
       void print();//print cards in hand
       CardsGroup tip();//tip function
