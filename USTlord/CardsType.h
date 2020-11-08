@@ -6,7 +6,7 @@ using std::string;
 class CardsType {
 public:
     enum class Type {
-        ROCKET, BOMB, SINGLE, PAIR, TRIO, TRIO_WITH_ONE,
+        EMPTY, ROCKET, BOMB, SINGLE, PAIR, TRIO, TRIO_WITH_ONE,
         SINGLE_CONTINUOUS, PAIR_CONTINUOUS, TRIO_CONTINUOUS,
         PLANE, FOUR_WITH_TWO
     };
