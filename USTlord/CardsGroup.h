@@ -25,8 +25,8 @@ public:
     CardsType get_card_type() const;
 
     //mutator
-    void setCards(vector<Card*>& cards);
-    void setCardsType(CardsType& card_type);
+    void setCards(const vector<Card*>& cards);
+    void setCardsType(const CardsType& card_type);
 };
 
 
