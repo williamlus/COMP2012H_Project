@@ -8,6 +8,7 @@ class CardsGroup {
 private:
     vector<Card*> cards;
     CardsType card_type;
+    int reference_value;//the value to compare with the same type
 public:
     CardsGroup();
     ~CardsGroup();
@@ -17,12 +18,13 @@ public:
     void init(string str, Deck* cards_held);//initialize the cardgroup with given data(probably this will be rewritten with better designed constructor)
     void init(vector<Card*> new_cards);
     bool is_valid() const;//check whether this is a legal group to play
-    int calculate_value() const;//calculate cards value
+    int calculate_value() const;//calculate reference value
     void arrange();//sort and calculate cards type
 
     //accessor
     vector<const Card*> getCards() const;
     CardsType get_card_type() const;
+    int get_reference_value() const;
 
     //mutator
     void setCards(const vector<Card*>& cards);
