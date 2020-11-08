@@ -10,7 +10,9 @@ class Card {
         HEART,
         DIAMOND,
         CLUB,
-        SPADE
+        SPADE,
+        BLACK_JOKER,
+        RED_JOKER
     };
     private:
       int value;
