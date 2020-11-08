@@ -3,9 +3,14 @@
 #include <string>
 using std::string;
 
-CardsType::CardsType(){}
+CardsType::CardsType():type(Type::EMPTY),num_cards(0),num_same_value(0),continuous(false){}
 CardsType::~CardsType(){}
-bool CardsType::is_equal(const CardsType& ct) const{}//compare whether two cardstype object are equal(can also be defined as bool operator==(const CardsTpe& ct);)
+bool CardsType::is_equal(const CardsType& ct) const{
+	if (this->type == ct.type && this->num_cards == ct.num_cards && this->num_same_value == ct.num_same_value && this->continuous == ct.continuous) {
+		return true;
+	}
+	return false;
+}//compare whether two cardstype object are equal(can also be defined as bool operator==(const CardsTpe& ct);)
 string CardsType::to_string() const{
 	string buffer;
 	switch (this->type){
