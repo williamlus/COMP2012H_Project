@@ -56,7 +56,7 @@ string CardsType::to_string() const{
 }//return the type by string
 
 //accessors
-Type CardsType::get_type() const{
+CardsType::Type CardsType::get_type() const{
 	return this->type;
 }
 int CardsType::get_num_cards() const{
