@@ -11,7 +11,7 @@ class Deck {
       int number_of_cards;//Number of cards in deck
     public:
       Deck();//default constructor
-      Deck(Vector<Card*> card);//Conersion constructor, i means the number of cards in this deck
+      Deck(vector<Card*> card);//Conersion constructor, i means the number of cards in this deck
       ~Deck();
       Card* operator[](int i);
       //void shuffle();//shuffle cards in deck//we will do shuffle in board
