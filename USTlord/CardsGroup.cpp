@@ -4,6 +4,7 @@
 #include "Card.h"
 #include "CardsType.h"
 #include "CardsGroup.h"
+#include "Deck.h"
 
 CardsGroup::CardsGroup(vector<Card*> cards){
 	//conversion constructor, deep copy of cards
