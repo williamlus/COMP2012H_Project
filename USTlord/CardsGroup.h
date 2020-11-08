@@ -19,7 +19,14 @@ public:
     bool is_valid() const;//check whether this is a legal group to play
     int calculate_value() const;//calculate cards value
     void arrange();//sort and calculate cards type
+
+    //accessor
+    vector<const Card*> getCards() const;
+    CardsType get_card_type() const;
+
+    //mutator
+    void setCards(vector<Card*>& cards);
+    void setCardsType(CardsType& card_type);
 };
 
-//Please add the mutators and accessors yourself
 
