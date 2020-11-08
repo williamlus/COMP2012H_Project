@@ -7,10 +7,10 @@ const char figures_to_int[] = "34567890JQKA2YZ";
 class Card {
     public:
     enum class COLOR{
+        SPADE,
         HEART,
         DIAMOND,
         CLUB,
-        SPADE,
         BLACK_JOKER,
         RED_JOKER
     };
