@@ -14,6 +14,6 @@ class Deck {
       Deck(Vector<Card*> card);//Conersion constructor, i means the number of cards in this deck
       ~Deck();
       Card* operator[](int i);
-      void shuffle();//shuffle cards in deck
+      //void shuffle();//shuffle cards in deck//we will do shuffle in board
       void rearrange();//Sort cards in deck according to their type and value
 };
