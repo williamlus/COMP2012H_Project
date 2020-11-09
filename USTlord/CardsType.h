@@ -15,12 +15,12 @@ public:
 private:
     Type type;
     int num_cards;//number of cards in this group
-    int num_same_value;//number of cards with same value
+    int max_repeat_times;//number of cards with same value
     bool continuous;//whether the cards are continuous
 public:
     //Constructors and Destructor
     CardsType();
-    CardsType(Type type,int num_cards,int num_same_value,bool continuous);
+    CardsType(Type type,int num_cards,int max_repeat_times,bool continuous);
     ~CardsType();
 
     //Binary Operation
@@ -31,14 +31,14 @@ public:
     string to_string() const;//return the type by string
     Type get_type() const;
     int get_num_cards() const;
-    int get_num_same_value() const;
+    int get_max_repeat_times() const;
     bool is_continuous() const;
 
     //Mutators
-    void reset(Type type,int num_cards,int num_same_value,bool continuous);
+    void reset(Type type,int num_cards,int max_repeat_times,bool continuous);
     void set_type(Type type);
     void set_num_cards(int num_cards);
-    void set_num_same_value(int num_same_value);
+    void set_max_repeat_times(int max_repeat_times);
     void set_continuous(bool continuous);
 
     //Static Functions
