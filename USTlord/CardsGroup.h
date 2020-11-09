@@ -6,29 +6,26 @@
 using std::vector;
 class CardsGroup {
 private:
-    vector<Card*> cards;
-    CardsType card_type;
-    int reference_value;//the value to compare with the same type
+    vector<const Card*> cards;
+    CardsType cards_type;
+    const Card* reference_card;//the value to compare with the same type
+    bool check_continuous(vector<int> figures_distribution,int repeat_times);//check whether CONTINUOUS exists
 public:
-    CardsGroup(vector<Card*> cards);//conversion constructor, deep copy of cards
+    CardsGroup(vector<const Card*> cards);
     ~CardsGroup();
-    Card* operator[](int i);
-    CardsType get_card_type() const;
-    void convert_card_type();//classify selected cards and give them a card_type
-    void init(string str, Deck* cards_held);//initialize the cardgroup with given data(probably this will be rewritten with better designed constructor)
-    void init(vector<Card*> new_cards);
-    bool is_valid() const;//check whether this is a legal group to play
-    int calculate_value() const;//calculate reference value
-    void arrange();//sort and calculate cards type
+    
+    void reset(vector<const Card*> cards);//reset CardsGroup
+    
+    void arrange();//sort cards and calculate cards type
+    void choose_ref_card();//choose the corresponding reference cards 
+    
 
     //accessor
-    vector<const Card*> getCards() const;
-    CardsType get_card_type() const;
-    int get_reference_value() const;
-
-    //mutator
-    void setCards(const vector<Card*>& cards);
-    void setCardsType(const CardsType& card_type);
+    const Card* operator[](int i) const;
+    vector<const Card*> get_cards() const;
+    CardsType get_cards_type() const;
+    const Card* get_reference_card() const;
+    bool is_valid() const;//check whether this is a legal group to play
 };
 
 
