@@ -1,12 +1,15 @@
-#include <iostream>
-#include <vector>
 #define NUMBER_OF_CARDS 54
+#define NUMBER_OF_FIGURES 14
 #define ERROR -1
 
-const char figures_to_int[] = "34567890JQKA2YZ";
+#include <string>
+using namespace std;
+
+const char figures_to_int[] = "3456789TJQKA2W";
 class Card {
     public:
-    enum class COLOR{
+    enum Color{
+        EMPTY,
         SPADE,
         HEART,
         DIAMOND,
@@ -15,17 +18,37 @@ class Card {
         RED_JOKER
     };
     private:
+      Color color;
       int value;
-      COLOR color;
     public:
-      Card(char figure, COLOR _color) : value(trans_val(figure)), color(_color){};
+      //Constructors and Destructor
+      Card(Color color, int value);//other constructor
+      Card(char color, char figure);//other constructor
       Card(const Card& c);//copy constructor
-      int trans_val(char figure) {
-        for(int i = 0; figures_to_int[i]; i++) {
-          if(figures_to_int[i] == figure) return i;
-        }
-        return ERROR;
-    }//transform user input char into int value
+      ~Card();//destructor
+      
+      //Accessors
+      string get_string() const;//return the value according to figures_to_int
       void print() const;//print this card in console
-      static bool cmpcards(Card* a, Card* b);//Compare the priority of two cards
-};//Please add the mutators and accessors yourself
+      int get_value() const;//get the value of the card
+      Color get_color() const;//get the color of the card
+
+      //Mutators
+      void set_value(int value);
+      void set_color(Color color);
+
+      //Binary Operations
+      bool operator<(const Card& a);//Compare the value of two cards
+      bool operator==(const Card& a);//Compare the value of two cards
+      bool operator>(const Card& a);//Compare the value of two cards
+      bool operator<=(const Card& a);//Compare the value of two cards
+      bool operator>=(const Card& a);//Compare the value of two cards
+      bool operator!=(const Card& a);//Compare the value of two cards
+
+      //Static Functions
+      static string to_string(Color color,int value);//transform color, value into string
+      static Color to_color(char color);//transform user input color into Color color
+      static int to_value(char figure);//transform char figure into int value
+      static bool compare_value(const Card* a, const Card* b);//return true if a's value is smaller than b's value, otherwise false
+      static bool strictly_compare(const Card* a, const Card* b);//strictly compare two cards in terms of value and color
+};
