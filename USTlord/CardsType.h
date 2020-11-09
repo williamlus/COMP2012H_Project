@@ -35,6 +35,7 @@ public:
     bool is_continuous() const;
 
     //Mutators
+    void reset(Type type,int num_cards,int num_same_value,bool continuous);
     void set_type(Type type);
     void set_num_cards(int num_cards);
     void set_num_same_value(int num_same_value);
