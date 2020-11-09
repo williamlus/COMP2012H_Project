@@ -4,9 +4,9 @@
 using std::string;
 
 //Constructor
-CardsType::CardsType():type(Type::EMPTY),num_cards(0),num_same_value(0),continuous(false){}
-CardsType::CardsType(Type type,int num_cards,int num_same_value,bool continuous):
-	type(type),num_cards(num_cards),num_same_value(num_same_value),continuous(continuous){}
+CardsType::CardsType():type(Type::EMPTY),num_cards(0),max_repeat_times(0),continuous(false){}
+CardsType::CardsType(Type type,int num_cards,int max_repeat_times,bool continuous):
+	type(type),num_cards(num_cards),max_repeat_times(max_repeat_times),continuous(continuous){}
 
 //Destructor
 CardsType::~CardsType(){}
@@ -14,7 +14,7 @@ CardsType::~CardsType(){}
 //Binary Operation
 bool CardsType::operator==(const CardsType& ct) const{
 	if (this->type == ct.type && this->num_cards == ct.num_cards 
-	&& this->num_same_value == ct.num_same_value && this->continuous == ct.continuous) {
+	&& this->max_repeat_times == ct.max_repeat_times && this->continuous == ct.continuous) {
 		return true;
 	}
 	return false;
@@ -45,18 +45,18 @@ CardsType::Type CardsType::get_type() const{
 int CardsType::get_num_cards() const{
 	return this->num_cards;
 }
-int CardsType::get_num_same_value() const{
-	return this->num_same_value;
+int CardsType::get_max_repeat_times() const{
+	return this->max_repeat_times;
 }
 bool CardsType::is_continuous() const{
 	return this->continuous;
 }
 
 //Mutators
-void CardsType::reset(Type type,int num_cards,int num_same_value,bool continuous){
+void CardsType::reset(Type type,int num_cards,int max_repeat_times,bool continuous){
 	this->type = type;
 	this->num_cards = num_cards;
-	this->num_same_value = num_same_value;
+	this->max_repeat_times = max_repeat_times;
 	this->continuous = continuous;
 }
 void CardsType::set_type(Type type){
@@ -65,8 +65,8 @@ void CardsType::set_type(Type type){
 void CardsType::set_num_cards(int num_cards){
 	this->num_cards = num_cards;
 }
-void CardsType::set_num_same_value(int num_same_value){
-	this->num_same_value = num_same_value;
+void CardsType::set_max_repeat_times(int max_repeat_times){
+	this->max_repeat_times = max_repeat_times;
 }
 void CardsType::set_continuous(bool continuous){
 	this->continuous = continuous;
