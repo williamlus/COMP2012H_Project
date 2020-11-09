@@ -53,6 +53,12 @@ bool CardsType::is_continuous() const{
 }
 
 //Mutators
+void CardsType::reset(Type type,int num_cards,int num_same_value,bool continuous){
+	this->type = type;
+	this->num_cards = num_cards;
+	this->num_same_value = num_same_value;
+	this->continuous = continuous;
+}
 void CardsType::set_type(Type type){
 	this->type = type;
 }
