@@ -27,5 +27,5 @@ class Card {
         return ERROR;
     }//transform user input char into int value
       void print() const;//print this card in console
-      bool cmpcards(Card* a, Card* b);//Compare the priority of two cards
+      static bool cmpcards(Card* a, Card* b);//Compare the priority of two cards
 };//Please add the mutators and accessors yourself
