@@ -115,9 +115,18 @@ void CardsGroup::arrange(){
 		}
 	}
 	/*Case II : max_repeat==2*/
+	if(max_repeat==2){
+		//TBC
+	}
 
 	/*Case III : max_repeat==3*/
+	if(max_repeat==3){
+		//TBC
+	}
 	/*Case IV : max_repeat==4*/
+	if(max_repeat==4){
+		//TBC
+	}
 
 }//sort and calculate cards type
 
