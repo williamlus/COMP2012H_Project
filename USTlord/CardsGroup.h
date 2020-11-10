@@ -9,6 +9,8 @@ private:
     vector<const Card*> cards;
     CardsType cards_type;
     const Card* reference_card;//the value to compare with the same type
+    
+    int count_max_continuous_times(vector<int> figures_distribution,int repeat_times);
     bool check_continuous(vector<int> figures_distribution,int repeat_times);//check whether CONTINUOUS exists
 public:
     CardsGroup(vector<const Card*> cards);
