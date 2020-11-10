@@ -10,13 +10,16 @@ private:
     CardsType cards_type;
     const Card* reference_card;//the value to compare with the same type
     
+    //Helper Functions
     void arrange();//sort cards and calculate cards type
     void choose_ref_card();//choose the corresponding reference cards
     
 public:
+    //Constructor and Destructor
     CardsGroup(vector<const Card*> cards);
     ~CardsGroup();
     
+    //Member Function
     int compare(const CardsGroup& a) const;
     //-2 when not comparable, -1 when *this<a, 0 when *this==a, 1 when *this>a 
 
