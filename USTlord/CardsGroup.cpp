@@ -8,119 +8,13 @@
 #include "Deck.h"
 using namespace std;
 
+//Constructor and Destructor
 CardsGroup::CardsGroup(vector<const Card*> cards):cards_type(),reference_card(nullptr){
 	this->reset(cards);
 }
 CardsGroup::~CardsGroup() {}
 
-int CardsGroup::compare(const CardsGroup& a) const{
-	if(this->is_valid() && a.is_valid()){
-		//if not comparable, return -2
-		if(!CardsType::is_comparable(this->cards_type,a.cards_type)){return -2;}
-		//if both are the same type, compare the reference card
-		if(this->cards_type==a.cards_type){
-			if(this->reference_card->get_value()<a.reference_card->get_value()){
-				return -1;
-			}
-			else if(this->reference_card->get_value()==a.reference_card->get_value()){
-				return 0;
-			}
-			else{
-				return 1;
-			}
-		}
-		//consider BOMB or ROCKET
-		//make use of the order of enum Type to compare
-		else{
-			if(this->cards_type.get_type()<a.cards_type.get_type()){
-				return -1;
-			}
-			else{return 1;}
-		}
-		
-	}
-	else{
-		return -2;
-	}
-}//-2 when not comparable, -1 when *this<a, 0 when *this==a, 1 when *this>a 
-
-void CardsGroup::reset(vector<const Card*> cards){
-	this->cards=cards;
-	this->arrange();
-	this->choose_ref_card();
-}//reset CardsGroup
-
-//helper function
-vector<int> CardsGroup::get_figures_distribution() const{
-	//use figures_distribution to record the situation of cards
-	vector<int> figures_distribution(NUMBER_OF_FIGURES,0);
-	for(int i=0;i<cards.size();++i){
-		int temp=cards[i]->get_value();
-		if(temp>=0 && temp<NUMBER_OF_FIGURES){
-			++figures_distribution[temp];
-		}
-	}
-	return figures_distribution;
-}
-
-int CardsGroup::count_max_continuous_times(vector<int> figures_distribution,int repeat_times){
-	//to ensure the length of figures_distribution == NUMBER_OF_FIGURES
-	if(figures_distribution.size()!=NUMBER_OF_FIGURES){
-		cerr<<"figures_distribution size is unmatched with NUMBER_OF_FIGURES.\n";
-		return ERROR;
-	}
-
-	//count the maximum continuous times
-	int max_cont_times=0;
-	//discard '2' and 'Joker'
-	for(int i=0;i<NUMBER_OF_FIGURES-2;++i){
-		if(figures_distribution[i]!=repeat_times){continue;}
-		else{
-			int count_continuous=0;
-			for(int j=i;j<NUMBER_OF_FIGURES-2;++j){
-				if(figures_distribution[j]==repeat_times){
-					++count_continuous;
-				}
-				else{
-					i=j;
-					break;
-				}
-			}
-			if(count_continuous>max_cont_times){
-				max_cont_times=count_continuous;
-			}
-		}
-	}
-	return max_cont_times;
-}
-
-bool CardsGroup::check_continuous(vector<int> figures_distribution,int repeat_times){
-	//to ensure the length of figures_distribution == NUMBER_OF_FIGURES
-	if(figures_distribution.size()!=NUMBER_OF_FIGURES){
-		cerr<<"figures_distribution size is unmatched with NUMBER_OF_FIGURES.\n";
-		return false;	
-	}
-	if(repeat_times<=0 || repeat_times>3){return false;}
-
-	//sum up the figures_distribution to find the size of cards
-	int size=0;
-	for(int i=0;i<figures_distribution.size();++i){
-		size+=figures_distribution[i];
-	}
-	if(size<5){return false;}
-
-	//calculate the maximum continuous times
-	int continuous_times=count_max_continuous_times(figures_distribution,repeat_times);
-
-	//return false if there is no pattern like 34567... or 334455... or 333444...
-	if(continuous_times*repeat_times<5){return false;}
-	//return false if there are extra cards besides continuous group
-	if(continuous_times*repeat_times!=size){return false;}
-	//else return true
-	return true;
-	
-}//check whether CONTINUOUS exists
-
+//Helper Functions
 void CardsGroup::arrange(){
 	//discard nullptr(s) in cards to prevent nullptr dereferencing
 	for(int i=0;i<cards.size();++i){
@@ -295,23 +189,137 @@ void CardsGroup::choose_ref_card(){
 	}//if all cards are the same figure, or is continuous(choose the smallest card for reference)
 }//choose the corresponding reference cards 
 
-//accessor
+//Member Function
+int CardsGroup::compare(const CardsGroup& a) const{
+	if(this->is_valid() && a.is_valid()){
+		//if not comparable, return -2
+		if(!CardsType::is_comparable(this->cards_type,a.cards_type)){return -2;}
+		//if both are the same type, compare the reference card
+		if(this->cards_type==a.cards_type){
+			if(this->reference_card->get_value()<a.reference_card->get_value()){
+				return -1;
+			}
+			else if(this->reference_card->get_value()==a.reference_card->get_value()){
+				return 0;
+			}
+			else{
+				return 1;
+			}
+		}
+		//consider BOMB or ROCKET
+		//make use of the order of enum Type to compare
+		else{
+			if(this->cards_type.get_type()<a.cards_type.get_type()){
+				return -1;
+			}
+			else{return 1;}
+		}
+		
+	}
+	else{
+		return -2;
+	}
+}//-2 when not comparable, -1 when *this<a, 0 when *this==a, 1 when *this>a 
+
+//Mutator
+void CardsGroup::reset(vector<const Card*> cards){
+	this->cards=cards;
+	this->arrange();
+	this->choose_ref_card();
+}//reset CardsGroup
+
+//Accessors
 const Card* CardsGroup::operator[](int i) const{
 	if(i<0 || i>=this->cards.size()){return nullptr;}
 	return this->cards[i];
 }
+
 vector<const Card*> CardsGroup::get_cards() const{
 	return this->cards;
 }
+
 CardsType CardsGroup::get_cards_type() const{
 	return this->cards_type;
 }
+
 const Card* CardsGroup::get_reference_card() const{
 	return this->reference_card;
 }
+
 bool CardsGroup::is_valid() const{
 	if(this->cards_type.get_type()==CardsType::Type::EMPTY){
 		return false;
 	}
 	return true;
 }//check whether this is a legal group to play
+
+vector<int> CardsGroup::get_figures_distribution() const{
+	//use figures_distribution to record the situation of cards
+	vector<int> figures_distribution(NUMBER_OF_FIGURES,0);
+	for(int i=0;i<cards.size();++i){
+		int temp=cards[i]->get_value();
+		if(temp>=0 && temp<NUMBER_OF_FIGURES){
+			++figures_distribution[temp];
+		}
+	}
+	return figures_distribution;
+}
+
+//Static Functions
+int CardsGroup::count_max_continuous_times(vector<int> figures_distribution,int repeat_times){
+	//to ensure the length of figures_distribution == NUMBER_OF_FIGURES
+	if(figures_distribution.size()!=NUMBER_OF_FIGURES){
+		cerr<<"figures_distribution size is unmatched with NUMBER_OF_FIGURES.\n";
+		return ERROR;
+	}
+
+	//count the maximum continuous times
+	int max_cont_times=0;
+	//discard '2' and 'Joker'
+	for(int i=0;i<NUMBER_OF_FIGURES-2;++i){
+		if(figures_distribution[i]!=repeat_times){continue;}
+		else{
+			int count_continuous=0;
+			for(int j=i;j<NUMBER_OF_FIGURES-2;++j){
+				if(figures_distribution[j]==repeat_times){
+					++count_continuous;
+				}
+				else{
+					i=j;
+					break;
+				}
+			}
+			if(count_continuous>max_cont_times){
+				max_cont_times=count_continuous;
+			}
+		}
+	}
+	return max_cont_times;
+}
+
+bool CardsGroup::check_continuous(vector<int> figures_distribution,int repeat_times){
+	//to ensure the length of figures_distribution == NUMBER_OF_FIGURES
+	if(figures_distribution.size()!=NUMBER_OF_FIGURES){
+		cerr<<"figures_distribution size is unmatched with NUMBER_OF_FIGURES.\n";
+		return false;	
+	}
+	if(repeat_times<=0 || repeat_times>3){return false;}
+
+	//sum up the figures_distribution to find the size of cards
+	int size=0;
+	for(int i=0;i<figures_distribution.size();++i){
+		size+=figures_distribution[i];
+	}
+	if(size<5){return false;}
+
+	//calculate the maximum continuous times
+	int continuous_times=count_max_continuous_times(figures_distribution,repeat_times);
+
+	//return false if there is no pattern like 34567... or 334455... or 333444...
+	if(continuous_times*repeat_times<5){return false;}
+	//return false if there are extra cards besides continuous group
+	if(continuous_times*repeat_times!=size){return false;}
+	//else return true
+	return true;
+	
+}//check whether CONTINUOUS exists
