@@ -10,24 +10,26 @@ private:
     CardsType cards_type;
     const Card* reference_card;//the value to compare with the same type
     
-    int count_max_continuous_times(vector<int> figures_distribution,int repeat_times);
-    bool check_continuous(vector<int> figures_distribution,int repeat_times);//check whether CONTINUOUS exists
+    void arrange();//sort cards and calculate cards type
+    void choose_ref_card();//choose the corresponding reference cards
+    
 public:
     CardsGroup(vector<const Card*> cards);
     ~CardsGroup();
     
     void reset(vector<const Card*> cards);//reset CardsGroup
     
-    void arrange();//sort cards and calculate cards type
-    void choose_ref_card();//choose the corresponding reference cards 
-    
-
     //accessor
     const Card* operator[](int i) const;
     vector<const Card*> get_cards() const;
     CardsType get_cards_type() const;
     const Card* get_reference_card() const;
     bool is_valid() const;//check whether this is a legal group to play
+    vector<int> get_figures_distribution() const;
+
+    //static functions
+    static int count_max_continuous_times(vector<int> figures_distribution,int repeat_times);
+    static bool check_continuous(vector<int> figures_distribution,int repeat_times);//check whether CONTINUOUS exists
 };
 
 
