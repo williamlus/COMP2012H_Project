@@ -13,4 +13,6 @@ class CurrentPattern{
     public:
     CardsGroup find_valid_group(Deck& cards_in_hand);//find card group that can beat current cards
     static CurrentPattern* get_current();//get Current pattern, if no previous cards, create a new current pattern object
+    int get_player_index();
+    CardsGroup get_cardsgroup();
 };
