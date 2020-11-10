@@ -21,7 +21,34 @@ void CardsGroup::reset(vector<const Card*> cards){
 
 //helper function
 int CardsGroup::count_max_continuous_times(vector<int> figures_distribution,int repeat_times){
-	//TBC
+	//to ensure the length of figures_distribution == NUMBER_OF_FIGURES
+	if(figures_distribution.size()!=NUMBER_OF_FIGURES){
+		cerr<<"figures_distribution size is unmatched with NUMBER_OF_FIGURES.\n";
+		return ERROR;
+	}
+
+	//count the maximum continuous times
+	int max_cont_times=0;
+	//discard '2' and 'Joker'
+	for(int i=0;i<NUMBER_OF_FIGURES-2;++i){
+		if(figures_distribution[i]!=repeat_times){continue;}
+		else{
+			int count_continuous=0;
+			for(int j=i;j<NUMBER_OF_FIGURES-2;++j){
+				if(figures_distribution[j]==repeat_times){
+					++count_continuous;
+				}
+				else{
+					i=j;
+					break;
+				}
+			}
+			if(count_continuous>max_cont_times){
+				max_cont_times=count_continuous;
+			}
+		}
+	}
+	return max_cont_times;
 }
 
 bool CardsGroup::check_continuous(vector<int> figures_distribution,int repeat_times){
@@ -39,35 +66,16 @@ bool CardsGroup::check_continuous(vector<int> figures_distribution,int repeat_ti
 	}
 	if(size<5){return false;}
 
-	//find the maximum repetition of a card
-	int max_repeat=0;
-	for(int i=0;i<figures_distribution.size();++i){
-		if(figures_distribution[i]>max_repeat){
-			max_repeat=figures_distribution[i];
-		}
-	}
-	if(max_repeat!=repeat_times){return false;}
+	//calculate the maximum continuous times
+	int continuous_times=count_max_continuous_times(figures_distribution,repeat_times);
 
-	//consider all cases of continuous
-	//Reference: https://www.gameabc.com/news/201903/5038.html
-	//find the smallest figure
-	int sf;//smallest figure
-	for(sf=0;sf<NUMBER_OF_FIGURES;++sf){
-		if(figures_distribution[sf]>0){break;}
-	}
-	//check if it is continuous
-	int count=0;//count how long is the continuous cardsgroup
-	//only accept 3,4,5,6,7,8,9,10,J,Q,K,A
-	for(int i=sf;i<NUMBER_OF_FIGURES-2;++i){
-		if(figures_distribution[i]==repeat_times){++count;}
-		else{break;}
-	}
-	//check if the least length is met
-	//and if size of cards > count, then the cards is discontinuous
-	if(count<5 || size>count*repeat_times){
-		return false;
-	}
-	else{return true;}
+	//return false if there is no pattern like 34567... or 334455... or 333444...
+	if(continuous_times*repeat_times<5){return false;}
+	//return false if there are extra cards besides continuous group
+	if(continuous_times*repeat_times!=size){return false;}
+	//else return true
+	return true;
+	
 }//check whether CONTINUOUS exists
 
 void CardsGroup::arrange(){
@@ -94,7 +102,7 @@ void CardsGroup::arrange(){
 		}
 	}
 
-	//find the maximum repetition of a card
+	//sort the distribution by value and find the maximum repetition of a card
 	int max_repeat=0;
 	vector<int> fig_dis_sorted=figures_distribution;
 	sort(fig_dis_sorted.begin(),fig_dis_sorted.end(),std::greater<int>());//sort it in descending order
@@ -102,13 +110,10 @@ void CardsGroup::arrange(){
 
 	/*Case I : max_repeat==1*/
 	if(max_repeat==1){
-		//this->cards_type.set_max_repeat_times(1);
-		
 		//consider the case of SINGLE
 		if(fig_dis_sorted[1]==0){
 			this->cards_type.reset(CardsType::Type::SINGLE,1,1,false);
 		}
-
 		//consider the case of SINGLE_CONTINUOUS
 		bool is_cont=check_continuous(figures_distribution,1);
 		if(is_cont){
@@ -118,6 +123,7 @@ void CardsGroup::arrange(){
 			this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),1,false);
 		}
 	}
+
 	/*Case II : max_repeat==2*/
 	if(max_repeat==2){
 		if(fig_dis_sorted[1]==0){
@@ -157,28 +163,65 @@ void CardsGroup::arrange(){
 		else if(fig_dis_sorted[1]==1 && fig_dis_sorted[2]==0){
 			this->cards_type.reset(CardsType::Type::TRIO_WITH_ONE,4,3,false);
 		}
+		//consider the case of TRIO_WITH_PAIR
+		else if(fig_dis_sorted[1]==2 && fig_dis_sorted[2]==0){
+			this->cards_type.reset(CardsType::Type::TRIO_WITH_PAIR,5,3,false);
+		}
 		else{
+			int max_continuous_times=count_max_continuous_times(figures_distribution,3);
 			//consider the case of TRIO_CONTINUOUS
 			bool is_cont=check_continuous(figures_distribution,3);
 			if(is_cont){
-				this->cards_type.reset(CardsType::Type::PAIR_CONTINUOUS,cards.size(),3,true);
+				this->cards_type.reset(CardsType::Type::TRIO_CONTINUOUS,cards.size(),3,true);
 			}
-			
-			//consider PLANE!!!!!
-			//Add helper func int count_max_cont_times(fig_dis,rep_times);
-			//need to modify check_continuous (for PAIR_CONT,TRIO_CONT, it suffices to find cards.size>=5)
-			else if(!is_cont){}
-
-			else{
-				this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),3,false);
+			//consider the case of PLANE_WITH_SMALL_WINGS and PLANE_WITH_BIG_WINGS
+			else if(max_continuous_times>=2){
+				int num_extra_cards=cards.size()-max_continuous_times*3;
+				//consider small wings
+				if(num_extra_cards==max_continuous_times){
+					this->cards_type.reset(CardsType::Type::PLANE_WITH_SMALL_WINGS,cards.size(),3,false);
+				}
+				//consider big wings
+				else if(num_extra_cards==max_continuous_times*2){
+					bool is_valid=true;
+					for(int i=max_continuous_times;i<max_continuous_times*2;++i){
+						if(fig_dis_sorted[i]!=2){
+							is_valid=false;
+							break;
+						}
+					}
+					if(is_valid){
+						this->cards_type.reset(CardsType::Type::PLANE_WITH_BIG_WINGS,cards.size(),3,false);
+					}
+					else{this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),3,false);}
+				}
 			}
+			else{this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),3,false);}
 		}
 	}
 	/*Case IV : max_repeat==4*/
 	if(max_repeat==4){
-		//TBC
+		//consider the case of BOMB
+		if(fig_dis_sorted[1]==0){
+			if(figures_distribution[NUMBER_OF_FIGURES-1]==0){
+				this->cards_type.reset(CardsType::Type::BOMB,4,4,false);
+			}
+			else{this->cards_type.reset(CardsType::Type::EMPTY,4,4,false);}
+		}
+		//consider the case of FOUR_WITH_TWO
+		if(cards.size()==6){
+			if(figures_distribution[NUMBER_OF_FIGURES-1]<=2){
+				this->cards_type.reset(CardsType::Type::FOUR_WITH_TWO,6,4,false);
+			}
+			else{this->cards_type.reset(CardsType::Type::EMPTY,6,4,false);}
+		}
+		else{
+			this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),4,false);
+		}
 	}
-
+	else{
+		this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),max_repeat,false);
+	}
 }//sort and calculate cards type
 
 void CardsGroup::choose_ref_card(){}//choose the corresponding reference cards 
