@@ -13,6 +13,37 @@ CardsGroup::CardsGroup(vector<const Card*> cards):cards_type(),reference_card(nu
 }
 CardsGroup::~CardsGroup() {}
 
+int CardsGroup::compare(const CardsGroup& a) const{
+	if(this->is_valid() && a.is_valid()){
+		//if not comparable, return -2
+		if(!CardsType::is_comparable(this->cards_type,a.cards_type)){return -2;}
+		//if both are the same type, compare the reference card
+		if(this->cards_type==a.cards_type){
+			if(this->reference_card->get_value()<a.reference_card->get_value()){
+				return -1;
+			}
+			else if(this->reference_card->get_value()==a.reference_card->get_value()){
+				return 0;
+			}
+			else{
+				return 1;
+			}
+		}
+		//consider BOMB or ROCKET
+		//make use of the order of enum Type to compare
+		else{
+			if(this->cards_type.get_type()<a.cards_type.get_type()){
+				return -1;
+			}
+			else{return 1;}
+		}
+		
+	}
+	else{
+		return -2;
+	}
+}//-2 when not comparable, -1 when *this<a, 0 when *this==a, 1 when *this>a 
+
 void CardsGroup::reset(vector<const Card*> cards){
 	this->cards=cards;
 	this->arrange();
@@ -269,9 +300,18 @@ const Card* CardsGroup::operator[](int i) const{
 	if(i<0 || i>=this->cards.size()){return nullptr;}
 	return this->cards[i];
 }
-vector<const Card*> CardsGroup::get_cards() const{}
+vector<const Card*> CardsGroup::get_cards() const{
+	return this->cards;
+}
 CardsType CardsGroup::get_cards_type() const{
 	return this->cards_type;
 }
-const Card* CardsGroup::get_reference_card() const{}
-bool CardsGroup::is_valid() const{}//check whether this is a legal group to play
+const Card* CardsGroup::get_reference_card() const{
+	return this->reference_card;
+}
+bool CardsGroup::is_valid() const{
+	if(this->cards_type.get_type()==CardsType::Type::EMPTY){
+		return false;
+	}
+	return true;
+}//check whether this is a legal group to play
