@@ -27,6 +27,7 @@ string CardsType::to_string() const{
 	else if(this->type==Type::PAIR){temp+="Pair";}
 	else if(this->type==Type::TRIO){temp+="Triple";}
 	else if(this->type==Type::TRIO_WITH_ONE){temp+="Triple With One";}
+	else if(this->type==Type::TRIO_WITH_PAIR){temp+="Triple With Pair";}
 	else if(this->type==Type::FOUR_WITH_TWO){temp+="Four With Two";}
 	else if(this->type==Type::SINGLE_CONTINUOUS){temp+="Single Continuous";}
 	else if(this->type==Type::PAIR_CONTINUOUS){temp+="Pair Continuous";}
