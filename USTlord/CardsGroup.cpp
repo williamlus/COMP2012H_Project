@@ -20,6 +20,18 @@ void CardsGroup::reset(vector<const Card*> cards){
 }//reset CardsGroup
 
 //helper function
+vector<int> CardsGroup::get_figures_distribution() const{
+	//use figures_distribution to record the situation of cards
+	vector<int> figures_distribution(NUMBER_OF_FIGURES,0);
+	for(int i=0;i<cards.size();++i){
+		int temp=cards[i]->get_value();
+		if(temp>=0 && temp<NUMBER_OF_FIGURES){
+			++figures_distribution[temp];
+		}
+	}
+	return figures_distribution;
+}
+
 int CardsGroup::count_max_continuous_times(vector<int> figures_distribution,int repeat_times){
 	//to ensure the length of figures_distribution == NUMBER_OF_FIGURES
 	if(figures_distribution.size()!=NUMBER_OF_FIGURES){
@@ -94,13 +106,7 @@ void CardsGroup::arrange(){
 	if(cards.size()==0){return;}
 
 	//use figures_distribution to record the situation of cards
-	vector<int> figures_distribution(NUMBER_OF_FIGURES,0);
-	for(int i=0;i<cards.size();++i){
-		int temp=cards[i]->get_value();
-		if(temp>=0 && temp<NUMBER_OF_FIGURES){
-			++figures_distribution[temp];
-		}
-	}
+	vector<int> figures_distribution=this->get_figures_distribution();
 
 	//sort the distribution by value and find the maximum repetition of a card
 	int max_repeat=0;
@@ -224,7 +230,39 @@ void CardsGroup::arrange(){
 	}
 }//sort and calculate cards type
 
-void CardsGroup::choose_ref_card(){}//choose the corresponding reference cards 
+void CardsGroup::choose_ref_card(){
+	vector<int> figures_distribution=this->get_figures_distribution();
+	//assume the cards is sorted, and finish arrange() function (i.e. know cards_type)
+	CardsType::Type current_type=this->cards_type.get_type();
+	if(current_type==CardsType::Type::EMPTY){
+		this->reference_card=nullptr;
+	}
+	if(current_type==CardsType::Type::TRIO_WITH_ONE){
+		this->reference_card=this->cards[1];
+	}
+	else if(current_type==CardsType::Type::TRIO_WITH_PAIR || current_type==CardsType::Type::FOUR_WITH_TWO){
+		this->reference_card=this->cards[2];
+	}
+	else if(current_type==CardsType::Type::PLANE_WITH_SMALL_WINGS || current_type==CardsType::Type::PLANE_WITH_BIG_WINGS){
+		int figure_index;
+		//find the minimum value with repeat_times==3
+		for(figure_index=0;figure_index<NUMBER_OF_FIGURES;++figure_index){
+			if(figures_distribution[figure_index]==3){
+				break;
+			}
+		}
+		//find the card with corresponding value in cards and record it
+		for(int i=0;i<cards.size();++i){
+			if(cards[i]->get_value()==figure_index){
+				this->reference_card=cards[i];
+				break;
+			}
+		}
+	}
+	else{
+		this->reference_card=this->cards[0];
+	}//if all cards are the same figure, or is continuous(choose the smallest card for reference)
+}//choose the corresponding reference cards 
 
 //accessor
 const Card* CardsGroup::operator[](int i) const{
