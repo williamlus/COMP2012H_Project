@@ -32,7 +32,8 @@ string CardsType::to_string() const{
 	else if(this->type==Type::SINGLE_CONTINUOUS){temp+="Single Continuous";}
 	else if(this->type==Type::PAIR_CONTINUOUS){temp+="Pair Continuous";}
 	else if(this->type==Type::TRIO_CONTINUOUS){temp+="Triple Continuous";}
-	else if(this->type==Type::PLANE){temp+="Plane With Wings";}
+	else if(this->type==Type::PLANE_WITH_SMALL_WINGS){temp+="Plane With Small Wings";}
+	else if(this->type==Type::PLANE_WITH_BIG_WINGS){temp+="Plane With Big Wings";}
 	else if(this->type==Type::BOMB){temp+="Bomb";}
 	else if(this->type==Type::ROCKET){temp+="Rocket";}
 	else if(this->type==Type::EMPTY){temp+="Empty";}
