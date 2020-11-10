@@ -7,7 +7,7 @@ class CardsType {
 public:
     enum Type {
         SINGLE, PAIR, TRIO,
-        TRIO_WITH_ONE, FOUR_WITH_TWO,
+        TRIO_WITH_ONE, TRIO_WITH_PAIR ,FOUR_WITH_TWO,
         SINGLE_CONTINUOUS, PAIR_CONTINUOUS, TRIO_CONTINUOUS, PLANE,
         BOMB, ROCKET, 
         EMPTY
