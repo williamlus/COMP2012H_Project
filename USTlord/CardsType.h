@@ -5,6 +5,9 @@ using std::string;
 
 class CardsType {
 public:
+    //organized by complexity(num of cards) and priority(normal type, bomb, rocket)
+    //please don't change the order
+    //can be used to determine the order of hints
     enum Type {
         SINGLE, PAIR, TRIO,
         TRIO_WITH_ONE, TRIO_WITH_PAIR ,FOUR_WITH_TWO,
