@@ -1,3 +1,6 @@
+#ifndef CARD_H_
+#define CARD_H_
+
 #define NUMBER_OF_CARDS 54
 #define NUMBER_OF_FIGURES 14
 #define ERROR -1
@@ -54,3 +57,5 @@ class Card {
       static bool compare_value(const Card* a, const Card* b);//return true if a's value is smaller than b's value, otherwise false
       static bool strictly_compare(const Card* a, const Card* b);//strictly compare two cards in terms of value and color
 };
+
+#endif /* CARD_H_ */
