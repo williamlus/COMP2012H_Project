@@ -8,12 +8,14 @@ using namespace std;
 const char figures_to_int[] = "3456789TJQKA2W";
 class Card {
     public:
+    //arranged in conventional ascending order
+    //designed for better GUI
     enum Color{
         EMPTY,
-        SPADE,
-        HEART,
         DIAMOND,
         CLUB,
+        HEART,
+        SPADE,
         BLACK_JOKER,
         RED_JOKER
     };
