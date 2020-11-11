@@ -40,6 +40,9 @@ void CardsGroup::arrange(){
 
 	/*Case I : max_repeat==1*/
 	if(max_repeat==1){
+		//default settings
+		this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),1,false);
+		//consider valid cases
 		//consider the case of SINGLE
 		if(fig_dis_sorted[1]==0){
 			this->cards_type.reset(CardsType::Type::SINGLE,1,1,false);
@@ -49,13 +52,13 @@ void CardsGroup::arrange(){
 		if(is_cont){
 			this->cards_type.reset(CardsType::Type::SINGLE_CONTINUOUS,cards.size(),1,true);
 		}
-		else{
-			this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),1,false);
-		}
 	}
 
 	/*Case II : max_repeat==2*/
 	else if(max_repeat==2){
+		//default settings
+		this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),2,false);
+		//consider valid cases
 		if(fig_dis_sorted[1]==0){
 			//consider the case of PAIR
 			if(figures_distribution[NUMBER_OF_FIGURES-1]==0){
@@ -72,21 +75,18 @@ void CardsGroup::arrange(){
 			if(is_cont){
 				this->cards_type.reset(CardsType::Type::PAIR_CONTINUOUS,cards.size(),2,true);
 			}
-			else{
-				this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),2,false);
-			}
 		}
 	}
 
 	/*Case III : max_repeat==3*/
 	else if(max_repeat==3){
+		//default settings
+		this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),3,false);
+		//consider valid cases
 		if(fig_dis_sorted[1]==0){
 			//consider the case of TRIO
 			if(figures_distribution[NUMBER_OF_FIGURES-1]==0){
 				this->cards_type.reset(CardsType::Type::TRIO,3,3,false);
-			}
-			else{
-				this->cards_type.reset(CardsType::Type::EMPTY,3,3,false);
 			}
 		}
 		//consider the case of TRIO_WITH_ONE
@@ -123,30 +123,26 @@ void CardsGroup::arrange(){
 					if(is_valid){
 						this->cards_type.reset(CardsType::Type::PLANE_WITH_BIG_WINGS,cards.size(),3,false);
 					}
-					else{this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),3,false);}
 				}
 			}
-			else{this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),3,false);}
 		}
 	}
 	/*Case IV : max_repeat==4*/
 	else if(max_repeat==4){
+		//default settings
+		this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),4,false);
+		//consider valid cases
 		//consider the case of BOMB
 		if(fig_dis_sorted[1]==0){
 			if(figures_distribution[NUMBER_OF_FIGURES-1]==0){
 				this->cards_type.reset(CardsType::Type::BOMB,4,4,false);
 			}
-			else{this->cards_type.reset(CardsType::Type::EMPTY,4,4,false);}
 		}
 		//consider the case of FOUR_WITH_TWO
 		else if(cards.size()==6){
 			if(figures_distribution[NUMBER_OF_FIGURES-1]<=2){
 				this->cards_type.reset(CardsType::Type::FOUR_WITH_TWO,6,4,false);
 			}
-			else{this->cards_type.reset(CardsType::Type::EMPTY,6,4,false);}
-		}
-		else{
-			this->cards_type.reset(CardsType::Type::EMPTY,cards.size(),4,false);
 		}
 	}
 	else{
