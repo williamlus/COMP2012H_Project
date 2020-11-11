@@ -1,3 +1,6 @@
+#ifndef CURRENTPATTERN_H_
+#define CURRENTPATTERN_H_
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -16,3 +19,5 @@ class CurrentPattern{
     int get_player_index();
     CardsGroup get_cardsgroup();
 };
+
+#endif /* CURRENTPATTERN_H_ */
