@@ -12,16 +12,41 @@
 
 class Board {
 private:
-    vector<Player*> palyers[NUMBER_OF_PLAYER];
-    bool win = false;//determine whether there is a winner
-    Deck cards();//A complete set of 54 cards
+    vector<Player*> players[NUMBER_OF_PLAYER];
+    bool game_finish = false, you_win= false, landlord_win = false;
+    int landlord_id = -1;
+
+    Deck cards;//A complete set of 54 cards
+    
 public:
-    Board();//Default constructor, also does the initialization of cards, i.e insert 54 cards into the deck 
-    ~Board();//Destructor, be careful of memory leaks
-    void init_game();//Initialize the game in offline mode
-    void start_game();//Perform the main process of the game
-    void choose_landlord();//Choose landlord according to the rule
-    void landlord_bonus();//Add 3 bonus cards to landlord
-    void shuffle();//Shuffle the Deck
-    bool check(CardsGroup* cardgroup);//Determine whether the cardgroup played is valid at the moment
+    //Default constructor
+    Board();
+
+    //Destructor.Be careful about the memory leak
+    ~Board();
+    //Delete all cards and players
+
+    void init_game();
+    //Initialize the game in offline mode:
+    //set players names
+    //call shuffle(): shuffle and distribute cards
+    //choose landlord and distribute landlord cards
+
+    void start_game();
+    //Perform the main process of the game
+    //players take turns to play cards
+    //check game finish state
+
+    int choose_landlord();
+    //Choose landlord according to the rule
+
+    void landlord_bonus();
+    //Add 3 bonus cards to landlord
+
+    void shuffle();
+    //Shuffle the Deck
+    //shuffle cards, distribute cards, call Deck::rearrange() to sort cards
+
+    bool check(CardsGroup* cardgroup);
+    //Determine whether the cardgroup played is valid at the moment
 };
