@@ -139,7 +139,7 @@ void CardsGroup::arrange(){
 			else{this->cards_type.reset(CardsType::Type::EMPTY,4,4,false);}
 		}
 		//consider the case of FOUR_WITH_TWO
-		if(cards.size()==6){
+		else if(cards.size()==6){
 			if(figures_distribution[NUMBER_OF_FIGURES-1]<=2){
 				this->cards_type.reset(CardsType::Type::FOUR_WITH_TWO,6,4,false);
 			}
