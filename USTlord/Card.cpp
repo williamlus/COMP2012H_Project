@@ -39,33 +39,28 @@ void Card::set_color(Color color){
 
 /*Binary Operations*/
 bool Card::operator<(const Card& a){
-    if(this->value<a.value){return true;}
-    return false;
+    return Card::compare_value(this,&a);
 }//Compare the value of two cards
 
 bool Card::operator==(const Card& a){
-    if(this->value==a.value){return true;}
-    return false;
+    //is neither smaller nor larger
+    return ((!compare_value(this,&a)) && (!compare_value(&a,this)));
 }//Compare the value of two cards
 
 bool Card::operator>(const Card& a){
-    if(this->value>a.value){return true;}
-    return false;
+    return Card::compare_value(&a,this);
 }//Compare the value of two cards
 
 bool Card::operator<=(const Card& a){
-    if(this->value<=a.value){return true;}
-    return false;
+    return (!Card::compare_value(&a,this));
 }//Compare the value of two cards
 
 bool Card::operator>=(const Card& a){
-    if(this->value>=a.value){return true;}
-    return false;
+    return (!Card::compare_value(this,&a));
 }//Compare the value of two cards
 
 bool Card::operator!=(const Card& a){
-    if(this->value!=a.value){return true;}
-    return false;
+    return (compare_value(this,&a) || compare_value(&a,this));
 }//Compare the value of two cards
 
 /*Static Functions*/
@@ -73,7 +68,8 @@ string Card::to_string(Color color,int value){
     string temp{};
     
     //Color to char
-    if(color==Color::SPADE){temp+='s';}
+    if(color==Color::EMPTY){temp+=' ';}
+    else if(color==Color::SPADE){temp+='s';}
     else if(color==Color::HEART){temp+='h';}
     else if(color==Color::DIAMOND){temp+='d';}
     else if(color==Color::CLUB){temp+='c';}
@@ -107,6 +103,10 @@ int Card::to_value(char figure) {
 
 bool Card::compare_value(const Card* a, const Card* b){
     if(a->value<b->value){return true;}
+    //Consider the case of Joker
+    else if(a->value==b->value && a->value==NUMBER_OF_FIGURES-1 && a->color<b->color){
+        return true;
+    }
     return false;
 }//return true if a's value is smaller than b's value, otherwise false
 
