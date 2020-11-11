@@ -5,7 +5,6 @@
 #include "Card.h"
 #include "CardsType.h"
 #include "CardsGroup.h"
-#include "Deck.h"
 using namespace std;
 
 //Constructor and Destructor
