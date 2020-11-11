@@ -30,7 +30,6 @@ public:
     //Binary Operation
     bool operator==(const CardsType& ct) const;//compare whether two cardstype object are equal(can also be defined as bool operator==(const CardsTpe& ct);)
     
-
     //Accessors
     string to_string() const;//return the type by string
     Type get_type() const;
