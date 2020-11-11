@@ -16,5 +16,7 @@ class Deck {
       Card* operator[](int i);
       //void shuffle();//shuffle cards in deck//we will do shuffle in board
       void rearrange();//Sort cards in deck according to their type and value
-    void delete_card(const CardsGroup& card);
+      void delete_card(const CardsGroup& card);
+      int get_num_cards() const;
+      vector<Card*> get_cards() const;
 };
