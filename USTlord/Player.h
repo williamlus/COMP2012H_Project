@@ -17,7 +17,7 @@ class Player {
       ~Player();
       void print();//print cards in hand
       CardsGroup tip();//tip function
-      void play(CardsGroup& cardgroup);//Play cards//probably contain makeChoive
+      void play(CardsGroup& cardgroup);//Play cards//probably contain makeChoice
       void set_name(string name);
       string get_name() const;
       Deck get_deck() const;
