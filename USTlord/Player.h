@@ -19,7 +19,7 @@ class Player {
       CardsGroup tip();//tip function
       void play(CardsGroup& cardgroup);//Play cards//probably contain makeChoive
       void set_name(string name);
-      string get_name();
-      Deck get_deck();
+      string get_name() const;
+      Deck get_deck() const;
         
 };
