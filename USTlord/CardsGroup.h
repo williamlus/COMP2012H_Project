@@ -1,3 +1,6 @@
+#ifndef CARDSGROUP_H_
+#define CARDSGROUP_H_
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -69,4 +72,4 @@ public:
     //return false when error occurs or it is discontinuous
 };
 
-
+#endif /* CARDSGROUP_H_ */
