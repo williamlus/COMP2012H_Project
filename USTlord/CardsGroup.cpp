@@ -55,7 +55,7 @@ void CardsGroup::arrange(){
 	}
 
 	/*Case II : max_repeat==2*/
-	if(max_repeat==2){
+	else if(max_repeat==2){
 		if(fig_dis_sorted[1]==0){
 			//consider the case of PAIR
 			if(figures_distribution[NUMBER_OF_FIGURES-1]==0){
@@ -79,7 +79,7 @@ void CardsGroup::arrange(){
 	}
 
 	/*Case III : max_repeat==3*/
-	if(max_repeat==3){
+	else if(max_repeat==3){
 		if(fig_dis_sorted[1]==0){
 			//consider the case of TRIO
 			if(figures_distribution[NUMBER_OF_FIGURES-1]==0){
@@ -130,7 +130,7 @@ void CardsGroup::arrange(){
 		}
 	}
 	/*Case IV : max_repeat==4*/
-	if(max_repeat==4){
+	else if(max_repeat==4){
 		//consider the case of BOMB
 		if(fig_dis_sorted[1]==0){
 			if(figures_distribution[NUMBER_OF_FIGURES-1]==0){
