@@ -1,3 +1,6 @@
+#ifndef BOARD_H_
+#define BOARD_H_
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -50,3 +53,5 @@ public:
     bool check(CardsGroup* cardgroup);
     //Determine whether the cardgroup played is valid at the moment
 };
+
+#endif /* BOARD_H_ */
