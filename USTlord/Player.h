@@ -20,6 +20,6 @@ class Player {
       void play(CardsGroup& cardgroup);//Play cards//probably contain makeChoice
       void set_name(string name);
       string get_name() const;
-      Deck get_deck() const;
+      Deck* get_deck() const;
         
 };
