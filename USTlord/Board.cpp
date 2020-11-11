@@ -154,6 +154,7 @@ void Board::landlord_bonus(){
 
 };
 
+//Shuffle the Deck
 void Board::shuffle(){
     int i = 0, j = 0, k = 0;
     for(i = 0; i < NUMBER_OF_CARDS; i++){
@@ -169,8 +170,9 @@ void Board::shuffle(){
         this->players[i]->rearrange(); //sort cards
         this->players[i]->print();
     }
-};//Shuffle the Deck
+};
 
+//Determine whether the cardgroup played is valid at the moment
 bool Board::check(CardsGroup* cardgroup){
     if(cardgroup->get_cards_type()->get_type() == -1){
         cout << "Action error. Please enter again: " << endl;
@@ -184,4 +186,4 @@ bool Board::check(CardsGroup* cardgroup){
     }else{
         return true;
     }
-};//Determine whether the cardgroup played is valid at the moment
+};
