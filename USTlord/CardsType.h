@@ -1,3 +1,6 @@
+#ifndef CARDSTYPE_H_
+#define CARDSTYPE_H_
+
 #include <iostream>
 #include <vector>
 #include <string>
@@ -48,3 +51,5 @@ public:
     static bool is_equal(const CardsType& a,const CardsType& b);//return true if two types are exactly the same
     static bool is_comparable(const CardsType& a,const CardsType& b);//return true if two types are the same or ROCKET/BOMB exists
 };
+
+#endif /* CARDSTYPE_H_ */
