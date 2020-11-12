@@ -25,12 +25,15 @@ bool CurrentPattern::can_be_beaten_by(int id,const CardsGroup& cg){
         }
         else if(compare_value==-2){
             //cout << "Not comparable.\n";
+            return false;
         }
         else if(compare_value==0){
             //cout << "They are the same.\n";
+            return false;
         }
         else if(compare_value==1){
             //cout << "Current Pattern is greater.\n";
+            return false;
         }
         return false;
     }
