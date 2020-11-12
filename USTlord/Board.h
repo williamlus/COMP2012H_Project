@@ -8,7 +8,7 @@
 #include "CardsType.h"
 #include "CardsGroup.h"
 #include "Deck.h"
-#include "CurrenrPattern.h"
+#include "CurrentPattern.h"
 #include "Player.h"
 #define NUMBER_OF_PLAYER 3
 #define NUMBER_OF_CARDS 54
