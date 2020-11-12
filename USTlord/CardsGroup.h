@@ -21,7 +21,7 @@ private:
 public:
     //Constructor and Destructor
     CardsGroup();
-    CardsGroup(vector<const Card*> cards);
+    CardsGroup(vector<Card const*> cards);
     //shallow copy of cards, all operations are based on pointers
     ~CardsGroup();
     
@@ -31,7 +31,7 @@ public:
     //-2 when not comparable, -1 when *this<a, 0 when *this==a, 1 when *this>a 
 
     //Mutator
-    void reset(vector<const Card*> cards);//reset CardsGroup
+    void reset(vector<Card const*> cards);//reset CardsGroup
     //it means that you can reuse the same object
 
     //Accessors

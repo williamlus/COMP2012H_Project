@@ -43,12 +43,12 @@ class Card {
       void set_color(Color color);
 
       //Binary Operations
-      bool operator<(const Card& a);//Compare the value of two cards
-      bool operator==(const Card& a);//Compare the value of two cards
-      bool operator>(const Card& a);//Compare the value of two cards
-      bool operator<=(const Card& a);//Compare the value of two cards
-      bool operator>=(const Card& a);//Compare the value of two cards
-      bool operator!=(const Card& a);//Compare the value of two cards
+      bool operator<(const Card& a) const;//Compare the value of two cards
+      bool operator==(const Card& a) const;//Compare the value of two cards
+      bool operator>(const Card& a) const;//Compare the value of two cards
+      bool operator<=(const Card& a) const;//Compare the value of two cards
+      bool operator>=(const Card& a) const;//Compare the value of two cards
+      bool operator!=(const Card& a) const;//Compare the value of two cards
 
       //Static Functions
       static string to_string(Color color,int value);//transform color, value into string
@@ -56,6 +56,7 @@ class Card {
       static int to_value(char figure);//transform char figure into int value
       static bool compare_value(const Card* a, const Card* b);//return true if a's value is smaller than b's value, otherwise false
       static bool strictly_compare(const Card* a, const Card* b);//strictly compare two cards in terms of value and color
+      static bool strictly_equal(const Card* a, const Card* b);
 };
 
 #endif /* CARD_H_ */

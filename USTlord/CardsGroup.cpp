@@ -218,7 +218,7 @@ int CardsGroup::compare(const CardsGroup& a) const{
 }//-2 when not comparable, -1 when *this<a, 0 when *this==a, 1 when *this>a 
 
 //Mutator
-void CardsGroup::reset(vector<const Card*> cards){
+void CardsGroup::reset(vector<Card const*> cards){
 	this->cards=cards;
 	this->arrange();
 	this->choose_ref_card();
@@ -230,7 +230,7 @@ const Card* CardsGroup::operator[](int i) const{
 	return this->cards[i];
 }
 
-vector<const Card*> CardsGroup::get_cards() const{
+vector<Card const*> CardsGroup::get_cards() const{
 	return this->cards;
 }
 

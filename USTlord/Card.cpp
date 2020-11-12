@@ -38,28 +38,28 @@ void Card::set_color(Color color){
 }
 
 /*Binary Operations*/
-bool Card::operator<(const Card& a){
+bool Card::operator<(const Card& a) const{
     return Card::compare_value(this,&a);
 }//Compare the value of two cards
 
-bool Card::operator==(const Card& a){
+bool Card::operator==(const Card& a) const{
     //is neither smaller nor larger
     return ((!compare_value(this,&a)) && (!compare_value(&a,this)));
 }//Compare the value of two cards
 
-bool Card::operator>(const Card& a){
+bool Card::operator>(const Card& a) const{
     return Card::compare_value(&a,this);
 }//Compare the value of two cards
 
-bool Card::operator<=(const Card& a){
+bool Card::operator<=(const Card& a) const{
     return (!Card::compare_value(&a,this));
 }//Compare the value of two cards
 
-bool Card::operator>=(const Card& a){
+bool Card::operator>=(const Card& a) const{
     return (!Card::compare_value(this,&a));
 }//Compare the value of two cards
 
-bool Card::operator!=(const Card& a){
+bool Card::operator!=(const Card& a) const{
     return (compare_value(this,&a) || compare_value(&a,this));
 }//Compare the value of two cards
 
@@ -115,3 +115,8 @@ bool Card::strictly_compare(const Card* a, const Card* b){
     else if(a->value==b->value && a->color<b->color){return true;}
     return false;
 }//strictly compare two cards in terms of value and color
+
+bool Card::strictly_equal(const Card* a, const Card* b){
+    if(a->value==b->value && a->color==b->color){return true;}
+    return false;
+}
