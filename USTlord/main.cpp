@@ -4,7 +4,7 @@
 #include "Card.h"
 #include "CardsType.h"
 #include "CardsGroup.h"
-#include "CurrenrPattern.h"
+#include "CurrentPattern.h"
 #include "Deck.h"
 #include "Player.h"
 #include "Board.h"
