@@ -20,6 +20,7 @@ private:
     
 public:
     //Constructor and Destructor
+    CardsGroup();
     CardsGroup(vector<const Card*> cards);
     //shallow copy of cards, all operations are based on pointers
     ~CardsGroup();

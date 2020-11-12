@@ -8,16 +8,16 @@
 #include "CardsType.h"
 #include "CardsGroup.h"
 
-class CurrentPattern{
-    static CurrentPattern* current_pattern;
+class CurrentPattern : public CardsGroup{
     private:
-      CardsGroup cardgroup;//Cardgroup last player played
       int player_index;//index of last player who played these cards
     public:
-    CardsGroup find_valid_group(Deck& cards_in_hand);//find card group that can beat current cards
-    static CurrentPattern* get_current();//get Current pattern, if no previous cards, create a new current pattern object
-    int get_player_index();
-    CardsGroup get_cardsgroup();
+      CurrentPattern():CardsGroup(),player_index(-1){};
+      int get_player_index() const;
+      void set_player_index(int id);
+      bool can_be_beaten_by(int id,const CardsGroup& cg);//check whether current_pattern can be beaten by cardsgroup played by the player with the id
+      //if both id's are the same, return true
+      void record(int id,const CardsGroup& cg);//record the cardsgroup played by the player with the id
 };
 
 #endif /* CURRENTPATTERN_H_ */

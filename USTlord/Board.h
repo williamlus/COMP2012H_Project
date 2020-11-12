@@ -10,24 +10,24 @@
 #include "Deck.h"
 #include "CurrenrPattern.h"
 #include "Player.h"
+#include "AIPlayer.h"
 #define NUMBER_OF_PLAYER 3
 #define NUMBER_OF_CARDS 54
 
 class Board {
 private:
-    vector<Player*> players[NUMBER_OF_PLAYER];
+    vector<Player*> players;
+    vector<Card*> set_of_cards;//A complete set of 54 cards
+    CurrentPattern* cp;
     bool game_finish = false, you_win= false, landlord_win = false;
     int landlord_id = -1;
-
-    Deck cards;//A complete set of 54 cards
     
 public:
     //Default constructor
-    Board();
+    Board();//generate 54 cards
 
     //Destructor.Be careful about the memory leak
-    ~Board();
-    //Delete all cards and players
+    ~Board();//delete 54 cards one by one and players
 
     void init_game();
     //Initialize the game in offline mode:
@@ -47,7 +47,6 @@ public:
     //Add 3 bonus cards to landlord
 
     void shuffle();
-    //Shuffle the Deck
     //shuffle cards, distribute cards, call Deck::rearrange() to sort cards
 
     bool check(CardsGroup* cardgroup);

@@ -8,6 +8,7 @@
 using namespace std;
 
 //Constructor and Destructor
+CardsGroup::CardsGroup():cards_type(),reference_card(nullptr),cards(0,nullptr){}
 CardsGroup::CardsGroup(vector<const Card*> cards):cards_type(),reference_card(nullptr){
 	this->reset(cards);
 }

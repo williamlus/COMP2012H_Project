@@ -11,7 +11,7 @@ using namespace std;
 
 Deck::Deck(){
     number_of_cards=54;
-    Card::COLOR color;
+    Card::Color color;
     
     for(int i=0;i<54;++i){
         char figure;
@@ -21,45 +21,40 @@ Deck::Deck(){
             int j = i/13;
             switch(j){
                 case 0:
-                color = Card::COLOR::SPADE;
+                color = Card::Color::SPADE;
                 break;
                 case 1:
-                color = Card::COLOR::HEART;
+                color = Card::Color::HEART;
                 break;
                 case 2:
-                color = Card::COLOR::DIAMOND;
+                color = Card::Color::DIAMOND;
                 break;
                 case 3:
-                color = Card::COLOR::CLUB;
+                color = Card::Color::CLUB;
                 break;
             }
         }
         else if(i==52){
-            figure = figures_to_int[13];
-            color = Card::COLOR::BLACK_JOKER;
+            figure = figures_to_int[NUMBER_OF_FIGURES-1];
+            color = Card::Color::BLACK_JOKER;
         }
         else{
-            figure = figures_to_int[14];
-            color = Card::COLOR::RED_JOKER;
+            figure = figures_to_int[NUMBER_OF_FIGURES-1];
+            color = Card::Color::RED_JOKER;
         }
         Card *temp = new Card(figure,color);
         cards.push_back(temp);
     }
 }
 
-Deck::Deck(vector<Card*> card){
-    number_of_cards=card.capacity();
-    cards=card;
-    }
+Deck::Deck(vector<Card const*> cards):cards(cards),number_of_cards(cards.size()){}
 
-Card* Deck::operator[](int i){
+Card const* Deck::operator[](int i){
     return this->cards[i];
 }
 
-
-bool cmpcards(Card* a,Card*b);
 void Deck::rearrange(){
-    sort(this->cards.begin(),this->cards.end(),cmpcards);
+    sort(this->cards.begin(),this->cards.end(),Card::strictly_compare);
 }
 
 
