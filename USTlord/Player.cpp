@@ -219,3 +219,42 @@ CardsGroup Player::play(const Board& b){
 void Player::clear_cards(const CardsGroup& cg){
     this->deck->clear_cards(cg.get_cards());
 }//clear the played cards' pointers(don't delete)
+
+vector<int> Player::get_deck_distribution() {
+    vector<int> count(NUMBER_OF_FIGURES, 0);
+    vector<Card const*> current_cards = deck->get_cards();
+    for (int i = 0; i < current_cards.size(); ++i) {
+        int temp_value = current_cards[i]->get_value();
+        count[temp_value]++;
+    }
+    return count;
+}
+
+void Player::calc_hints(const CurrentPattern& cp) {
+    //first know what's the card type of the current pattern
+    CardsType::Type type = (cp.get_cards_type()).get_type();
+    vector<Card const*> current_cards = deck->get_cards();
+    //first we can find whether there are bombs in current_cards
+    vector<int> count = get_deck_distribution();
+    for (int i = 0; i < NUMBER_OF_FIGURES; ++i) {
+        else if (i == NUMBER_OF_FIGURES - 1) {
+            if(count[i]==2){
+                Card* red_joker = deck->get_certain_card(Card::Color::)
+                vector<Card const*> temp_cards_combination = 
+                bombs.push_back()}
+        }
+    }
+    //then we do searching in the players_to_player's deck, to check whether he has the same type or boom
+    switch(type) {
+    //SINGLE case
+    case SINGLE:
+        //first get all valid SINGLE
+        for (int i = 0; i < deck->get_num_cards(); ++i) {
+            CardsGroup  temp(current_cards[i]);
+            if (temp.compare(cp) == 1) {
+                hints.push_back(temp);
+            }
+        }
+        //then get all possible BOMB
+    }
+}
