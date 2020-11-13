@@ -328,6 +328,10 @@ void Player::calc_hints(const CurrentPattern& cp) {
             }
         }
     }
+    //TRIO_WITH_ONE case
+    else if(type==CardsType::Type::TRIO_WITH_ONE){
+        //check after chosing 3, is there any 1 single card left
+    }
 
     }
     
