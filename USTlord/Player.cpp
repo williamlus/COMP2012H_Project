@@ -261,10 +261,10 @@ void Player::calc_hints(const CurrentPattern& cp) {
                 }
         }
     }
-    //then we do searching in the players_to_player's deck, to check whether he has the same type or boom
-    switch(type) {
+    //then we do searching in the players_to_player's deck, to check whether he has the same type or bomb
+
     //SINGLE case
-    case CardsType::Type::SINGLE:
+    if(type==CardsType::Type::SINGLE){
         //first get all valid SINGLE
         for (int i = 0; i < deck->get_num_cards(); ++i) {
             vector<Card const* > card_to_add {current_cards[i]};
@@ -280,9 +280,9 @@ void Player::calc_hints(const CurrentPattern& cp) {
                 hints.push_back(bombs[j]);
             }
         }
-        break;
+        }
     //PAIR case
-    case CardsType::Type::PAIR :
+    else if(type==CardsType::PAIR){
         //first get all valid PAIR
         for(int i=0;i<NUMBER_OF_FIGURES;++i){
             if(count[i]>=2){
@@ -303,6 +303,31 @@ void Player::calc_hints(const CurrentPattern& cp) {
                 hints.push_back(bombs[j]);
             }
         }
-        break;
+        
+        }
+    //TRIO
+    if(type==CardsType::Type::TRIO){
+    //first get all valid TRIO
+    for(int i=0;i<NUMBER_OF_FIGURES;++i){
+        if(count[i]>=3){
+                Card const* first = deck->get_certain_card(i,nullptr);
+                Card const* second = deck->get_certain_card(i,first);
+                Card const* third = deck->get_certain_card(i,third);
+                vector<Card const* > card_to_add {first,second,third};
+                CardsGroup  temp(card_to_add);
+                if (temp.compare(cp) == 1) {
+                    hints.push_back(temp);
+                }
+        }
     }
-}
+    //then get all possible BOMB
+        if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+    }
+
+    }
+    
