@@ -22,6 +22,7 @@ class Deck {
       int get_num_cards() const;
       vector<Card const*> get_cards() const;
       Card* get_certain_card(Card::Color color, int value);
+      Card* get_certain_card(int value);
 };
 
 #endif /* DECK_H_ */
