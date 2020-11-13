@@ -1,8 +1,18 @@
 #include "AIPlayer.h"
+#include <random>
+#include "time.h"
 
-AIPlayer::AIPlayer():name(),deck(new Deck()){}
-AIPlayer::AIPlayer(string name) : name(name), deck(new Deck()) {}
+AIPlayer::AIPlayer():Player(){}
+AIPlayer::AIPlayer(int id,string name):Player(id,name){}
 AIPlayer::~AIPlayer(){}
-const CardsGroup& AIPlayer::choose_hint(const Board& b){}//choose cardsgroup according to the situation of board (e.g. num of cards of other players, current_pattern)
-CardsGroup AIPlayer::play(const Board& b){}//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
-bool AIPlayer::want_landlord(){}//choose to be landlord or not
+const CardsGroup& AIPlayer::choose_hint(const Board& b){
+
+}//choose cardsgroup according to the situation of board (e.g. num of cards of other players, current_pattern)
+CardsGroup AIPlayer::play(const Board& b){
+    this->calc_hints(*b.get_current_pattern());
+    return this->choose_hint(b);
+}//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
+bool AIPlayer::want_landlord(){
+    srand(time(0));
+    return rand()%2;//temporary settings (need to increase AI's intelligence)
+}//choose to be landlord or not

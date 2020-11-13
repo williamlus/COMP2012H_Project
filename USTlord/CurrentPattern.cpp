@@ -8,7 +8,7 @@ int CurrentPattern::get_player_index() const{
 void CurrentPattern::set_player_index(int id){
     this->player_index=id;
 }
-bool CurrentPattern::can_be_beaten_by(int id,const CardsGroup& cg){
+bool CurrentPattern::can_be_beaten_by(int id,const CardsGroup& cg) const{
     if(this->player_index==id){
         if(cg.is_valid()){
             //cout << "Next round!\n";

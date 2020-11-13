@@ -16,8 +16,9 @@ class Deck {
       Deck(vector<Card const*> card);//Conversion constructor
       ~Deck();
       Card const* operator[](int i);
+      void add_card(Card const* c);
       void rearrange();//Sort cards in deck according to their type and value
-      void clear_cards(const CardsGroup& cg);//clear the cards' pointers according to cardsgroup (do not delete)
+      void clear_cards(vector <Card const*> c);//clear the cards' pointers according to cardsgroup (do not delete)
       int get_num_cards() const;
       vector<Card const*> get_cards() const;
 };

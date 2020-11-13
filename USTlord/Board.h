@@ -29,6 +29,9 @@ public:
     //Destructor.Be careful about the memory leak
     ~Board();//delete 54 cards one by one and players
 
+    vector<int> get_players_num_cards() const;
+    CurrentPattern const* get_current_pattern() const;
+
     void init_game();
     //Initialize the game in offline mode:
     //set players names

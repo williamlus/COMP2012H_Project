@@ -15,7 +15,7 @@ class CurrentPattern : public CardsGroup{
       CurrentPattern():CardsGroup(),player_index(-1){};
       int get_player_index() const;
       void set_player_index(int id);
-      bool can_be_beaten_by(int id,const CardsGroup& cg);//check whether current_pattern can be beaten by cardsgroup played by the player with the id
+      bool can_be_beaten_by(int id,const CardsGroup& cg) const;//check whether current_pattern can be beaten by cardsgroup played by the player with the id
       //if both id's are the same, return true
       void record(int id,const CardsGroup& cg);//record the cardsgroup played by the player with the id
 };

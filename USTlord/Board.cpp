@@ -58,12 +58,23 @@ Board::~Board(){
     delete this->cp;
 };
 
+vector<int> Board::get_players_num_cards() const{
+    vector<int> num_cards(0,0);
+    for(int id=0;id<NUMBER_OF_PLAYER;id++){
+        num_cards.push_back(this->players[id]->get_num_cards());
+    }
+    return num_cards;
+}
+CurrentPattern const* Board::get_current_pattern() const{
+    return this->cp;
+}
+
 //Initialize the game in offline mode
 void Board::init_game(){
     //generate 3 players (1 player, 2 AI)
-    this->players[CURRENT_PLAYER]=new Player("You");
-    this->players[1]=new AIPlayer("AI "+to_string(1));
-    this->players[2]=new AIPlayer("AI "+to_string(2));
+    this->players[CURRENT_PLAYER]=new Player(0,"You");
+    this->players[1]=new AIPlayer(1,"AI "+to_string(1));
+    this->players[2]=new AIPlayer(2,"AI "+to_string(2));
     this->cp=new CurrentPattern();
     game_finish = false;
     you_win = false;

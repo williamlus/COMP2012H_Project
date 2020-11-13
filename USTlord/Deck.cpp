@@ -17,15 +17,18 @@ Card const* Deck::operator[](int i){
     return this->cards[i];
 }
 
+void Deck::add_card(Card const* c){
+    this->cards.push_back(c);
+}
+
 void Deck::rearrange(){
     sort(this->cards.begin(),this->cards.end(),Card::strictly_compare);
 }
 
-void Deck::clear_cards(const CardsGroup& cg){
-    vector<Card const*> cg_cards=cg.get_cards();
-    for(int i=0;i<cg_cards.size();++i){
+void Deck::clear_cards(vector <Card const*> c){
+    for(int i=0;i<c.size();++i){
         for(int j=0;j<this->cards.size();++j){
-            if(Card::strictly_equal(cg_cards[i],cards[j])){
+            if(Card::strictly_equal(c[i],cards[j])){
                 cards.erase(cards.begin()+j);
                 break;
             }
