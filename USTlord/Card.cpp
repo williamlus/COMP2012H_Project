@@ -4,6 +4,7 @@
 using namespace std;
 
 /*Constructors*/
+Card::Card():color(Color::EMPTY),value(ERROR){}
 Card::Card(Color color, int value) : color(color), value(value){}//other constructor
 Card::Card(char color, char figure) : color(to_color(color)), value(to_value(figure)){}//other constructor
 Card::Card(const Card& c) : value(c.value),color(c.color){}//copy constructor
