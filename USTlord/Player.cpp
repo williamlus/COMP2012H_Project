@@ -296,5 +296,13 @@ void Player::calc_hints(const CurrentPattern& cp) {
 
             }
         }
+        //then get all possible BOMB
+        if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+        break;
     }
 }
