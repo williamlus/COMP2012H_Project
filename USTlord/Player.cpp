@@ -115,9 +115,17 @@ CardsGroup Player::play(const Board& b){
             this->display_cards();
         }
         else if (choice=='s'){
+            vector<string*> cards_string(0,nullptr);
             cout << "Please enter a set of cards, e.g. s3 h3 : ";
-            
-            //TBC
+            cards_string=this->request_cards_string();
+            vector<Card const*> cards=this->deck->get_cards();
+            for(int i=0;i<cards_string.size();i++){
+                for(int j=0;j<cards.size();j++){
+                    if(cards[j]->get_string()==*cards_string[i]){
+                        this->select_card(cards[j]);
+                    }
+                }
+            }
         }
         else if (choice=='p'){
             if(this->selected_cards_group.is_valid()){
