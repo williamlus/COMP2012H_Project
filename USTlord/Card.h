@@ -27,6 +27,7 @@ class Card {
       int value;
     public:
       //Constructors and Destructor
+      Card();
       Card(Color color, int value);//other constructor
       Card(char color, char figure);//other constructor
       Card(const Card& c);//copy constructor
