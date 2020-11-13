@@ -306,7 +306,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
         
         }
     //TRIO
-    if(type==CardsType::Type::TRIO){
+    else if(type==CardsType::Type::TRIO){
     //first get all valid TRIO
     for(int i=0;i<NUMBER_OF_FIGURES;++i){
         if(count[i]>=3){
