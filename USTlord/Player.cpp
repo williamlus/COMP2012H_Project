@@ -103,6 +103,65 @@ bool Player::selected_can_beat(const CurrentPattern& cp){
     return false;
 }//check whether the player's selected cards can beat the last player's CardsGroup
 
+vector<string*> Player::request_cards_string(){
+    vector<string*> cards(0,nullptr);
+    //check whether the input of cards is valid (only consider the format)
+    int valid=false;
+    while(!valid){
+        cout << "Please enter the set of cards : " << endl;
+        string card_name="";
+        char temp='\0';
+
+        while(true){
+            temp=cin.get();
+            if(temp=='\n'){
+                if(card_name.size()==2){
+                    cards.push_back(new string(card_name));
+                    card_name="";
+                }
+                else if(card_name.size()!=0){
+                    cout << "Invalid input." << endl;
+                    for(int i=0;i<cards.size();++i){
+                        delete cards[i];
+                    }
+                    cards.clear();
+                    break;
+                }
+                break;
+            }
+            else if(temp==' '){
+                if(card_name.size()==2){
+                    cards.push_back(new string(card_name));
+                    card_name="";
+                }
+                else if(card_name.size()!=0){
+                    cout << "Invalid input." << endl;
+                    for(int i=0;i<cards.size();++i){
+                        delete cards[i];
+                    }
+                    cards.clear();
+                    break;
+                }
+                continue;
+            }
+            else{
+                card_name+=temp;
+            }
+        }
+        if(cards.size()>0){
+            valid=true;
+            cout << "This is the cards you choose : " << endl;
+            for(int i=0;i<cards.size();i++){
+                cout << *cards[i] << endl;
+            }
+        }
+        if(temp!='\n'){
+            cin.ignore(999,'\n');
+        }
+    }
+    return cards;
+}
+
 CardsGroup Player::play(const Board& b){
     this->calc_hints(*b.get_current_pattern());
     char choice;
