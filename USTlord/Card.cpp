@@ -4,6 +4,7 @@
 using namespace std;
 
 /*Constructors*/
+Card::Card():color(Color::EMPTY),value(ERROR){}
 Card::Card(Color color, int value) : color(color), value(value){}//other constructor
 Card::Card(char color, char figure) : color(to_color(color)), value(to_value(figure)){}//other constructor
 Card::Card(const Card& c) : value(c.value),color(c.color){}//copy constructor
@@ -16,10 +17,6 @@ string Card::get_string() const{
     return to_string(this->color,this->value);
 }//return the value according to figures_to_int
 
-void Card::print() const{
-    std::cout << this->get_string() << " ";
-}//print this card in console
-
 int Card::get_value() const{
     return this->value;
 }//get the value of the card
@@ -28,7 +25,28 @@ Card::Color Card::get_color() const{
     return this->color;
 }//get the color of the card
 
+bool Card::is_valid() const{
+    if(this->color==EMPTY || this->value==ERROR){
+        return false;
+    }
+    else if(this->value==NUMBER_OF_FIGURES-1){
+        if(this->color!=RED_JOKER && this->color!=BLACK_JOKER){
+            return false;
+        }
+    }
+    return true;
+}//check if the card is valid
+
 /*Mutators*/
+void Card::reset(char color, char figure){
+    this->color=to_color(color);
+    this->value=to_value(figure);
+}
+void Card::reset(Color color, int value){
+    this->color=color;
+    this->value-value;
+}
+
 void Card::set_value(int value){
     this->value=value;
 }
@@ -38,28 +56,28 @@ void Card::set_color(Color color){
 }
 
 /*Binary Operations*/
-bool Card::operator<(const Card& a){
+bool Card::operator<(const Card& a) const{
     return Card::compare_value(this,&a);
 }//Compare the value of two cards
 
-bool Card::operator==(const Card& a){
+bool Card::operator==(const Card& a) const{
     //is neither smaller nor larger
     return ((!compare_value(this,&a)) && (!compare_value(&a,this)));
 }//Compare the value of two cards
 
-bool Card::operator>(const Card& a){
+bool Card::operator>(const Card& a) const{
     return Card::compare_value(&a,this);
 }//Compare the value of two cards
 
-bool Card::operator<=(const Card& a){
+bool Card::operator<=(const Card& a) const{
     return (!Card::compare_value(&a,this));
 }//Compare the value of two cards
 
-bool Card::operator>=(const Card& a){
+bool Card::operator>=(const Card& a) const{
     return (!Card::compare_value(this,&a));
 }//Compare the value of two cards
 
-bool Card::operator!=(const Card& a){
+bool Card::operator!=(const Card& a) const{
     return (compare_value(this,&a) || compare_value(&a,this));
 }//Compare the value of two cards
 
@@ -115,3 +133,8 @@ bool Card::strictly_compare(const Card* a, const Card* b){
     else if(a->value==b->value && a->color<b->color){return true;}
     return false;
 }//strictly compare two cards in terms of value and color
+
+bool Card::strictly_equal(const Card* a, const Card* b){
+    if(a->value==b->value && a->color==b->color){return true;}
+    return false;
+}

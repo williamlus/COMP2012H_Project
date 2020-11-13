@@ -1,65 +1,48 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "Card.h"
-#include "CardsType.h"
-#include "CardsGroup.h"
-#include "Deck.h"
 #include <algorithm>
+#include "Deck.h"
 
 using namespace std;
 
-Deck::Deck(){
-    number_of_cards=54;
-    Card::COLOR color;
-    
-    for(int i=0;i<54;++i){
-        char figure;
+Deck::Deck():cards(0,nullptr){}
 
-        if(i<52){
-            figure = figures_to_int[i%13];
-            int j = i/13;
-            switch(j){
-                case 0:
-                color = Card::COLOR::SPADE;
-                break;
-                case 1:
-                color = Card::COLOR::HEART;
-                break;
-                case 2:
-                color = Card::COLOR::DIAMOND;
-                break;
-                case 3:
-                color = Card::COLOR::CLUB;
-                break;
-            }
-        }
-        else if(i==52){
-            figure = figures_to_int[13];
-            color = Card::COLOR::BLACK_JOKER;
-        }
-        else{
-            figure = figures_to_int[14];
-            color = Card::COLOR::RED_JOKER;
-        }
-        Card *temp = new Card(figure,color);
-        cards.push_back(temp);
-    }
+Deck::Deck(vector<Card const*> cards):cards(cards){}
+
+Deck::~Deck(){}
+
+void Deck::set_cards(vector<Card const*> cards){
+    this->cards=cards;
 }
 
-Deck::Deck(vector<Card*> card){
-    number_of_cards=card.capacity();
-    cards=card;
-    }
-
-Card* Deck::operator[](int i){
+Card const* Deck::operator[](int i){
     return this->cards[i];
 }
 
+void Deck::add_card(Card const* c){
+    this->cards.push_back(c);
+}
 
-bool cmpcards(Card* a,Card*b);
 void Deck::rearrange(){
-    sort(this->cards.begin(),this->cards.end(),cmpcards);
+    sort(this->cards.begin(),this->cards.end(),Card::strictly_compare);
+}
+
+void Deck::clear_cards(vector <Card const*> c){
+    for(int i=0;i<c.size();++i){
+        for(int j=0;j<this->cards.size();++j){
+            if(Card::strictly_equal(c[i],cards[j])){
+                cards.erase(cards.begin()+j);
+                break;
+            }
+        }
+    }
+}//clear the cards' pointers according to cardsgroup (do not delete)
+int Deck::get_num_cards() const{
+    return this->cards.size();
+}
+vector<Card const*> Deck::get_cards() const{
+    return this->cards;
 }
 
 
