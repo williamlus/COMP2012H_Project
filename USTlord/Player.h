@@ -20,6 +20,7 @@ class Player {
       vector<CardsGroup> hints;
       int current_hint;
       bool is_landlord = false;
+      vector<int> get_deck_distribution();
     public:
       //constructor
       Player();
