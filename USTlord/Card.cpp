@@ -24,7 +24,28 @@ Card::Color Card::get_color() const{
     return this->color;
 }//get the color of the card
 
+bool Card::is_valid() const{
+    if(this->color==EMPTY || this->value==ERROR){
+        return false;
+    }
+    else if(this->value==NUMBER_OF_FIGURES-1){
+        if(this->color!=RED_JOKER && this->color!=BLACK_JOKER){
+            return false;
+        }
+    }
+    return true;
+}//check if the card is valid
+
 /*Mutators*/
+void Card::reset(char color, char figure){
+    this->color=to_color(color);
+    this->value=to_value(figure);
+}
+void Card::reset(Color color, int value){
+    this->color=color;
+    this->value-value;
+}
+
 void Card::set_value(int value){
     this->value=value;
 }
