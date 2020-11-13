@@ -34,7 +34,6 @@ class Card {
       
       //Accessors
       string get_string() const;//return the value according to figures_to_int
-      void print() const;//print this card in console
       int get_value() const;//get the value of the card
       Color get_color() const;//get the color of the card
 

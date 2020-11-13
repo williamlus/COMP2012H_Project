@@ -19,8 +19,8 @@ class AIPlayer : public Player {
       AIPlayer(int id,string name);
       ~AIPlayer();
       const CardsGroup& choose_hint(const Board& b);//choose cardsgroup according to the situation of board (e.g. num of cards of other players, current_pattern)
-      CardsGroup play(const Board& b) override;//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
-      bool want_landlord() override;//choose to be landlord or not
+      CardsGroup play(const Board& b) override;//use calc_hints, get_hint, choose_hint to play cards according to current pattern, clear_cards to be played, and reset data members
+      bool want_landlord() override;//choose to be landlord or not automatically
 };
 
 #endif /* AIPLAYER_H_ */

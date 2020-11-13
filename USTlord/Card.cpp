@@ -16,10 +16,6 @@ string Card::get_string() const{
     return to_string(this->color,this->value);
 }//return the value according to figures_to_int
 
-void Card::print() const{
-    std::cout << this->get_string() << " ";
-}//print this card in console
-
 int Card::get_value() const{
     return this->value;
 }//get the value of the card

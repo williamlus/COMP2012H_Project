@@ -16,7 +16,7 @@ class Player {
       int id;
       string name;
       Deck* deck;
-      CardsGroup selected_cards;
+      CardsGroup selected_cards_group;
       vector<CardsGroup> hints;
       int current_hint;
       bool is_landlord = false;
@@ -37,8 +37,8 @@ class Player {
       //Member functions
       virtual bool want_landlord();//choose to be landlord or not
       void calc_hints(const CurrentPattern& cp);//find all possible hints according to current pattern, and stored them in hints.
-      CardsGroup get_hint();//get one hint according to hints and current_hint, update the selected_cards, and display_cards()
-      void select_card(Card const * c);//select one card from deck and push its pointer to selected_cards, if card exists in selected_cards, then unselect it
+      CardsGroup get_hint();//get one hint according to hints and current_hint, update the selected_cards_group, and display_cards()
+      void select_card(Card const * c);//select one card from deck and push its pointer to selected_cards_group, if card exists in selected_cards_group, then unselect it
       bool selected_can_beat(const CurrentPattern& cp);//check whether the player's selected cards can beat the last player's CardsGroup
       virtual CardsGroup play(const Board& b);//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
       void clear_cards(const CardsGroup& cg);//clear the played cards' pointers(don't delete)
