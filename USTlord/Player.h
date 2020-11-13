@@ -20,6 +20,7 @@ class Player {
       vector<CardsGroup> hints;
       int current_hint;
       bool is_landlord = false;
+      vector<string*> request_cards_string();//only check the format during the request
       vector<int> get_deck_distribution();
     public:
       //constructor
