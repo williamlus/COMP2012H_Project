@@ -36,8 +36,11 @@ class Card {
       string get_string() const;//return the value according to figures_to_int
       int get_value() const;//get the value of the card
       Color get_color() const;//get the color of the card
+      bool is_valid() const;//check if the card is valid
 
       //Mutators
+      void reset(char color, char figure);
+      void reset(Color color, int value);
       void set_value(int value);
       void set_color(Color color);
 
