@@ -13,6 +13,8 @@ using std::cout;
 using std::cin;
 using std::endl;
 
+bool make_choice(string);
+
 int main() {
     Board* board = new Board();
     do{

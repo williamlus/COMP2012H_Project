@@ -27,6 +27,7 @@ class Card {
       int value;
     public:
       //Constructors and Destructor
+      Card();
       Card(Color color, int value);//other constructor
       Card(char color, char figure);//other constructor
       Card(const Card& c);//copy constructor
@@ -34,21 +35,23 @@ class Card {
       
       //Accessors
       string get_string() const;//return the value according to figures_to_int
-      void print() const;//print this card in console
       int get_value() const;//get the value of the card
       Color get_color() const;//get the color of the card
+      bool is_valid() const;//check if the card is valid
 
       //Mutators
+      void reset(char color, char figure);
+      void reset(Color color, int value);
       void set_value(int value);
       void set_color(Color color);
 
       //Binary Operations
-      bool operator<(const Card& a);//Compare the value of two cards
-      bool operator==(const Card& a);//Compare the value of two cards
-      bool operator>(const Card& a);//Compare the value of two cards
-      bool operator<=(const Card& a);//Compare the value of two cards
-      bool operator>=(const Card& a);//Compare the value of two cards
-      bool operator!=(const Card& a);//Compare the value of two cards
+      bool operator<(const Card& a) const;//Compare the value of two cards
+      bool operator==(const Card& a) const;//Compare the value of two cards
+      bool operator>(const Card& a) const;//Compare the value of two cards
+      bool operator<=(const Card& a) const;//Compare the value of two cards
+      bool operator>=(const Card& a) const;//Compare the value of two cards
+      bool operator!=(const Card& a) const;//Compare the value of two cards
 
       //Static Functions
       static string to_string(Color color,int value);//transform color, value into string
@@ -56,6 +59,7 @@ class Card {
       static int to_value(char figure);//transform char figure into int value
       static bool compare_value(const Card* a, const Card* b);//return true if a's value is smaller than b's value, otherwise false
       static bool strictly_compare(const Card* a, const Card* b);//strictly compare two cards in terms of value and color
+      static bool strictly_equal(const Card* a, const Card* b);
 };
 
 #endif /* CARD_H_ */

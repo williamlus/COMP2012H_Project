@@ -8,6 +8,7 @@
 using namespace std;
 
 //Constructor and Destructor
+CardsGroup::CardsGroup():cards_type(),reference_card(nullptr),cards(0,nullptr){}
 CardsGroup::CardsGroup(vector<const Card*> cards):cards_type(),reference_card(nullptr){
 	this->reset(cards);
 }
@@ -27,7 +28,10 @@ void CardsGroup::arrange(){
 	sort(cards.begin(),cards.end(),Card::strictly_compare);
 	
 	//return if cards is empty
-	if(cards.size()==0){return;}
+	if(cards.size()==0){
+		this->cards_type.reset(CardsType::Type::EMPTY,0,0,false);
+		this->reference_card=nullptr;
+	}
 
 	//use figures_distribution to record the situation of cards
 	vector<int> figures_distribution=this->get_figures_distribution();
@@ -157,7 +161,7 @@ void CardsGroup::choose_ref_card(){
 	if(current_type==CardsType::Type::EMPTY){
 		this->reference_card=nullptr;
 	}
-	if(current_type==CardsType::Type::TRIO_WITH_ONE){
+	else if(current_type==CardsType::Type::TRIO_WITH_ONE){
 		this->reference_card=this->cards[1];
 	}
 	else if(current_type==CardsType::Type::TRIO_WITH_PAIR || current_type==CardsType::Type::FOUR_WITH_TWO){
@@ -217,7 +221,7 @@ int CardsGroup::compare(const CardsGroup& a) const{
 }//-2 when not comparable, -1 when *this<a, 0 when *this==a, 1 when *this>a 
 
 //Mutator
-void CardsGroup::reset(vector<const Card*> cards){
+void CardsGroup::reset(vector<Card const*> cards){
 	this->cards=cards;
 	this->arrange();
 	this->choose_ref_card();
@@ -229,7 +233,7 @@ const Card* CardsGroup::operator[](int i) const{
 	return this->cards[i];
 }
 
-vector<const Card*> CardsGroup::get_cards() const{
+vector<Card const*> CardsGroup::get_cards() const{
 	return this->cards;
 }
 
