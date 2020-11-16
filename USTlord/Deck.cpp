@@ -63,4 +63,28 @@ const Card* Deck::get_certain_card(int value,Card const* check){
         return nullptr;
 }
 
+void Deck::generate_combination(){
+    //find if there is bomb
+}
+
+const Card* Deck::get_certain_card(vector<Card const*> chosen){
+    for(int i=0;i<cards.size();++i){
+        //if the i-th card in not in the chosen one, use it
+         if(!exist(cards[i])){
+             return cards[i];
+         }
+    }
+    return nullptr;
+}
+bool Deck::exist(Card const* card){
+    
+    for(int i=0;i<cards.size();++i){
+        if(Card::strictly_equal(card,cards[i]))
+        return true;
+    }
+    return false;
+
+}
+
+
 
