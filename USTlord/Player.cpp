@@ -240,3 +240,118 @@ CardsGroup Player::play(const CurrentPattern& cp){
 void Player::clear_cards(const CardsGroup& cg){
     this->deck->clear_cards(cg.get_cards());
 }//clear the played cards' pointers(don't delete)
+
+vector<int> Player::get_deck_distribution() {
+    vector<int> count(NUMBER_OF_FIGURES, 0);
+    vector<Card const*> current_cards = deck->get_cards();
+    for (int i = 0; i < current_cards.size(); ++i) {
+        int temp_value = current_cards[i]->get_value();
+        count[temp_value]++;
+    }
+    return count;
+}
+
+void Player::calc_hints(const CurrentPattern& cp) {
+    //first know what's the card type of the current pattern
+    CardsType::Type type = (cp.get_cards_type()).get_type();
+    vector<Card const*> current_cards = deck->get_cards();
+    vector<CardsGroup> bombs;
+    //first we can find whether there are bombs in current_cards
+    vector<int> count = get_deck_distribution();
+    for (int i = 0; i < NUMBER_OF_FIGURES; ++i) {
+        //this is for normal bomb case
+        if(i< NUMBER_OF_FIGURES-1){
+            if(count[i]==4){
+                Card const* first = deck->get_certain_card(Card::Color::SPADE,i);
+                Card const* second = deck->get_certain_card(Card::Color::HEART,i);
+                Card const* third = deck->get_certain_card(Card::Color::CLUB,i);
+                Card const* fourth = deck->get_certain_card(Card::Color::DIAMOND,i);
+                vector<Card const*> temp_cards_combination {first,second,third,fourth};
+                CardsGroup group_to_add(temp_cards_combination);
+                bombs.push_back(group_to_add);
+            }
+        }
+        //for the rocket case
+        else if (i == NUMBER_OF_FIGURES - 1) {
+            if(count[i]==2){
+                Card const * red_joker = deck->get_certain_card(Card::Color::RED_JOKER,NUMBER_OF_FIGURES-1);
+                Card const * black_joker = deck->get_certain_card(Card::Color::BLACK_JOKER,NUMBER_OF_FIGURES-1);
+                vector<Card const*> temp_cards_combination {red_joker,black_joker};
+                CardsGroup group_to_add(temp_cards_combination);
+                bombs.push_back(group_to_add);
+                }
+        }
+    }
+    //then we do searching in the players_to_player's deck, to check whether he has the same type or bomb
+
+    //SINGLE case
+    if(type==CardsType::Type::SINGLE){
+        //first get all valid SINGLE
+        for (int i = 0; i < deck->get_num_cards(); ++i) {
+            vector<Card const* > card_to_add {current_cards[i]};
+            CardsGroup  temp(card_to_add);
+            if (temp.compare(cp) == 1) {
+                hints.push_back(temp);
+            }
+        }
+        //then get all possible BOMB
+        if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+        }
+    //PAIR case
+    else if(type==CardsType::PAIR){
+        //first get all valid PAIR
+        for(int i=0;i<NUMBER_OF_FIGURES;++i){
+            if(count[i]>=2){
+                Card const* first = deck->get_certain_card(i,nullptr);
+                Card const* second = deck->get_certain_card(i,first);
+                vector<Card const* > card_to_add {first,second};
+                CardsGroup  temp(card_to_add);
+                if (temp.compare(cp) == 1) {
+                    hints.push_back(temp);
+                }
+
+            }
+        }
+        //then get all possible BOMB
+        if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+        
+        }
+    //TRIO
+    else if(type==CardsType::Type::TRIO){
+    //first get all valid TRIO
+    for(int i=0;i<NUMBER_OF_FIGURES;++i){
+        if(count[i]>=3){
+                Card const* first = deck->get_certain_card(i,nullptr);
+                Card const* second = deck->get_certain_card(i,first);
+                Card const* third = deck->get_certain_card(i,third);
+                vector<Card const* > card_to_add {first,second,third};
+                CardsGroup  temp(card_to_add);
+                if (temp.compare(cp) == 1) {
+                    hints.push_back(temp);
+                }
+        }
+    }
+    //then get all possible BOMB
+        if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+    }
+    //TRIO_WITH_ONE case
+    else if(type==CardsType::Type::TRIO_WITH_ONE){
+        //check after chosing 3, is there any 1 single card left
+    }
+
+    }
