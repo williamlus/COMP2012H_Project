@@ -9,6 +9,9 @@
 class Deck {
     private:
       vector<Card const*> cards;//cards in Deck
+      vector<CardsGroup> combination;
+      void generate_combination();
+      bool exist(Card const*);
     public:
       Deck();//default constructor, generate an empty deck
       Deck(vector<Card const*> card);//Conversion constructor
