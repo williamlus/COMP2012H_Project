@@ -45,4 +45,22 @@ vector<Card const*> Deck::get_cards() const{
     return this->cards;
 }
 
+const Card* Deck::get_certain_card(Card::Color color, int value) {
+    Card* temp_card = new Card(color, value);
+    for (int i = 0; i < cards.size(); ++i) {
+        if(Card::strictly_equal(temp_card,cards[i])){return cards[i]; }
+    }
+    delete temp_card;
+        return nullptr;
+}
+
+const Card* Deck::get_certain_card(int value,Card const* check){
+    Card* temp_card = new Card(Card::Color::SPADE, value);
+    for (int i = 0; i < cards.size(); ++i) {
+        if(*temp_card==*cards[i]&&cards[i]!=check){return cards[i]; }
+    }
+    delete temp_card;
+        return nullptr;
+}
+
 
