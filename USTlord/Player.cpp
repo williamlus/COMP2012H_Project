@@ -239,7 +239,7 @@ void Player::clear_cards(const CardsGroup& cg){
     this->deck->clear_cards(cg.get_cards());
 }//clear the played cards' pointers(don't delete)
 
-vector<int> Player::get_deck_distribution() {
+vector<int> Player::get_deck_distribution(Deck* deck) {
     vector<int> count(NUMBER_OF_FIGURES, 0);
     vector<Card const*> current_cards = deck->get_cards();
     for (int i = 0; i < current_cards.size(); ++i) {
@@ -257,7 +257,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     vector<Card const*> bomb_cards;
     int num_input = cp.get_cards_type().get_num_cards();
     //first we can find whether there are bombs in current_cards
-    vector<int> count = get_deck_distribution();
+    vector<int> count = get_deck_distribution(this->deck);
     for (int i = 0; i < NUMBER_OF_FIGURES; ++i) {
         //this is for normal bomb case
         if(i< NUMBER_OF_FIGURES-1){
