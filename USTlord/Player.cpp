@@ -86,9 +86,7 @@ void Player::select_card(Card const * c){
     }
 }//select one card from deck and push its pointer to selected_cards_group, if card exists in selected_cards_group, then unselect it
 
-void Player::calc_hints(const CurrentPattern& cp){
-    //TBC
-}//find all possible hints according to current pattern, and stored them in hints.
+
 
 CardsGroup Player::get_hint(){
     int temp=this->current_hint;
@@ -235,6 +233,8 @@ void Player::calc_hints(const CurrentPattern& cp) {
     CardsType::Type type = (cp.get_cards_type()).get_type();
     vector<Card const*> current_cards = deck->get_cards();
     vector<CardsGroup> bombs;
+    vector<Card const*> bomb_cards;
+    int num_input = cp.get_cards_type().get_num_cards();
     //first we can find whether there are bombs in current_cards
     vector<int> count = get_deck_distribution();
     for (int i = 0; i < NUMBER_OF_FIGURES; ++i) {
@@ -245,6 +245,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
                 Card const* second = deck->get_certain_card(Card::Color::HEART,i);
                 Card const* third = deck->get_certain_card(Card::Color::CLUB,i);
                 Card const* fourth = deck->get_certain_card(Card::Color::DIAMOND,i);
+                
                 vector<Card const*> temp_cards_combination {first,second,third,fourth};
                 CardsGroup group_to_add(temp_cards_combination);
                 bombs.push_back(group_to_add);
@@ -286,9 +287,10 @@ void Player::calc_hints(const CurrentPattern& cp) {
         //first get all valid PAIR
         for(int i=0;i<NUMBER_OF_FIGURES;++i){
             if(count[i]>=2){
-                Card const* first = deck->get_certain_card(i,nullptr);
-                Card const* second = deck->get_certain_card(i,first);
-                vector<Card const* > card_to_add {first,second};
+                Card const* first = deck->get_certain_card(i,{});
+                vector<Card const* > card_to_add {first};
+                Card const* second = deck->get_certain_card(i,card_to_add);
+                card_to_add.push_back(second);
                 CardsGroup  temp(card_to_add);
                 if (temp.compare(cp) == 1) {
                     hints.push_back(temp);
@@ -310,10 +312,12 @@ void Player::calc_hints(const CurrentPattern& cp) {
     //first get all valid TRIO
     for(int i=0;i<NUMBER_OF_FIGURES;++i){
         if(count[i]>=3){
-                Card const* first = deck->get_certain_card(i,nullptr);
-                Card const* second = deck->get_certain_card(i,first);
-                Card const* third = deck->get_certain_card(i,third);
-                vector<Card const* > card_to_add {first,second,third};
+                Card const* first = deck->get_certain_card(i,{});
+                vector<Card const* > card_to_add {first};
+                Card const* second = deck->get_certain_card(i,card_to_add);
+                card_to_add.push_back(second);
+                Card const* third = deck->get_certain_card(i,card_to_add);
+                card_to_add.push_back(third);
                 CardsGroup  temp(card_to_add);
                 if (temp.compare(cp) == 1) {
                     hints.push_back(temp);
@@ -331,7 +335,277 @@ void Player::calc_hints(const CurrentPattern& cp) {
     //TRIO_WITH_ONE case
     else if(type==CardsType::Type::TRIO_WITH_ONE){
         //check after chosing 3, is there any 1 single card left
+        //first get all valid TRIO
+        for(int i=0;i<NUMBER_OF_FIGURES;++i){
+            if(count[i]>=3){
+                Card const* first = deck->get_certain_card(i,{});
+                vector<Card const* > card_to_add {first};
+                Card const* second = deck->get_certain_card(i,card_to_add);
+                card_to_add.push_back(second);
+                Card const* third = deck->get_certain_card(i,card_to_add);
+                card_to_add.push_back(third);
+                Card const* single = deck->get_certain_card(card_to_add);
+                if(single!=nullptr){
+                    card_to_add.push_back(single);
+                    CardsGroup temp(card_to_add);
+                    if (temp.compare(cp)==1){
+                        hints.push_back(temp);
+                    }
+                }
+            }
+        }
+        //then get all possible BOMB
+        if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
     }
-
+    //TRIO_WITH_PAIR case
+    else if(type==CardsType::Type::TRIO_WITH_PAIR&&deck->get_num_cards()>=5){
+        //check after chosing 3, is there any 1 single card left
+        //first get all valid TRIO
+        for(int i=0;i<NUMBER_OF_FIGURES;++i){
+            if(count[i]>=3){
+                Card const* first = deck->get_certain_card(i,{});
+                vector<Card const* > card_to_add {first};
+                Card const* second = deck->get_certain_card(i,card_to_add);
+                card_to_add.push_back(second);
+                Card const* third = deck->get_certain_card(i,card_to_add);
+                card_to_add.push_back(third);
+                //now find the remaining pair
+                for(int j = 0;j<NUMBER_OF_FIGURES;++j){
+                    if(count[j]>=2&&j!=i){
+                        Card const* first_single = deck->get_certain_card(j,card_to_add);
+                        card_to_add.push_back(first_single);
+                        Card const* second_single = deck->get_certain_card(j,card_to_add);
+                        card_to_add.push_back(second_single);
+                        break;
+                    }
+                }
+                CardsGroup temp=(card_to_add);
+                if(temp.compare(cp)==1){
+                    hints.push_back(temp);
+                }
+            }
+        }
+        //then get all possible BOMB
+        if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
     }
-    
+    //FOUR_WITH_TWO
+    else if(type==CardsType::Type::FOUR_WITH_TWO&&deck->get_num_cards()>=6){
+        if(bombs.size()>0){
+            for(int i=0;i<NUMBER_OF_FIGURES;++i){
+                if(count[i]==4){
+                    Card const* first = deck->get_certain_card(Card::Color::SPADE,i);
+                    Card const* second = deck->get_certain_card(Card::Color::HEART,i);
+                    Card const* third = deck->get_certain_card(Card::Color::CLUB,i);
+                    Card const* fourth = deck->get_certain_card(Card::Color::DIAMOND,i);
+                    vector<Card const*> card_to_add {first,second,third,fourth};
+                    for(int j = 0;i<NUMBER_OF_FIGURES;++j){
+                        if(count[j]>=2&&j!=i){
+                            Card const* first_single = deck->get_certain_card(j,card_to_add);
+                            card_to_add.push_back(first_single);
+                            Card const* second_single = deck->get_certain_card(j,card_to_add);
+                            card_to_add.push_back(second_single);
+                            break;
+                        }
+                    }
+                    CardsGroup temp=(card_to_add);
+                        if(temp.compare(cp)==1){
+                            hints.push_back(temp);
+                        }
+            }
+            }
+            //then get all possible BOMB
+            if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+        }
+    }
+    //SINGLE_CONTINUOUS case
+    else if(type==CardsType::Type::SINGLE_CONTINUOUS){
+        //do searching iff there exists possible consecutive terms
+        if(CardsGroup::count_max_continuous_times(count,1)>=num_input){
+        int num_continuous = cp.get_cards_type().get_num_cards();
+        int value_of_ref = cp.get_reference_card()->get_value();
+        //find the starting point of such consecutive terms
+        for(int i=value_of_ref;i<value_of_ref+num_continuous;++i){
+        if(i+num_continuous<=11){
+            bool check = true;
+        for( int j =i;j<value_of_ref+num_continuous;++j){
+            if(count[j]==0){check=false;break;}
+        }
+        //check is true means that such consecutive terms are found, then add them to hint
+        if(check){
+            Card const* first = deck->get_certain_card(i,{});
+            vector<Card const*> card_to_add{first};
+            for(int k =1,p=i+1;k<num_continuous;++k,++p){
+                Card const* to_add = deck->get_certain_card(p,card_to_add);
+                card_to_add.push_back(to_add);
+            }
+            CardsGroup temp(card_to_add);
+                if(temp.compare(cp)==1){
+                        hints.push_back(temp);
+                    }
+        }
+        
+        }
+        }
+        }
+        //then get all possible BOMB
+            if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+    }
+    //PAIR_CONTINUOUS case
+    else if(type==CardsType::Type::PAIR_CONTINUOUS){
+        //do searching iff there exists possible consecutive terms
+        if(CardsGroup::count_max_continuous_times(count,2)>=num_input/2){
+        int num_continuous = num_input/2;
+        int value_of_ref = cp.get_reference_card()->get_value();
+        for(int i = value_of_ref;i<value_of_ref+num_continuous;++i){
+            //consequent checking is meaningful iff the last card in the consecutive term is less or equal than A
+            if(i+num_continuous<=11){
+                bool check = true;
+                for(int j = i;j<value_of_ref+num_continuous;++j){
+                    if(count[j]<2){check == false; return;}
+                }
+                //check is true means that such consecutive terms are found, then add them to hint
+                if(check){
+                    vector<Card const*> card_to_add {};
+                    for(int k = 0, p = i; k<num_continuous;++k,++p){
+                        Card const* first_to_add = deck->get_certain_card(p,card_to_add);
+                        card_to_add.push_back(first_to_add);
+                        Card const* second_to_add = deck->get_certain_card(p,card_to_add);
+                        card_to_add.push_back(second_to_add);
+                    }
+                    CardsGroup temp(card_to_add);
+                    if(temp.compare(cp)==1){
+                        hints.push_back(temp);
+                    }
+                }
+            }
+        }
+    }
+    //then get all possible BOMB
+            if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+    }
+    //TRIO_CONTINUOUS and PLANE case
+    //since these three cases share the same TRIO, we can discuss them together
+    else if(type==CardsType::Type::TRIO_CONTINUOUS||type==CardsType::Type::PLANE_WITH_SMALL_WINGS||type==CardsType::Type::PLANE_WITH_BIG_WINGS){
+        //do searching iff there exists possible consecutive terms
+        vector<int> cp_distribution = cp.get_figures_distribution();
+        //get the number of and reference card of consecutive TRIO
+        int num_continuous = CardsGroup::count_max_continuous_times(cp_distribution,3);
+        int value_of_ref = cp.get_reference_card()->get_value();
+        
+        if(CardsGroup::count_max_continuous_times(count,3)>=num_continuous){
+            
+            for(int i = value_of_ref;i<value_of_ref+num_continuous;++i){
+                //consequent checking is meaningul iff the last card in the consecutive term is less or equal than A
+                if(i+num_continuous<=11){
+                    bool check = true;
+                    for(int j = i;j<value_of_ref+num_continuous;++j){
+                        if(count[j]<3){check = false; return;}
+                    }
+                    //check is true means that such consecutive terms are found, then add them to hint
+                    if(check){
+                        vector<Card const*> card_to_add {};
+                        for(int k =0, p=i;k<num_continuous;++k,++p){
+                            Card const* first_to_add = deck->get_certain_card(p,card_to_add);
+                            card_to_add.push_back(first_to_add);
+                            Card const* second_to_add = deck->get_certain_card(p,card_to_add);
+                            card_to_add.push_back(second_to_add);
+                            Card const* third_to_add = deck->get_certain_card(p,card_to_add);
+                            card_to_add.push_back(third_to_add);
+                        }
+                        //for TRIO case
+                        if(type==CardsType::Type::TRIO){
+                        CardsGroup temp(card_to_add);
+                        if(temp.compare(cp)==1){
+                            hints.push_back(temp);
+                        }
+                        }
+                        //for PLANE_WITH_SMALL_WINGS case
+                        else if(type==CardsType::Type::PLANE_WITH_SMALL_WINGS){
+                            //find if there has enough SINGLE cards remaining
+                            if(deck->get_num_cards()-3*num_continuous>=num_continuous){
+                                for(int k = 0;k<num_continuous;++k){
+                                    Card const* to_add = deck->get_certain_card(card_to_add);
+                                    card_to_add.push_back(to_add);
+                                }
+                                CardsGroup temp(card_to_add);
+                                if(temp.compare(cp)==1){
+                                    hints.push_back(temp);
+                                }
+                            }
+                        }
+                        //for PLANE_WITH_BIG_WINGS case
+                        else if(type==CardsType::Type::PLANE_WITH_BIG_WINGS){
+                            //find if there has enough cards remaining
+                            if(deck->get_num_cards()-3*num_continuous>=2*num_continuous){
+                                int count_pair = 0;
+                                vector<int> pair_index;
+                                //then check whether there exists required PAIR
+                                for(int  j =0;j<NUMBER_OF_FIGURES;++j){
+                                    //be careful that the pair chosen cannot be the TRIO chosen!!
+                                    if(count[j]>=2&&(j<i||j>i+num_continuous-1)){
+                                        count_pair+=1;
+                                        pair_index.push_back(j);
+                                    }
+                                }
+                                //exist required pair
+                                if(count_pair>=num_continuous){
+                                    //store the pair
+                                    for(int p =0;p<num_continuous;++p){
+                                        int index = pair_index[p];
+                                        Card const* first_to_add = deck->get_certain_card(index,card_to_add);
+                                        card_to_add.push_back(first_to_add);
+                                        Card const* second_to_add = deck->get_certain_card(index,card_to_add);
+                                        card_to_add.push_back(second_to_add);
+                                    }
+                                    CardsGroup temp(card_to_add);
+                                    if(temp.compare(cp)==1){
+                                        hints.push_back(temp);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //then get all possible BOMB
+            if(bombs.size()>0){
+            
+            for(int j=0;j<bombs.size();++j){
+                hints.push_back(bombs[j]);
+            }
+        }
+    }
+    //BOMB case
+    if(bombs.size()>0){
+        //compare the bomb
+        for(int i =0;i<bombs.size();++i){
+            if(bombs[i].compare(cp)==1){hints.push_back(bombs[i]);}
+        }
+    }
+    }
