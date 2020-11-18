@@ -54,28 +54,92 @@ const Card* Deck::get_certain_card(Card::Color color, int value) {
         return nullptr;
 }
 
-const Card* Deck::get_certain_card(int value,Card const* check){
-    Card* temp_card = new Card(Card::Color::SPADE, value);
-    for (int i = 0; i < cards.size(); ++i) {
-        if(*temp_card==*cards[i]&&cards[i]!=check){return cards[i]; }
+const Card* Deck::get_certain_card(int value,vector<Card const*> chosen){
+    for(int i = 0;i<cards.size();++i){
+        if(cards[i]->get_value()==value){
+            //check whether it's inside chosen, if not, return it
+            bool check=true;
+            for(int j = 0;j<chosen.size();++j){
+                if(Card::strictly_equal(chosen[j],cards[i])){check=false; break;}
+            }
+            //if not exist
+            if(check){
+                return cards[i];
+            }
+        }
     }
-    delete temp_card;
-        return nullptr;
+    return nullptr;
+
+}
+
+const Card* Deck::get_certain_card_base(int value,vector<Card const*> chosen){
+    for(int i = 0;i<cards.size();++i){
+        if(cards[i]->get_value()==value){
+            //check whether it's inside chosen, if not, return it
+            bool check=true;
+            for(int j = 0;j<chosen.size();++j){
+                if(Card::strictly_equal(chosen[j],cards[i])){check=false; break;}
+            }
+            //if not exist
+            if(check){
+                return cards[i];
+            }
+        }
+    }
+    return nullptr;
 }
 
 void Deck::generate_combination(){
-    //find if there is bomb
+    vector<int> count = get_deck_distribution(this);
+    //find TRIO
+    for(int i = 0;i<NUMBER_OF_FIGURES;++i){
+        if(count[i]==3){
+            for(int j=0;j<3;++j){
+                Card const* to_add = get_certain_card_base(i,cards_in_combination);
+                cards_in_combination.push_back(to_add);
+                cards_in_important_combination.push_back(to_add);
+            }
+        }
+    }
+    //find if there is BOMB
+    for(int i = 0 ; i<NUMBER_OF_FIGURES;++i){
+        if(count[i]==4){
+            for(int j=0;j<4;++j){
+                Card const* to_add = get_certain_card_base(i,cards_in_combination);
+                cards_in_combination.push_back(to_add);
+                cards_in_important_combination.push_back(to_add);
+            }
+
+        }
+    }
+    //find if there is PAIR
+    for(int i=0;i<NUMBER_OF_FIGURES;++i){
+        if(count[i]==2){
+            Card const* first_to_add = get_certain_card_base(i,cards_in_combination);
+            cards_in_combination.push_back(first_to_add);
+            Card const* second_to_add = get_certain_card_base(i,cards_in_combination);
+            cards_in_combination.push_back(second_to_add);
+        }
+    }
 }
 
 const Card* Deck::get_certain_card(vector<Card const*> chosen){
     for(int i=0;i<cards.size();++i){
         //if the i-th card in not in the chosen one, use it
-         if(!exist(cards[i])){
-             return cards[i];
-         }
+        
+        if(!exist(cards[i],chosen)){
+            //first not considering return card in cards_in_combination
+            if(!exist(cards[i],cards_in_combination)){return cards[i];}
+            //if no cards left outside cards_in_combination, try to not split the important combination
+            else if(!exist(cards[i],cards_in_important_combination)){return cards[i];}
+            //if no cards left outside cards_in_important_combination, then split the important_combination
+            else{split_important_combination=true; return cards[i];}
+        }
     }
     return nullptr;
 }
+
+
 bool Deck::exist(Card const* card){
     
     for(int i=0;i<cards.size();++i){
@@ -84,6 +148,13 @@ bool Deck::exist(Card const* card){
     }
     return false;
 
+}
+
+bool Deck::exist(Card const* card,vector<Card const*> chosen){
+    for(int i=0;i<chosen.size();++i){
+        if(Card::strictly_equal(chosen[i],card)){return true;}
+    }
+    return false;
 }
 
 vector<int> Deck::get_deck_distribution(Deck* deck) {
@@ -95,7 +166,6 @@ vector<int> Deck::get_deck_distribution(Deck* deck) {
     }
     return count;
 }
-
 
 
 
