@@ -100,7 +100,6 @@ void Player::select_card(Card const * c){
 }//select one card from deck and push its pointer to selected_cards_group, if card exists in selected_cards_group, then unselect it
 
 
-
 CardsGroup Player::get_hint(){
     int temp=this->current_hint;
     ++this->current_hint;
