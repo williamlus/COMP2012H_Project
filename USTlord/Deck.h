@@ -17,7 +17,7 @@ class Deck {
       bool exist(Card const*,vector<Card const*>);
       //helper function for generate_combination
       const Card* get_certain_card_base(int value,vector<Card const*> chosen);
-      bool split_important_combination {false};//a signal of whether this hint must split the important combination. This is used for AI player
+      
     public:
       Deck();//default constructor, generate an empty deck
       Deck(vector<Card const*> card);//Conversion constructor
@@ -34,6 +34,7 @@ class Deck {
       const Card* get_certain_card(vector<Card const*> chosen);
       //for all get_certain_card function, before invoke it, make sure such certain card exist, otherwise it will return nullptr
       static vector<int> get_deck_distribution(Deck* deck);
+      bool split_important_combination {false};//a signal of whether this hint must split the important combination. This is used for AI player
 };
 
 #endif /* DECK_H_ */
