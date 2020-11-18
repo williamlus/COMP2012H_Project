@@ -70,7 +70,7 @@ CurrentPattern const* Board::get_current_pattern() const{
 }
 
 //Initialize the game in offline mode
-void Board::init_game(){
+void Board::init_online_game(){
     for(int i=0;i<NUMBER_OF_PLAYER;i++){delete this->players[i];}
     //generate 3 players (1 player, 2 AI)
     this->players[CURRENT_PLAYER]=new Player(0,"You");
@@ -96,6 +96,31 @@ void Board::init_game(){
     this->cp->set_player_index(landlord_id);
     cout << "Init game success!" << endl;
 };
+
+void Board::init_offline_game(){
+    for(int i=0;i<NUMBER_OF_PLAYER;i++){delete this->players[i];}
+    //generate 3 players (1 player, 2 AI)
+    this->players[CURRENT_PLAYER]=new Player(0,"You");
+    this->players[1]=new AIPlayer(1,"AI "+to_string(1));//////////////
+    this->players[2]=new AIPlayer(2,"AI "+to_string(2));//////////////
+    this->cp=new CurrentPattern();
+    game_finish = false;
+    you_win = false;
+    landlord_win = false;
+    landlord_id = -1;
+
+    while(landlord_id == -1){
+        srand((int)time(0));
+        shuffle();
+        landlord_id = choose_landlord();
+    }
+
+    players[landlord_id]->set_is_landlord(true);
+    cout << players[landlord_id]->get_name() << " is landlord now" << endl;
+    this->landlord_bonus();
+    this->cp->set_player_index(landlord_id);
+    cout << "Init game success!" << endl;
+}
 
 //Perform the main process of the game
 void Board::start_game(){
