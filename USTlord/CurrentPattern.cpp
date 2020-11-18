@@ -50,10 +50,17 @@ bool CurrentPattern::can_be_beaten_by(int id,const CardsGroup& cg) const{
     }
 }//check whether current_pattern can be beaten by cardsgroup played by the player with the id
 //if both id's are the same, return true
-void CurrentPattern::record(int id,const CardsGroup& cg){
+
+void CurrentPattern::record(int id,const CardsGroup& cg,bool is_landlord){
     if(cg.get_cards_type().get_num_cards()==0){
         return;
     }
     this->reset(cg.get_cards());
     this->player_index=id;
+    this->is_landlord = is_landlord;
 }//record the cardsgroup played by the player with the id
+
+bool CurrentPattern::current_is_landlord() const{
+    return is_landlord;
+}
+
