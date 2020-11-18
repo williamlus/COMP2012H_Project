@@ -17,8 +17,19 @@ bool make_choice(string);
 
 int main() {
     Board* board = new Board();
+    char mode='\0';
     do{
-        board->init_game();
+        cout << "online or offline mode? (O=online/F=offline)";
+        cin >> mode;
+        cin.ignore(999,'\n');
+    }while(mode!='O' &&mode!='o' && mode!='F' && mode!='f');
+    do{
+        if(mode=='O' || mode=='o'){
+            board->init_online_game();
+        }
+        else{
+            board->init_offline_game();
+        }
         board->start_game();
     }while(make_choice("\nStart another game? (Y=yes/N=no) :"));
     delete board;
