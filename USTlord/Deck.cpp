@@ -98,6 +98,7 @@ void Deck::generate_combination(){
                 Card const* to_add = get_certain_card_base(i,cards_in_combination);
                 cards_in_combination.push_back(to_add);
                 cards_in_important_combination.push_back(to_add);
+                num_of_important_combination+=1;
             }
         }
     }
@@ -108,6 +109,7 @@ void Deck::generate_combination(){
                 Card const* to_add = get_certain_card_base(i,cards_in_combination);
                 cards_in_combination.push_back(to_add);
                 cards_in_important_combination.push_back(to_add);
+                num_of_important_combination+=1;
             }
 
         }
@@ -124,18 +126,21 @@ void Deck::generate_combination(){
 }
 
 const Card* Deck::get_certain_card(vector<Card const*> chosen){
-    for(int i=0;i<cards.size();++i){
-        //if the i-th card in not in the chosen one, use it
-        
-        if(!exist(cards[i],chosen)){
-            //first not considering return card in cards_in_combination
-            if(!exist(cards[i],cards_in_combination)){return cards[i];}
-            //if no cards left outside cards_in_combination, try to not split the important combination
-            else if(!exist(cards[i],cards_in_important_combination)){return cards[i];}
-            //if no cards left outside cards_in_important_combination, then split the important_combination
-            else{split_important_combination=true; return cards[i];}
-        }
+    //if the i-th card in not in the chosen one, use it
+    //first not considering return card in cards_in_combination
+    for(int i=0;i<cards.size();++i){   
+        if(!exist(cards[i],chosen)&&!exist(cards[i],cards_in_combination)){return cards[i];}
     }
+    //if no cards left outside cards_in_combination, try to not split the important combination
+    for(int i=0;i<cards.size();++i){
+        if(!exist(cards[i],chosen)&&!exist(cards[i],cards_in_important_combination)){return cards[i];}
+    }
+    //if no cards left outside cards_in_important_combination, then split the important_combination for player
+    //also set split_important_combination to true, this is used for AI player
+    for(int i=0;i<cards.size();++i){
+        if(!exist(cards[i],chosen)){return cards[i];}
+    }
+
     return nullptr;
 }
 
@@ -165,6 +170,10 @@ vector<int> Deck::get_deck_distribution(Deck* deck) {
         count[temp_value]++;
     }
     return count;
+}
+
+int Deck::get_num_important_combination(){
+    return num_of_important_combination;
 }
 
 
