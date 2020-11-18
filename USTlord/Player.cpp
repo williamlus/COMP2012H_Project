@@ -240,6 +240,8 @@ void Player::clear_cards(const CardsGroup& cg){
 
 
 void Player::calc_hints(const CurrentPattern& cp) {
+    //first reset split_important_combination. This is for AI player
+    deck->split_important_combination=false;
     //first know what's the card type of the current pattern
     CardsType::Type type = (cp.get_cards_type()).get_type();
     vector<Card const*> current_cards = deck->get_cards();
