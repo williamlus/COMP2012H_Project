@@ -33,11 +33,13 @@ public:
     vector<int> get_players_num_cards() const;
     CurrentPattern const* get_current_pattern() const;
 
-    void init_game();
+    void init_online_game();
     //Initialize the game in offline mode:
     //set players names
     //call shuffle(): shuffle and distribute cards
     //choose landlord and distribute landlord cards
+
+    void init_offline_game();
 
     void start_game();
     //Perform the main process of the game
