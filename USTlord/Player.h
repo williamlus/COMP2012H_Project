@@ -21,6 +21,7 @@ class Player {
       int current_hint;
       bool is_landlord = false;
       vector<string*> request_cards_string();//only check the format during the request
+      
     public:
       //constructor
       Player();
@@ -40,7 +41,7 @@ class Player {
       void display_cards() const;//display cards in hand (deck) and the selected cards to the player
       //Member functions
       virtual bool want_landlord();//choose to be landlord or not
-      void calc_hints(const CurrentPattern& cp);//find all possible hints according to current pattern, and stored them in hints.
+      virtual void calc_hints(const CurrentPattern& cp);//find all possible hints according to current pattern, and stored them in hints.
       CardsGroup get_hint();//get one hint according to hints and current_hint, update the selected_cards_group, and display_cards()
       void select_card(Card const * c);//select one card from deck and push its pointer to selected_cards_group, if card exists in selected_cards_group, then unselect it
       bool selected_can_beat(const CurrentPattern& cp);//check whether the player's selected cards can beat the last player's CardsGroup
