@@ -133,7 +133,7 @@ void Board::start_game(){
             turn = 0;
         }
         cout << endl;
-        this->cp->record(players[turn]->get_id(),players[turn]->play(*this->get_current_pattern()));
+        this->cp->record(players[turn]->get_id(),players[turn]->play(*this->get_current_pattern()),players[turn]->get_id()==landlord_id);
         this->cp->display();
 
         //check game state
