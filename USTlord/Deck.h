@@ -26,6 +26,7 @@ class Deck {
       const Card* get_certain_card(Card::Color color, int value);
       const Card* get_certain_card(int value,Card const* check);
       const Card* get_certain_card(vector<Card const*> chosen);
+      static vector<int> get_deck_distribution(Deck* deck);
 };
 
 #endif /* DECK_H_ */
