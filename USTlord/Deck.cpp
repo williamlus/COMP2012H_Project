@@ -86,5 +86,16 @@ bool Deck::exist(Card const* card){
 
 }
 
+vector<int> Deck::get_deck_distribution(Deck* deck) {
+    vector<int> count(NUMBER_OF_FIGURES, 0);
+    vector<Card const*> current_cards = deck->get_cards();
+    for (int i = 0; i < current_cards.size(); ++i) {
+        int temp_value = current_cards[i]->get_value();
+        count[temp_value]++;
+    }
+    return count;
+}
+
+
 
 
