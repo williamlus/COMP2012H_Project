@@ -19,7 +19,7 @@ int main() {
     Board* board = new Board();
     char mode='\0';
     do{
-        cout << "online or offline mode? (O=online/F=offline)";
+        cout << "online or offline mode? (O=online/F=offline) : ";
         cin >> mode;
         cin.ignore(999,'\n');
     }while(mode!='O' &&mode!='o' && mode!='F' && mode!='f');
