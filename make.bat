@@ -1,1 +1,0 @@
-g++ AIPlayer.cpp Board.cpp Card.cpp CardsGroup.cpp CardsType.cpp CurrentPattern.cpp Deck.cpp main.cpp Player.cpp -o main.exe
