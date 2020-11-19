@@ -615,10 +615,15 @@ void Player::calc_hints(const CurrentPattern& cp) {
         }
     }
     //BOMB case
+    else if(type==CardsType::Type::BOMB){
     if(bombs.size()>0){
         //compare the bomb
         for(int i =0;i<bombs.size();++i){
             if(bombs[i].compare(cp)==1){hints.push_back(bombs[i]);}
         }
-    }
+    }}
+        //this is for AI player
+        //for real player, the last hint should not be displayed
+        hints.push_back(CardsGroup());
+    
     }

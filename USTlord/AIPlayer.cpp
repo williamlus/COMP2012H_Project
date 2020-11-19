@@ -14,13 +14,39 @@ const CardsGroup& AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> pl
     }
     else{
         if(cp.current_is_landlord()){
-          //if current AIPlayer is farmer, then avoid to beat its partner 
-          //when its partner play same combination except small PAIR  
+            return this->hints[0];
+          
+        }
+        else{
+            //if current AIPlayer is farmer, then avoid to beat its partner 
+            //when its partner play same combination except small PAIR and small SINGLE unless can win
+            if(cp.get_cards_type().get_type()==CardsType::Type::SINGLE){
+                if(deck->get_num_cards()==1){return this->hints[0];}
+                //never beat partner if he plays a SINGLE greater or equal 2
+                if(cp.get_reference_card()->get_value()>=12){return hints[hints.size()-1];}
+                else{return this->hints[0];}
+            }
+            else if(cp.get_cards_type().get_type()==CardsType::Type::PAIR){
+                if(deck->get_num_cards()==2){return this->hints[0];}
+                //if cannot win, never beat partner if he plays a SINGLE greater or equal than AA
+                if(cp.get_reference_card()->get_value()>=11){return hints[hints.size()-1];}
+                else{return this->hints[0];}
+            }
+            else{
+                //partner plays some combination, never beat him unless itself can win 
+                if(deck->get_num_cards()==cp.get_cards_type().get_num_cards()){
+                    return this->hints[0];
+                }
+                else{
+                    return hints[hints.size()-1];
+                }
+            }
+            
         }
     }
     
 
-    return this->hints[0];
+    
     //TBC
 }//choose cardsgroup according to the situation of board (e.g. num of cards of other players, current_pattern)
 
