@@ -18,7 +18,7 @@ class Player {
       Deck* deck;
       CardsGroup selected_cards_group;
       vector<CardsGroup> hints;
-      int current_hint;
+      int current_hint = 0;
       bool is_landlord = false;
       vector<string*> request_cards_string();//only check the format during the request
       
