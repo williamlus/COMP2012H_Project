@@ -184,7 +184,7 @@ CardsGroup Player::play(const CurrentPattern& cp, vector<int> players_num_cards)
         cout << endl;
         if (choice=='h'){
             this->selected_cards_group=this->get_hint();
-            this->display_cards();
+            //this->display_cards();
         }
         else if (choice=='s'){
             vector<string*> cards_string(0,nullptr);
