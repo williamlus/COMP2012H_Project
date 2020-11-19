@@ -173,7 +173,7 @@ vector<string*> Player::request_cards_string(){
     return cards;
 }
 
-CardsGroup Player::play(const CurrentPattern& cp){
+CardsGroup Player::play(const CurrentPattern& cp, vector<int> players_num_cards){
     this->calc_hints(cp);
     char choice;
     while (true){
