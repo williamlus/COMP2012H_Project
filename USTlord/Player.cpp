@@ -622,8 +622,6 @@ void Player::calc_hints(const CurrentPattern& cp) {
             if(bombs[i].compare(cp)==1){hints.push_back(bombs[i]);}
         }
     }}
-        //this is for AI player
-        //for real player, the last hint should not be displayed
-        hints.push_back(CardsGroup());
+      
     
     }

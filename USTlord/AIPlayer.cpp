@@ -7,7 +7,7 @@ AIPlayer::AIPlayer():Player(-1,"default name"){}
 AIPlayer::AIPlayer(int id,string name):Player(id,name){}
 AIPlayer::~AIPlayer(){}
 
-const CardsGroup& AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> players_num_cards){
+const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> players_num_cards){
     //if current AIPlayer is landlord, then try to beat everyone
     if(is_landlord){
         return this->hints[0];
@@ -23,13 +23,13 @@ const CardsGroup& AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> pl
             if(cp.get_cards_type().get_type()==CardsType::Type::SINGLE){
                 if(deck->get_num_cards()==1){return this->hints[0];}
                 //never beat partner if he plays a SINGLE greater or equal 2
-                if(cp.get_reference_card()->get_value()>=12){return hints[hints.size()-1];}
+                if(cp.get_reference_card()->get_value()>=12){return CardsGroup();}
                 else{return this->hints[0];}
             }
             else if(cp.get_cards_type().get_type()==CardsType::Type::PAIR){
                 if(deck->get_num_cards()==2){return this->hints[0];}
                 //if cannot win, never beat partner if he plays a SINGLE greater or equal than AA
-                if(cp.get_reference_card()->get_value()>=11){return hints[hints.size()-1];}
+                if(cp.get_reference_card()->get_value()>=11){return CardsGroup();}
                 else{return this->hints[0];}
             }
             else{
@@ -38,7 +38,7 @@ const CardsGroup& AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> pl
                     return this->hints[0];
                 }
                 else{
-                    return hints[hints.size()-1];
+                    return CardsGroup();
                 }
             }
             
