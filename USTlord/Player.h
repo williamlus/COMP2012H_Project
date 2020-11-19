@@ -45,7 +45,7 @@ class Player {
       CardsGroup get_hint();//get one hint according to hints and current_hint, update the selected_cards_group, and display_cards()
       void select_card(Card const * c);//select one card from deck and push its pointer to selected_cards_group, if card exists in selected_cards_group, then unselect it
       bool selected_can_beat(const CurrentPattern& cp);//check whether the player's selected cards can beat the last player's CardsGroup
-      virtual CardsGroup play(const CurrentPattern& cp);//use cin or hint (with loops) to play cards according to current pattern, clear_cards, and reset data members
+      virtual CardsGroup play(const CurrentPattern& cp, vector<int> players_num_cards);//use cin or hint (with loops) to play cards according to current pattern, clear_cards, and reset data members
       void clear_cards(const CardsGroup& cg);//clear the played cards' pointers(don't delete)
 };
 
