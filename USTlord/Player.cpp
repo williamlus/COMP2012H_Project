@@ -101,8 +101,9 @@ void Player::select_card(Card const * c){
 
 
 CardsGroup Player::get_hint(){
+    if(this->hints.size()==0){return CardsGroup();}
     int temp=this->current_hint;
-    ++this->current_hint;
+    this->current_hint=(this->current_hint+1)%this->hints.size();
     return this->hints[temp];
 }//get one hint according to hints and current_hint, update the selected_cards_group, and display_cards()
 
