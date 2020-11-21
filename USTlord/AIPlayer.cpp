@@ -8,7 +8,7 @@ AIPlayer::AIPlayer():Player(-1,"default name"){}
 AIPlayer::AIPlayer(int id,string name):Player(id,name){}
 AIPlayer::~AIPlayer(){}
 
-const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> players_num_cards){
+const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
     //if this AIPlayer is the first one to play card or the last currentPattern is played by himself
     //he can play any CardsGroup
     if(cp.get_player_index()==this->get_id()||cp.get_cards_type().get_type()==CardsType::Type::EMPTY){
@@ -138,13 +138,13 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> pla
     
 
     
-    //TBC
+    
 }//choose cardsgroup according to the situation of board (e.g. num of cards of other players, current_pattern)
 
 CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_cards){
     if(!deck->split_important_combination){
     this->calc_hints(cp);
-    return this->choose_hint(cp, players_num_cards);}
+    return this->choose_hint(cp);}
     else{
         return CardsGroup();
     }
