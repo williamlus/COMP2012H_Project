@@ -90,10 +90,12 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> pla
     }
     //if current AIPlayer is landlord, then try to beat everyone
     if(is_landlord){
+        if(hints.empty()){return CardsGroup();}
         return this->hints[0];
     }
     else{
         if(cp.current_is_landlord()){
+            if(hints.empty()){return CardsGroup();}
             return this->hints[0];
           
         }
@@ -104,17 +106,26 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp, vector<int> pla
                 if(deck->get_num_cards()==1){return this->hints[0];}
                 //never beat partner if he plays a SINGLE greater or equal 2
                 if(cp.get_reference_card()->get_value()>=12){return CardsGroup();}
-                else{return this->hints[0];}
+                else{
+                    if(hints.empty()){return CardsGroup();}
+                    return this->hints[0];
+                    }
             }
             else if(cp.get_cards_type().get_type()==CardsType::Type::PAIR){
-                if(deck->get_num_cards()==2){return this->hints[0];}
+                if(deck->get_num_cards()==2){
+                    if(hints.empty()){return CardsGroup();}
+                    return this->hints[0];}
                 //if cannot win, never beat partner if he plays a SINGLE greater or equal than AA
                 if(cp.get_reference_card()->get_value()>=11){return CardsGroup();}
-                else{return this->hints[0];}
+                else{
+                    if(hints.empty()){return CardsGroup();}
+                    return this->hints[0];
+                    }
             }
             else{
                 //partner plays some combination, never beat him unless itself can win 
                 if(deck->get_num_cards()==cp.get_cards_type().get_num_cards()){
+                    if(hints.empty()){return CardsGroup();}
                     return this->hints[0];
                 }
                 else{

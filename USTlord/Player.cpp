@@ -245,7 +245,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     // he can play any card
     //so we give no hint
     if(cp.get_player_index()==this->get_id()||cp.get_cards_type().get_type()==CardsType::Type::EMPTY){
-        std::cout<<"You can play any CardsGroup you want!"<<std::endl;
+        std::cout<<"You can play any CardsGroup you want!"<<std::endl<<std::endl;
         return;
     }
     //first reset split_important_combination. This is for AI player
