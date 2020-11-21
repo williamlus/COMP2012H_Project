@@ -151,17 +151,18 @@ CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_card
     this->current_hint=0;
     this->clear_cards(cg);
     return cg;
-}//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
+    }
+//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
 
 bool AIPlayer::want_landlord(){
-    //if num_of_important_combination >=3, the probability of want_lanlord is 0.8
+    //if num_of_important_combination >=3, the probability of want_lanlord is 0.75
     //if num_of_important_combination==2, the probability of want_landload is 0.6
     //if num_of_important_combination<2, the probability of want_landlord is 0.3
     srand((unsigned)time(NULL));
     float prob = static_cast<float>(rand()/RAND_MAX);
     int num_of_important_combination = deck->get_num_important_combination();
     if(num_of_important_combination>=3){
-        return (prob<0.8)? true : false;
+        return (prob<0.75)? true : false;
     }
     else if(num_of_important_combination==2){
         return (prob<0.6)? true : false;
