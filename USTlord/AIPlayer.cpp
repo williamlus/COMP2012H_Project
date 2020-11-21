@@ -86,6 +86,12 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
             }
             return CardsGroup(card_to_add);
         }
+        //if not SINGLE_CONTINUOUS, just play the SINGLE
+        else{
+            Card const* to_add = deck->get_certain_card(smallest_index,{});
+            vector<Card const*> card_to_add {to_add};
+            return CardsGroup(card_to_add);
+        }
         
     }
     //if current AIPlayer is landlord, then try to beat everyone
