@@ -151,7 +151,6 @@ CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_card
     this->current_hint=0;
     this->clear_cards(cg);
     return cg;
-    }
 }//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
 
 bool AIPlayer::want_landlord(){
