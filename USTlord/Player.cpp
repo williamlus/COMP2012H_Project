@@ -241,6 +241,13 @@ void Player::clear_cards(const CardsGroup& cg){
 
 
 void Player::calc_hints(const CurrentPattern& cp) {
+    //if the last currentPattern is player by this player or this player is the first to play
+    // he can play any card
+    //so we give no hint
+    if(cp.get_player_index()==this->get_id()||cp.get_cards_type().get_type()==CardsType::Type::EMPTY){
+        std::cout<<"You can play any CardsGroup you want!"<<std::endl;
+        return;
+    }
     //first reset split_important_combination. This is for AI player
     deck->split_important_combination=false;
     //first know what's the card type of the current pattern
