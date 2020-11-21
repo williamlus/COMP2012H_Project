@@ -142,11 +142,15 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
 }//choose cardsgroup according to the situation of board (e.g. num of cards of other players, current_pattern)
 
 CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_cards){
+    CardsGroup cg=CardsGroup();
     if(!deck->split_important_combination){
     this->calc_hints(cp);
-    return this->choose_hint(cp);}
-    else{
-        return CardsGroup();
+    cg=this->choose_hint(cp);
+    }
+    this->hints.clear();
+    this->current_hint=0;
+    this->clear_cards(cg);
+    return cg;
     }
 }//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
 
