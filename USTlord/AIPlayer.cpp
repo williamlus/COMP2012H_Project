@@ -150,6 +150,10 @@ CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_card
     this->hints.clear();
     this->current_hint=0;
     this->clear_cards(cg);
+    if(cg.is_valid()){cout << this->name << " " << this->id << " " << "do not play." << endl;}
+    else{
+        cout << this->name << " " << this->id << " play : " << cg.get_cards_type().to_string() << endl;
+    }
     return cg;
     }
 //use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
