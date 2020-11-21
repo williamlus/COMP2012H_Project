@@ -113,6 +113,15 @@ void Deck::generate_combination(){
             }
 
         }
+    //find if there is ROCKET
+    if(count[NUMBER_OF_FIGURES-1]==2){
+        vector<Card const*> card_to_add;
+        Card const* first_to_add = get_certain_card(NUMBER_OF_FIGURES-1,card_to_add);
+        card_to_add.push_back(first_to_add);
+        Card const* second_to_add = get_certain_card(NUMBER_OF_FIGURES-1,card_to_add);
+        card_to_add.push_back(second_to_add);
+        num_of_important_combination+=1;
+    }
     }
     //find if there is PAIR
     for(int i=0;i<NUMBER_OF_FIGURES;++i){

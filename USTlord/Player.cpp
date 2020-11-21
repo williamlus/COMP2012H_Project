@@ -245,7 +245,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     // he can play any card
     //so we give no hint
     if(cp.get_player_index()==this->get_id()||cp.get_cards_type().get_type()==CardsType::Type::EMPTY){
-        std::cout<<"You can play any CardsGroup you want!"<<std::endl<<std::endl;
+        std::cout<<this->get_name()<<"You can play any CardsGroup you want!"<<std::endl<<std::endl;
         return;
     }
     //first reset split_important_combination. This is for AI player
@@ -306,7 +306,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     //PAIR case
     else if(type==CardsType::PAIR){
         //first get all valid PAIR
-        for(int i=0;i<NUMBER_OF_FIGURES;++i){
+        for(int i=0;i<NUMBER_OF_FIGURES-1;++i){
             if(count[i]>=2){
                 Card const* first = deck->get_certain_card(i,{});
                 vector<Card const* > card_to_add {first};
@@ -331,7 +331,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     //TRIO
     else if(type==CardsType::Type::TRIO){
     //first get all valid TRIO
-    for(int i=0;i<NUMBER_OF_FIGURES;++i){
+    for(int i=0;i<NUMBER_OF_FIGURES-1;++i){
         if(count[i]>=3){
                 Card const* first = deck->get_certain_card(i,{});
                 vector<Card const* > card_to_add {first};
