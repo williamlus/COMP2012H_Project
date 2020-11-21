@@ -150,7 +150,7 @@ CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_card
     this->hints.clear();
     this->current_hint=0;
     this->clear_cards(cg);
-    if(cg.is_valid()){cout << this->name << " " << this->id << " " << "do not play." << endl;}
+    if(!cg.is_valid()){cout << this->name << " " << this->id << " " << "do not play." << endl;}
     else{
         cout << this->name << " " << this->id << " play : " << cg.get_cards_type().to_string() << endl;
     }
