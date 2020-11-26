@@ -46,4 +46,6 @@ void Server::clientDisconnected(){
     std::cout << "Client disconnected.";
     std::cout << "Delete Messages.";
     emit msgChangedTo(msg,msg_len);
+    QString qs("Client IP : ");
+    emit clientIPChangedTo(qs,qs.size());
 }
