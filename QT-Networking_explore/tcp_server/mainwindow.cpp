@@ -51,5 +51,6 @@ void MainWindow::on_StopServerButton_clicked()
         delete this->server;
         this->server=nullptr;
         ui->message->setText("No Server...");
+        ui->ClientIPlabel->setText("Client IP : ");
     }
 }
