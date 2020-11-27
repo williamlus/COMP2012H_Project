@@ -45,12 +45,23 @@ void MainWindow::setClientIP(const QString ip,int ip_len){
 
 void MainWindow::on_StopServerButton_clicked()
 {
-    if(this->server){
+    if(this->server!=nullptr){
         qDebug() << "Stop the TcpServer.";
         std::cout << "Stop the TcpServer.";
         delete this->server;
         this->server=nullptr;
         ui->message->setText("No Server...");
         ui->ClientIPlabel->setText("Client IP : ");
+    }
+}
+
+
+void MainWindow::on_sendButton_clicked()
+{
+    if(server!=nullptr && server->isListening() && server->getClientSocket()!=nullptr){
+        QByteArray msgToClient;
+        QDataStream out(&msgToClient,QIODevice::WriteOnly);
+        out << ui->textEdit->toPlainText();
+        server->sendMsgToClient(msgToClient);
     }
 }

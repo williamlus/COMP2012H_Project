@@ -4,6 +4,13 @@ Server::Server(QObject *parent) : QTcpServer(parent)
 {
 }
 
+void Server::sendMsgToClient(QByteArray msgToClient)
+{
+    if(this->sock!=nullptr){
+        this->sock->write(msgToClient);
+    }
+}
+
 void Server::incomingConnection(qintptr handle){
     const char* temp="Incoming Connection.";
     qDebug() << temp;
@@ -18,6 +25,7 @@ void Server::incomingConnection(qintptr handle){
 }
 
 void Server::receiveMessage(){
+    if(sock==nullptr){return;}
     msg_len=sock->bytesAvailable();
     if(msg_len>0){
         msg=new char[msg_capacity]{};
@@ -37,6 +45,11 @@ void Server::receiveMessage(){
 
 void Server::clientDisconnected(){
     delete msg;
+    //delete sock; >_<
+    sock->deleteLater(); //:)
+    // Don't need to delete it manually
+    // because parent will delete it automatically
+    sock=nullptr;
     whole_msg[0]='\0';
     msg=new char[msg_capacity];
     strcpy(msg,"Client Disconnected.");

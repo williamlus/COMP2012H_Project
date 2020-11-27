@@ -26,6 +26,8 @@ private slots:
 
     void on_StopServerButton_clicked();
 
+    void on_sendButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Server* server{nullptr};

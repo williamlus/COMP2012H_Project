@@ -13,6 +13,8 @@ class Server : public QTcpServer
 public:
     explicit Server(QObject *parent = nullptr);
     ~Server(){qDebug() << "Server Killed.";}
+    const QTcpSocket * getClientSocket() const{return sock;}
+    void sendMsgToClient(QByteArray msgToClient);
 
 private:
     QTcpSocket *sock=nullptr;
