@@ -19,7 +19,7 @@ public:
 private:
     QTcpSocket *sock=nullptr;
     char* msg=nullptr;
-    int msg_capacity=16;
+    int msg_capacity=128;
     int msg_len=0;
     char* whole_msg=new char[msg_capacity]{};
 

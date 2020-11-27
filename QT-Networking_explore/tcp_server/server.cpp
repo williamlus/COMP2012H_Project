@@ -29,16 +29,21 @@ void Server::receiveMessage(){
     msg_len=sock->bytesAvailable();
     if(msg_len>0){
         msg=new char[msg_capacity]{};
-        sock->read(msg,msg_len);
+        sock->read(msg,msg_capacity);
         qDebug() << msg;
         std::cout << msg;
         if(strlen(whole_msg)>=(uint)msg_capacity-1-strlen(msg)){
             for(int i=0;i<msg_capacity;++i){
                 whole_msg[i]=whole_msg[i+strlen(msg)];
+                if((uint)i>=(uint)msg_capacity-1-strlen(msg)){
+                    whole_msg[i]='\0';
+                }
             }
+            whole_msg[(uint)msg_capacity-1-strlen(msg)]='\0';
         }
         qDebug() << "strlen(whole_msg) : " << strlen(whole_msg);
-        strcat(whole_msg,msg);
+        int max_size=msg_capacity-strlen(whole_msg)-1;
+        strcat_s(whole_msg,max_size,msg);
         emit msgChangedTo(whole_msg,strlen(whole_msg));
     }
 }
