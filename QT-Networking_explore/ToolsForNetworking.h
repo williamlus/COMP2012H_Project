@@ -29,7 +29,7 @@ class DataPackage{
     int sender_id; // 0 for server, 1 for client
     QVector <Card> cards;
     QVector <Player_Info> player_info;
-    int active_player_id;
+    int active_player_id;//-1 for default
 
     DataPackage(int data_type=-1, int sender_id=-1, QVector <Card> cards={}, QVector <Player_Info> player_info={}, int active_player_id=-1) :
     data_type(data_type), sender_id(sender_id), cards(cards), player_info(player_info), active_player_id(active_player_id) {}
