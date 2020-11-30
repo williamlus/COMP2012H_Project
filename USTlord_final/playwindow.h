@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include "source/ToolsForNetworking.h"
 
 namespace Ui {
 class PlayWindow;
@@ -28,6 +29,11 @@ private slots:
     void on_pushButton_want_landlord_clicked();
 
     void on_pushButton_want_farmer_clicked();
+
+signals:
+    void send_datapackage(DataPackage dp);
+public slots:
+    void receive_datapackage(DataPackage dp);
 
 private:
     Ui::PlayWindow *ui;
