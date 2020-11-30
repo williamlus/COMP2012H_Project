@@ -6,6 +6,7 @@ ClientWindow::ClientWindow(QWidget *parent) :
     ui(new Ui::ClientWindow)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
 }
 
 void ClientWindow::closeEvent(QCloseEvent *event)
