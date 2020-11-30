@@ -1,4 +1,4 @@
-﻿#ifndef TOOLSFORNETWORKING_H
+#ifndef TOOLSFORNETWORKING_H
 #define TOOLSFORNETWORKING_H
 
 #include <QtNetwork>
@@ -15,6 +15,16 @@ class Player_Info{
 
     Player_Info(int player_index=-1, int cards_remain=-1, int role=-1) : player_index(player_index), cards_remain(cards_remain), role(role) {}
 
+    friend QDataStream& operator>>(QDataStream& in, Player_Info player_info){
+        in >> player_info.player_index >>player_info.cards_remain >> player_info.role;
+        return in;
+    }
+
+    friend QDataStream& operator<<(QDataStream& out, Player_Info player_info){
+        out << player_info.player_index << player_info.cards_remain << player_info.role;
+        return out;
+    }
+
 };
 
 class DataPackage{
@@ -22,9 +32,10 @@ class DataPackage{
 
     int data_type;
     /* 0: confirm_ready
-     * 2: deal cards
      * 1: choose landlord
-     * 3: play cards
+     * 2: deal cards
+     * 3: choose hint
+     * 4: play cards
      */
     int sender_id; // 0 for server, 1 for client
     QVector <Card> cards;
@@ -35,6 +46,19 @@ class DataPackage{
     DataPackage(int data_type=-1, int sender_id=-1, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}, int active_player_id=-1) :
     data_type(data_type), sender_id(sender_id), cards(cards), player_info(player_info), message(message), active_player_id(active_player_id) {}
 
+    //overloaded >> and << for Card:
+    //QString + int (stands for color and value)
+    /*QString for color:
+    "E": EMPTY
+    "S": SPADE
+    "H": HEART
+    "C": CLUB
+    "D": DIAMOND
+    "B": BLACK_JOKER
+    "R": RED_JOKER
+    */
+    //overloaded << and >> for Player_Info:
+    //player_index+cards_remain+role
     friend QDataStream& operator>>(QDataStream& in, DataPackage& data){
         in >> data.data_type >> data.sender_id >> data.cards >> data.player_info >> data.active_player_id;
         return in;
