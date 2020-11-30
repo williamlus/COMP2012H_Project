@@ -54,3 +54,6 @@ void PlayWindow::on_pushButton_want_farmer_clicked()
 {
 
 }
+
+void PlayWindow::receive_datapackage(DataPackage dp){}
+
