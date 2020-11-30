@@ -34,8 +34,7 @@ class DataPackage{
     /* 0: confirm_ready
      * 1: choose landlord
      * 2: deal cards
-     * 3: choose hint
-     * 4: play cards
+     * 3: play cards
      */
     int sender_id; // 0 for server, 1 for client
     QVector <Card> cards;
