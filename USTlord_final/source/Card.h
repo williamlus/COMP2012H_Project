@@ -6,6 +6,8 @@
 #define ERROR -1
 
 #include <string>
+#include <QDataStream>
+
 using namespace std;
 
 const char figures_to_int[] = "3456789TJQKA2W";
@@ -24,8 +26,11 @@ class Card {
     };
     private:
       Color color;
+      QString str_color;
       int value;
+
     public:
+
       //Constructors and Destructor
       Card();
       Card(Color color, int value);//other constructor
@@ -52,6 +57,14 @@ class Card {
       bool operator<=(const Card& a) const;//Compare the value of two cards
       bool operator>=(const Card& a) const;//Compare the value of two cards
       bool operator!=(const Card& a) const;//Compare the value of two cards
+      friend QDataStream& operator >>(QDataStream& in,Card card){
+          in >> card.str_color >>  card.value;
+          return in;
+      }
+      friend QDataStream& operator <<(QDataStream& out,Card card){
+          out << card.str_color << card.value;
+          return out;
+      }
 
       //Static Functions
       static string to_string(Color color,int value);//transform color, value into string
