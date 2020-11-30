@@ -26,7 +26,7 @@ class Card {
     };
     private:
       Color color;
-      QString str_color;
+      QString str_color{"E"};
       int value;
 
     public:
