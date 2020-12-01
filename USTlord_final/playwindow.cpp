@@ -8,6 +8,12 @@ PlayWindow::PlayWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
+PlayWindow::PlayWindow(DataPackage data,QWidget *parent):QMainWindow(parent),ui(new Ui::PlayWindow)
+{
+    data=DataPackage();//just for debugging
+    ui->setupUi(this);
+}
+
 void PlayWindow::closeEvent(QCloseEvent *event)
 {
     QMessageBox::StandardButton answer = QMessageBox::question( this, "PlayWindow",
