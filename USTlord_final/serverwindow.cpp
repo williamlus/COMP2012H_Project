@@ -110,7 +110,6 @@ void ServerWindow::receiveData(DataPackage data){
         received_message=0;
         qDebug()<< "players are all ready to play!";
         player_info.clear();
-        player_to_beat=-1;
         //deal cards
         QVector<Card> cards_to_deal;
         //TO DO: generate 54 cards and shuffle it and store them sequentially in cards_to_deal
@@ -228,26 +227,26 @@ void ServerWindow::init_game(QVector<Card>& cards_to_deal){
                 int j = i/13;
                 switch(j){
                     case 0:
-                    color = 's';
+                    color = 'S';
                     break;
                     case 1:
-                    color = 'h';
+                    color = 'H';
                     break;
                     case 2:
-                    color = 'd';
+                    color = 'D';
                     break;
                     case 3:
-                    color = 'c';
+                    color = 'C';
                     break;
                 }
             }
             else if(i==52){
                 figure = figures_to_int[NUMBER_OF_FIGURES-1];
-                color = 'b';
+                color = 'B';
             }
             else{
                 figure = figures_to_int[NUMBER_OF_FIGURES-1];
-                color = 'r';
+                color = 'R';
             }
             set_of_cards.push_back(Card(color.toLatin1(),figure));
         }
