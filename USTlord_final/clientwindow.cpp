@@ -12,10 +12,8 @@ ClientWindow::ClientWindow(QWidget *parent) :
 
 void ClientWindow::closeEvent(QCloseEvent *event)
 {
-    if(client){
-        client->close();
-        qDebug() << "close the tcpsocket.";
-    }
+    //close the tcpsocket
+    on_pushButton_stop_joining_clicked();
     //show the mainwindow
     this->parentWidget()->show();
     //allow to close the second window
