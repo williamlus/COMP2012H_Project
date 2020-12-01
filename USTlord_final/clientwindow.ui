@@ -10,6 +10,12 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
@@ -25,7 +31,10 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QVBoxLayout" name="verticalLayout"/>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
@@ -51,30 +60,6 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_clients">
-         <property name="text">
-          <string>Clients:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QListView" name="listView_clients"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_dialog">
-         <property name="text">
-          <string>Dialog:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QListView" name="listView_dialogs"/>
-       </item>
-       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QPushButton" name="pushButton_join_server">
@@ -98,6 +83,16 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_dialog">
+         <property name="text">
+          <string>Dialog:</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QListWidget" name="listWidget_dialogs"/>
        </item>
       </layout>
      </item>
