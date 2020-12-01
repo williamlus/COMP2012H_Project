@@ -45,7 +45,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_serverIP"/>
+          <widget class="QLineEdit" name="lineEdit_serverIP">
+           <property name="text">
+            <string>127.0.0.1</string>
+           </property>
+          </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_port">
@@ -55,7 +59,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_server_port"/>
+          <widget class="QLineEdit" name="lineEdit_server_port">
+           <property name="text">
+            <string>2012</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
