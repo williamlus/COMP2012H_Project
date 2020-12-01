@@ -100,6 +100,7 @@ void ServerWindow::on_pushButton_start_game_clicked()
 }
 
 void ServerWindow::acceptConnection(){
+    if(clients.size()>=3){return;}
     qDebug()<<"a connection is succesfully accepted";
     clients.push_back(server->nextPendingConnection());
     ui->listWidget_clients->addItem(clients.last()->peerAddress().toString()+": " + QString::number(clients.last()->peerPort()));
