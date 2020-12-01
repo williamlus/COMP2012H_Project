@@ -45,22 +45,27 @@ void ClientWindow::on_pushButton_join_server_clicked()
     }
     client = new QTcpSocket();
     // connected with the server
-    connect(client, &QTcpSocket::connected, [=]{ qDebug() << "connected"; });
+    connect(client, &QTcpSocket::connected, [=]{ qDebug() << "connected"; ui->listWidget_dialogs->addItem(QString("Connected to server")); });
     connect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
     // "new data is available for reading from the device's current read channel"
     connect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
     connect(&my_tool, &MyTools::transferPackage, this, &ClientWindow::received_from_server);
     client->connectToHost(ui->lineEdit_serverIP->text(), static_cast<quint16>(ui->lineEdit_server_port->text().toInt()));
     qDebug() << ui->lineEdit_serverIP->text() << static_cast<quint16>(ui->lineEdit_server_port->text().toInt());
+    ui->listWidget_dialogs->addItem(QString("Server IP: ")+ui->lineEdit_serverIP->text()+":"+ui->lineEdit_server_port->text());
 }
 
 void ClientWindow::on_pushButton_stop_joining_clicked()
 {
-    disconnect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
-    // "new data is available for reading from the device's current read channel"
-    disconnect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
-    client->close();
-    client=nullptr;
+    if(client){
+        disconnect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
+        // "new data is available for reading from the device's current read channel"
+        disconnect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
+        client->close();
+        client=nullptr;
+        qDebug() << "Client closed.";
+        ui->listWidget_dialogs->addItem(QString("Client closed"));
+    }
 }
 
 void ClientWindow::readyRead()
@@ -71,7 +76,7 @@ void ClientWindow::readyRead()
 void ClientWindow::displayError(QAbstractSocket::SocketError)
 {
     qDebug() << "error" << client->errorString();
-    on_pushButton_stop_joining_clicked();
+    ui->listWidget_dialogs->addItem(QString("error ")+client->errorString());
 }//display error and close the client
 
 void ClientWindow::received_from_server(DataPackage data)
@@ -85,6 +90,7 @@ void ClientWindow::received_from_server(DataPackage data)
     }
     else{
         qDebug() << "Received id: " + QString::number(data.id);
+        ui->listWidget_dialogs->addItem(QString("Received package, data id: ")+QString::number(data.id));
         play_window->receive_datapackage(data);
     }
 }
