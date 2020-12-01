@@ -37,15 +37,16 @@ private:
 
     MyTools tool;
     QVector<Card> cards{};
+    QVector<Card> bonus_cards{};
     QVector<Player_Info> player_info{};
     QVector<QString> message{};
-    int player_to_beat;
 
 
 
-    QTcpServer* server;
+
+    QTcpServer* server{nullptr};
     QVector<QTcpSocket*> clients;
-    ClientWindow* client_window;
+    ClientWindow* client_window{nullptr};
     //DataPackage* data_to_send{nullptr};
     QVector<DataPackage*> data_received{};
 
