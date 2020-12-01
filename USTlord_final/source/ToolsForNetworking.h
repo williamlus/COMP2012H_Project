@@ -151,7 +151,20 @@ public:
     }
 
     template <class T>
-    void send(QTcpSocket* socket, const T& data);
+    void send(QTcpSocket* socket, const T& data)
+    {
+        QByteArray bytes;
+        QDataStream stream(&bytes, QIODevice::WriteOnly);
+        stream.setVersion(QDataStream::Qt_5_12);
+        stream.setByteOrder(QDataStream::BigEndian);
+        stream << qint32(0);
+        stream << data;
+        stream.device()->seek(0);
+        // qDebug() << bytes.size() - sizeof(qint32);
+        stream << qint32(static_cast<qint32>(bytes.size()) - static_cast<qint32>(sizeof(qint32)));
+        socket->write(bytes);
+        qDebug() << "sent one!";
+    }
 
 
     void read(QTcpSocket* socket);
