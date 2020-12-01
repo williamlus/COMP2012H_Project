@@ -33,6 +33,8 @@ public slots:
 
     void readyRead();//let my_tool to process the raw data
 
+    void handleSocketEvent(QAbstractSocket::SocketState state);
+
     void displayError(QAbstractSocket::SocketError);//display error, close the client and set to nullptr
 
     void received_from_server(DataPackage data);
