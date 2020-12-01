@@ -44,23 +44,20 @@ void ServerWindow::on_pushButton_create_clicked()
     //Add clients to server (including yourself i.e. local address and new port)
     //Record the clients' addresses in listWidget_clients in ui
     server->close();
-    while(true){
-        if(!server->listen(QHostAddress::Any,static_cast<quint16>(ui->lineEdit_port->text().toInt()))){
-        qDebug() << "There is some error when listening a port: " << server->errorString();
-        continue;
+    ui->listWidget_dialogs->addItem(QString("Port: ")+ui->lineEdit_port->text());
+    if(!server->listen(QHostAddress::Any,static_cast<quint16>(ui->lineEdit_port->text().toInt()))){
+        qDebug() << "Error when listening a port: " << server->errorString();
+        ui->listWidget_dialogs->addItem(QString("Error: "+server->errorString()));
+        return;
     }
     connect(server, &QTcpServer::newConnection,this, &ServerWindow::acceptConnection);
     //create a client window for the server itself
     client_window = new ClientWindow(this);
-        client_window->setServerIP(QString("127.0.0.1"));
-        client_window->setPort(ui->lineEdit_port->text());
-        client_window->on_pushButton_join_server_clicked();
-        ui->pushButton_create->setEnabled(false);
-    break;
+    client_window->setServerIP(QString("127.0.0.1"));
+    client_window->setPort(ui->lineEdit_port->text());
+    client_window->on_pushButton_join_server_clicked();
+    ui->pushButton_create->setEnabled(false);
 }
-}
-
-
 
 void ServerWindow::on_pushButton_start_game_clicked()
 {
