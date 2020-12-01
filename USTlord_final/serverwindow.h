@@ -27,6 +27,8 @@ private slots:
     void on_pushButton_start_game_clicked();
 
     void acceptConnection();
+    
+    void handleException(QAbstractSocket::SocketState state);
 
     void receiveData(DataPackage data);
 
