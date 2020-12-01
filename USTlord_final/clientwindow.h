@@ -21,6 +21,7 @@ public:
 
     ~ClientWindow();
 
+    void setServerIP(QString ip);//modify the ServerIP by line edit
     void setPort(const int port);//modify the port by line edit
 
 public slots:
