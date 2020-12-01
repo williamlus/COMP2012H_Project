@@ -52,6 +52,7 @@ void ClientWindow::on_pushButton_join_server_clicked()
     connect(&my_tool, &MyTools::transferPackage, this, &ClientWindow::received_from_server);
     client->connectToHost(ui->lineEdit_serverIP->text(), static_cast<quint16>(ui->lineEdit_server_port->text().toInt()));
     qDebug() << ui->lineEdit_serverIP->text() << static_cast<quint16>(ui->lineEdit_server_port->text().toInt());
+}
 
 void ClientWindow::on_pushButton_stop_joining_clicked()
 {
