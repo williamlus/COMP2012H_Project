@@ -142,7 +142,7 @@ void ServerWindow::receiveData(DataPackage data){
         int random_index = QRandomGenerator::global()->bounded(3);
         DataPackage data_landlord;
         data_landlord.data_type=1;
-        data_landlord.message << "Want landlord?";
+        data_landlord.message << "want landlord?";
         tool.send(clients[random_index],data_landlord);
     }
     else if(data.data_type==1){
