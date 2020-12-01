@@ -51,8 +51,9 @@ void ServerWindow::on_pushButton_create_clicked()
     }
     connect(server, &QTcpServer::newConnection,this, &ServerWindow::acceptConnection);
     //create a client window for the server itself
-    client_window = new ClientWindow();
-    client_window->setPort(ui->lineEdit_port->text().toInt());
+    client_window = new ClientWindow(this);
+    client_window->setServerIP(QString("127.0.0.1"));
+    client_window->setPort(ui->lineEdit_port->text());
     client_window->on_pushButton_join_server_clicked();
     ui->pushButton_create->setEnabled(false);
     break;
