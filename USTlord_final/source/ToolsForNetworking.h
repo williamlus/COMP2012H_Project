@@ -53,6 +53,7 @@ class DataPackage{
      * At the play cards stage, data_type = 3
        There is NO message in this case
        Only with cards storing the cards to play and id equaling active_player_index
+       If the player choose pass, just send an empty cards QVector
        This datapackage will first be sent out from the active_player's client,
        then broadcast to every client by server
 
