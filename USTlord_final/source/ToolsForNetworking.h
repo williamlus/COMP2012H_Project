@@ -79,7 +79,7 @@ class DataPackage{
 
     //overloaded >> and << for Card:
     //QChar + int (stands for color and value)
-    /*QSChar for color:
+    /*QChar for color:
     'E': EMPTY
     'S': SPADE
     'H': HEART
