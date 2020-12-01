@@ -75,7 +75,7 @@ class DataPackage{
      */
 
 
-    DataPackage(int data_type=-1, int id=-2, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}) :
+    DataPackage(int data_type=-1, int id=-1, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}) :
     data_type(data_type), id(id), cards(cards), player_info(player_info), message(message) {}
 
     //override >> and << for Card:
