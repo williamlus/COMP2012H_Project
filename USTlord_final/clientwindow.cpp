@@ -49,7 +49,7 @@ void ClientWindow::on_pushButton_join_server_clicked()
     }
     client = new QTcpSocket();
     // connected with the server
-    connect(client, &QTcpSocket::connected, [=]{ qDebug() << "connected"; ui->listWidget_dialogs->addItem(QString("Connected to server")); });
+    connect(client, &QTcpSocket::stateChanged,this,&ClientWindow::handleSocketEvent);
     connect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
     // "new data is available for reading from the device's current read channel"
     connect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
@@ -62,9 +62,11 @@ void ClientWindow::on_pushButton_join_server_clicked()
 void ClientWindow::on_pushButton_stop_joining_clicked()
 {
     if(client){
+        disconnect(client, &QTcpSocket::stateChanged,this,&ClientWindow::handleSocketEvent);
         disconnect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
         // "new data is available for reading from the device's current read channel"
         disconnect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
+        disconnect(&my_tool, &MyTools::transferPackage, this, &ClientWindow::received_from_server);
         client->close();
         client=nullptr;
         qDebug() << "Client closed.";
@@ -75,6 +77,21 @@ void ClientWindow::on_pushButton_stop_joining_clicked()
 void ClientWindow::readyRead()
 {
     my_tool.read(client);
+}
+
+void ClientWindow::handleSocketEvent(QAbstractSocket::SocketState state)
+{
+    if(state==QAbstractSocket::SocketState::UnconnectedState){
+        if(client){
+            qDebug() << "Disconnected from server";
+            ui->listWidget_dialogs->addItem(QString("Disconnected from server"));
+            on_pushButton_stop_joining_clicked();
+        }
+    }
+    else if(state==QAbstractSocket::SocketState::ConnectedState){
+        qDebug() << "connected to server";
+        ui->listWidget_dialogs->addItem(QString("Connected to server"));
+    }
 }
 
 void ClientWindow::displayError(QAbstractSocket::SocketError)
