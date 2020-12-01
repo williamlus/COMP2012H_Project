@@ -77,7 +77,7 @@ class DataPackage{
     DataPackage(int data_type=-1, int id=-2, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}) :
     data_type(data_type), id(id), cards(cards), player_info(player_info), message(message) {}
 
-    //overloaded >> and << for Card:
+    //override >> and << for Card:
     //QChar + int (stands for color and value)
     /*QChar for color:
     'E': EMPTY
@@ -88,7 +88,7 @@ class DataPackage{
     'B': BLACK_JOKER
     'R': RED_JOKER
     */
-    //overloaded << and >> for Player_Info:
+    //override << and >> for Player_Info:
     //player_index+cards_remain+role
     friend QDataStream& operator>>(QDataStream& in,  DataPackage& data){
         in >> data.data_type >> data.id >> data.cards >> data.player_info ;
