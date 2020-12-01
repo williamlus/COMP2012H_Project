@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QCloseEvent>
-#include "source/client.h"
 #include "source/ToolsForNetworking.h"
 #include "playwindow.h"
 
