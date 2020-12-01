@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QCloseEvent>
-#include "source/server.h"
 #include "clientwindow.h"
 
 namespace Ui {
