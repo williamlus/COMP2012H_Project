@@ -12,6 +12,10 @@ ClientWindow::ClientWindow(QWidget *parent) :
 
 void ClientWindow::closeEvent(QCloseEvent *event)
 {
+    if(client){
+        client->close();
+        qDebug() << "close the tcpsocket.";
+    }
     //show the mainwindow
     this->parentWidget()->show();
     //allow to close the second window
@@ -75,7 +79,7 @@ void ClientWindow::readyRead()
 
 void ClientWindow::displayError(QAbstractSocket::SocketError)
 {
-    qDebug() << "error" << client->errorString();
+    qDebug() << "Error: " << client->errorString();
     ui->listWidget_dialogs->addItem(QString("error ")+client->errorString());
 }//display error and close the client
 
