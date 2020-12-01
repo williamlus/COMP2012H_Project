@@ -36,7 +36,11 @@
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_port"/>
+          <widget class="QLineEdit" name="lineEdit_port">
+           <property name="text">
+            <string>2012</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -69,7 +73,7 @@
          <item>
           <widget class="QPushButton" name="pushButton_create">
            <property name="text">
-            <string>create</string>
+            <string>Create</string>
            </property>
           </widget>
          </item>
@@ -110,7 +114,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
