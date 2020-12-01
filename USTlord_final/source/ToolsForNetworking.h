@@ -69,6 +69,9 @@ class DataPackage{
     QVector <Card> cards;
     QVector <Player_Info> player_info;
     QVector <QString> message;
+    /*
+
+     */
 
 
     DataPackage(int data_type=-1, int id=-2, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}) :
@@ -147,61 +150,11 @@ public:
         return ipInfo;
     }
 
-    static int nextId(const int _id)
-    {
-        return (_id + 1) % 3;
-    }
-
-
-
     template <class T>
-    void send(QTcpSocket* socket, const T& data)
-    {
-        QByteArray bytes;
-        QDataStream stream(&bytes, QIODevice::WriteOnly);
-        stream.setVersion(QDataStream::Qt_5_12);
-        stream.setByteOrder(QDataStream::BigEndian);
-        stream << qint32(0);
-        stream << data;
-        stream.device()->seek(0);
-        // qDebug() << bytes.size() - sizeof(qint32);
-        stream << qint32(static_cast<qint32>(bytes.size()) - static_cast<qint32>(sizeof(qint32)));
-        socket->write(bytes);
-        qDebug() << "sent one!";
-    }
+    void send(QTcpSocket* socket, const T& data);
 
-    void read(QTcpSocket* socket)
-    {
-        DataPackage data;
-        QDataStream in(socket);
-        in.setVersion(QDataStream::Qt_5_12);
-        in.setByteOrder(QDataStream::BigEndian);
-        static qint32 bytesToRead = 0;
-        //qDebug() << "socket->bytesAvailable(): " << socket->bytesAvailable();
-        if (static_cast<qint32>(socket->bytesAvailable()) < static_cast<qint32>(sizeof(qint32)))
-            return; // the head info of size is incomplete
-        while (socket->bytesAvailable())
-        {
-            if (static_cast<qint32>(socket->bytesAvailable()) >= static_cast<qint32>(sizeof(qint32)) && bytesToRead == 0)
-                in >> bytesToRead;  // read the size of following data
-            //qDebug() << "socket->bytesAvailable(): " << socket->bytesAvailable();
-            if (socket->bytesAvailable() >= bytesToRead)
-            {
-                // read data
-                //qDebug() << "start reading data...";
-                char* temp = new char[static_cast<unsigned long>(bytesToRead + 1)]{ 0 };
-                in.readRawData(temp, bytesToRead);
-                //qDebug() << "socket->bytesAvailable(): " << socket->bytesAvailable();
-                QByteArray buffer(temp, bytesToRead);
-                QDataStream stream(&buffer, QIODevice::ReadWrite);
-                stream >> data;
-                bytesToRead = 0;
-                emit transferPackage(data);
-            }
-           else
-                break;  // the data is incomplete; read it next time
-        }
-    }
+
+    void read(QTcpSocket* socket);
 
     template <class T>
     void installMyEventFilter(T* _obj)
