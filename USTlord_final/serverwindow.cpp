@@ -18,6 +18,13 @@ ServerWindow::ServerWindow(QWidget *parent) :
 
 void ServerWindow::closeEvent(QCloseEvent *event)
 {
+    if(server){server->close();}
+    for(int i=0,n=clients.size();i<n;++i){
+        if(clients[i]){
+            clients[i]->close();
+        }
+    }
+    qDebug() << "close server_window";
     //show the mainwindow
     this->parentWidget()->show();
     //allow to close the second window
@@ -26,6 +33,7 @@ void ServerWindow::closeEvent(QCloseEvent *event)
 
 ServerWindow::~ServerWindow()
 {
+    qDebug() << "Call destructor of server_window";
     delete ui;
 }
 
