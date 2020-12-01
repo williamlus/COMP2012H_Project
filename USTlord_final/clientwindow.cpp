@@ -28,9 +28,9 @@ void ClientWindow::setServerIP(QString ip)
     ui->lineEdit_serverIP->setText(ip);
 }
 
-void ClientWindow::setPort(const int port)
+void ClientWindow::setPort(QString port)
 {
-    ui->lineEdit_server_port->setText(QString(port));
+    ui->lineEdit_server_port->setText(port);
 }
 
 void ClientWindow::on_pushButton_quit_clicked()
