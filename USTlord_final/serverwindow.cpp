@@ -181,7 +181,7 @@ void ServerWindow::choose_landlord(DataPackage data){
         }
         else{
             DataPackage data_landlord;
-            data_landlord.data_type = 3;
+            data_landlord.data_type = 1;
             data_landlord.message << "want landlord?";
             tool.send(clients[(data.id+1)%3],data_landlord);
         }
