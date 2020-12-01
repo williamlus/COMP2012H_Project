@@ -91,6 +91,8 @@ void ClientWindow::received_from_server(DataPackage data)
         connect(play_window,&PlayWindow::send_datapackage,this,&ClientWindow::received_from_playwindow);
         this->hide();
         play_window->show();
+        DataPackage response(0);
+        my_tool.send(client,response);
     }
     else{
         qDebug() << "Received id: " + QString::number(data.id);
