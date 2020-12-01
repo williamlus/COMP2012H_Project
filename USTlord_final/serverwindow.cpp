@@ -103,6 +103,7 @@ void ServerWindow::acceptConnection(){
     qDebug()<<"a connection is succesfully accepted";
     clients.push_back(server->nextPendingConnection());
     ui->listWidget_clients->addItem(clients.last()->peerAddress().toString()+": " + QString::number(clients.last()->peerPort()));
+    connect(clients[clients.size()-1],&QTcpSocket::stateChanged,this,&ServerWindow::handleException);//if clients disconnected, close it
 }
 
 void ServerWindow::receiveData(DataPackage data){
