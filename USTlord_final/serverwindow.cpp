@@ -1,22 +1,16 @@
-#include "serverwindow.h"
-#include "ui_serverwindow.h"
-#include <QMessageBox>
+#include "clientwindow.h"
+#include "ui_clientwindow.h"
 
-ServerWindow::ServerWindow(QWidget *parent) :
+ClientWindow::ClientWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ServerWindow)
+    ui(new Ui::ClientWindow)
 {
     ui->setupUi(this);
-    setWindowTitle(QStringLiteral("Landlord - connecting - page"));
-    server = new QTcpServer();
-    //get the local IP info
-    auto ipVec = MyTools::getLocalIP();
-    foreach (auto& ip, ipVec){
-        ui->listWidget_serverIP->addItem(ip);
-    }
+    this->setFixedSize(800,600);
+
 }
 
-void ServerWindow::closeEvent(QCloseEvent *event)
+void ClientWindow::closeEvent(QCloseEvent *event)
 {
     //show the mainwindow
     this->parentWidget()->show();
@@ -24,199 +18,85 @@ void ServerWindow::closeEvent(QCloseEvent *event)
     event->accept();
 }
 
-ServerWindow::~ServerWindow()
+ClientWindow::~ClientWindow()
 {
     delete ui;
 }
 
-void ServerWindow::on_pushButton_quit_clicked()
+void ClientWindow::setServerIP(QString ip)
+{
+    ui->lineEdit_serverIP->setText(ip);
+}
+
+void ClientWindow::setPort(QString port)
+{
+    ui->lineEdit_server_port->setText(port);
+}
+
+void ClientWindow::on_pushButton_quit_clicked()
 {
     this->close();
 }
 
-void ServerWindow::on_pushButton_create_clicked()
+void ClientWindow::on_pushButton_join_server_clicked()
 {
-    //TODO:
-    //Create a Server object if it does not exist
-    //Record the server's IP address(es) in listWidget_serverIP in ui
-    //Start listening according to the port in line edit in ui
-    //Record the connection state in dialogs in ui
-    //Add clients to server (including yourself i.e. local address and new port)
-    //Record the clients' addresses in listWidget_clients in ui
-    server->close();
-    while(true){
-        if(!server->listen(QHostAddress::Any,static_cast<quint16>(ui->lineEdit_port->text().toInt()))){
-        qDebug() << "There is some error when listening a port: " << server->errorString();
-        continue;
+    if(client){
+        client->close();
     }
-    connect(server, &QTcpServer::newConnection,this, &ServerWindow::acceptConnection);
-    //create a client window for the server itself
-    client_window = new ClientWindow(this);
-    client_window->setServerIP(QString("127.0.0.1"));
-    client_window->setPort(ui->lineEdit_port->text());
-    client_window->on_pushButton_join_server_clicked();
-    ui->pushButton_create->setEnabled(false);
-    break;
+    client = new QTcpSocket();
+    // connected with the server
+    connect(client, &QTcpSocket::connected, [=]{ qDebug() << "connected"; ui->listWidget_dialogs->addItem(QString("Connected to server")); });
+    connect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
+    // "new data is available for reading from the device's current read channel"
+    connect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
+    connect(&my_tool, &MyTools::transferPackage, this, &ClientWindow::received_from_server);
+    client->connectToHost(ui->lineEdit_serverIP->text(), static_cast<quint16>(ui->lineEdit_server_port->text().toInt()));
+    qDebug() << ui->lineEdit_serverIP->text() << static_cast<quint16>(ui->lineEdit_server_port->text().toInt());
+    ui->listWidget_dialogs->addItem(QString("Server IP: ")+ui->lineEdit_serverIP->text()+":"+ui->lineEdit_server_port->text());
 }
-}
 
-
-
-void ServerWindow::on_pushButton_start_game_clicked()
+void ClientWindow::on_pushButton_stop_joining_clicked()
 {
-    //TODO:
-    //If there is less than three persons, nothing happens
-    //Otherwise, create a PlayWindow with conversion constructor : PlayWindow(Client* myself)
-    //Generate a deck of cards and pre-distribute the cards as three groups and three extra cards
-    //Send each group of cards and the three extra cards to each client and start the game
-    //Hide ServerWindow and show PlayWindow
-    //Start the game
-    if(clients.size()==3){
-        QMessageBox::StandardButton reply;
-        reply = QMessageBox::question(this,"Game is ready to start : )","Start game?",QMessageBox::Yes|QMessageBox::No);
-        if(reply == QMessageBox::Yes){
-            qDebug()<<"Three players are ready!";
-            connect(&tool, &MyTools::transferPackage, this, &ServerWindow::receiveData);
-            DataPackage send_data;
-            send_data.id = 0;
-            send_data.message << QString::number(QRandomGenerator::global()->bounded(2));
-            foreach (auto* socket, clients){
-                connect(socket, &QTcpSocket::readyRead, this, [=]{tool.read(socket);});
-                tool.send(socket,send_data);
-                send_data.id+=1;
-            }
-            qDebug()<<"is written";
-            client_window->move((this->pos()));
-            client_window->resize(this->size());
-            this->hide();
-        }
+    if(client){
+        disconnect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
+        // "new data is available for reading from the device's current read channel"
+        disconnect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
+        client->close();
+        client=nullptr;
+        qDebug() << "Client closed.";
+        ui->listWidget_dialogs->addItem(QString("Client closed"));
     }
 }
 
-void ServerWindow::acceptConnection(){
-    qDebug()<<"a connection is succesfully accepted";
-    clients.push_back(server->nextPendingConnection());
-    ui->listWidget_clients->addItem(clients.last()->peerAddress().toString()+": " + QString::number(clients.last()->peerPort()));
+void ClientWindow::readyRead()
+{
+    my_tool.read(client);
 }
 
-void ServerWindow::receiveData(DataPackage data){
-    qDebug()<<"one data is received!";
-    static int received_message = 0;
+void ClientWindow::displayError(QAbstractSocket::SocketError)
+{
+    qDebug() << "error" << client->errorString();
+    ui->listWidget_dialogs->addItem(QString("error ")+client->errorString());
+}//display error and close the client
+
+void ClientWindow::received_from_server(DataPackage data)
+{
+    if(data.data_type==-1){return;}
     if(data.data_type==0){
-        qDebug()<<"ready is confirmed: "<<++received_message << data.id;
-
-    if(received_message==6){
-        received_message=0;
-        qDebug()<< "players are all ready to play!";
-        player_info.clear();
-        player_to_beat=-1;
-        //deal cards
-        QVector<Card> cards_to_deal;
-        //TO DO: generate 54 cards and shuffle it and store them sequentially in cards_to_deal
-        init_game(cards_to_deal);
-        for(int i = 0;i<3;++i){
-            player_info.push_back(Player_Info(i,17,-1));
-        }
-        DataPackage data_dealCards[3];
-        for(int i=0;i<3;++i){
-            data_dealCards[i].data_type=2;
-            data_dealCards->player_info=player_info;
-            for(int j=0;j<17;++j){
-                data_dealCards[i].cards.push_back(cards_to_deal[j+i*17]);
-            }
-        }
-        for(int i=0;i<3;++i){
-            tool.send(clients[i],data_dealCards[i]);
-        }
-    }}
-    else if(data.data_type==2){
-        received_message+=1;
-        //choosing the landlord
-        qDebug()<< "now it's time for choosing the landlord!";
-        int random_index = QRandomGenerator::global()->bounded(3);
-        DataPackage data_landlord;
-        data_landlord.data_type=1;
-        data_landlord.message << "Want landlord?";
-        tool.send(clients[random_index],data_landlord);
+        play_window = new PlayWindow(data,this);
+        connect(play_window,&PlayWindow::send_datapackage,this,&ClientWindow::received_from_playwindow);
+        this->hide();
+        play_window->show();
     }
-    else if(data.data_type==1){
-        choose_landlord(data);
-    }
-    else if(data.data_type==2){
-        //update the cards_remain
-        player_info[data.id].cards_remain-=data.cards.size();
-        DataPackage data_play_cards;
-
+    else{
+        qDebug() << "Received id: " + QString::number(data.id);
+        ui->listWidget_dialogs->addItem(QString("Received package, data id: ")+QString::number(data.id));
+        play_window->receive_datapackage(data);
     }
 }
 
-void ServerWindow::choose_landlord(DataPackage data){
-
+void ClientWindow::received_from_playwindow(DataPackage data){
+    if(client!=nullptr){
+        my_tool.send(client,data);
+    }
 }
-
-void ServerWindow::init_game(QVector<Card>& cards_to_deal){
-    //generate 54 cards
-        QVector<Card> set_of_cards;
-        QChar color;
-        for(int i=0;i<54;++i){
-            char figure;
-            if(i<52){
-                figure = figures_to_int[i%13];
-                int j = i/13;
-                switch(j){
-                    case 0:
-                    color = 's';
-                    break;
-                    case 1:
-                    color = 'h';
-                    break;
-                    case 2:
-                    color = 'd';
-                    break;
-                    case 3:
-                    color = 'c';
-                    break;
-                }
-            }
-            else if(i==52){
-                figure = figures_to_int[NUMBER_OF_FIGURES-1];
-                color = 'b';
-            }
-            else{
-                figure = figures_to_int[NUMBER_OF_FIGURES-1];
-                color = 'r';
-            }
-            set_of_cards.push_back(Card(color.toLatin1(),figure));
-        }
-
-        //shuffle the set_of_cards
-        int i = 0;
-        srand(time(0));
-        for(i = 0; i < 54; i++){
-            swap(set_of_cards[i], set_of_cards[rand()%NUMBER_OF_CARDS]);
-        }
-
-        cards_to_deal=set_of_cards;
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
