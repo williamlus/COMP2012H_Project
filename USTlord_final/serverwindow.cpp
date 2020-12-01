@@ -112,6 +112,7 @@ void ServerWindow::handleException(QAbstractSocket::SocketState state)
     if(state==QAbstractSocket::SocketState::UnconnectedState){
         for(int i=0;i<clients.size();++i){
             if(clients[i]->state()==state){
+                disconnect(clients[i],&QTcpSocket::stateChanged,this,&ServerWindow::handleException);
                 QString feedback="Closing " + clients[i]->peerAddress().toString()+": "+QString::number(clients[i]->peerPort());
                 qDebug() << feedback;
                 ui->listWidget_clients->addItem(feedback);
