@@ -30,6 +30,34 @@ class Player_Info{
 class DataPackage{
     public:
 
+    //some clarification of the concrete usage of datapackage
+    /*
+     * At the confirm_ready stage, data_type = 0, there is NO message in this stage
+       and all the players are intialitialized with sequential id (0~2), 17 cards_remain, null role (-1)
+
+     * At the deal cards stage, data_type = 2, a random_index will be generate for the first player to choose landlord
+       SERVER will send back a datapackage ONLY to the first player with RANDOM_INDEX with:
+       message: "want lardlord?"
+
+     * At the choose landlord stage, data_type = 1, there will be two different usages of datapackage
+       If the information is not enough to determine a landlord, a datapackage will ONLY send to one player at a time
+       For the message sended by CLIENT: the 0-index of datapackage will be either "yes" or "no"
+       For the message sended by SERVER: the 0-index of datapackage will be "want landlord?"
+
+       If landlord is decided, SERVER will send a datapackage to inform the client
+       Then the cards in this datapackage will be three bonus cards
+       The message will be "landlord is finalized"
+       With role index refreshed for each player_id
+
+
+     * At the play cards stage, data_type = 3
+       There is NO message in this case
+       Only with cards storing the cards to play and id equaling active_player_index
+       This datapackage will first be sent out from the active_player's client,
+       then broadcast to every client by server
+
+     */
+
     int data_type;
     /* 0: confirm_ready
      * 1: choose landlord
@@ -41,21 +69,24 @@ class DataPackage{
     QVector <Card> cards;
     QVector <Player_Info> player_info;
     QVector <QString> message;
+    /*
+
+     */
 
 
     DataPackage(int data_type=-1, int id=-2, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}) :
     data_type(data_type), id(id), cards(cards), player_info(player_info), message(message) {}
 
     //overloaded >> and << for Card:
-    //QString + int (stands for color and value)
-    /*QString for color:
-    "E": EMPTY
-    "S": SPADE
-    "H": HEART
-    "C": CLUB
-    "D": DIAMOND
-    "B": BLACK_JOKER
-    "R": RED_JOKER
+    //QChar + int (stands for color and value)
+    /*QSChar for color:
+    'E': EMPTY
+    'S': SPADE
+    'H': HEART
+    'C': CLUB
+    'D': DIAMOND
+    'B': BLACK_JOKER
+    'R': RED_JOKER
     */
     //overloaded << and >> for Player_Info:
     //player_index+cards_remain+role
