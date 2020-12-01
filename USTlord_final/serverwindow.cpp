@@ -106,7 +106,7 @@ void ServerWindow::receiveData(DataPackage data){
     if(data.data_type==0){
         qDebug()<<"ready is confirmed: "<<++received_message << data.id;
 
-    if(received_message==6){
+    if(received_message==3){
         received_message=0;
         qDebug()<< "players are all ready to play!";
         player_info.clear();
