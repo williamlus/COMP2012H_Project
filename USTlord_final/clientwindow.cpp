@@ -23,6 +23,11 @@ ClientWindow::~ClientWindow()
     delete ui;
 }
 
+void ClientWindow::setServerIP(QString ip)
+{
+    ui->label_serverIP->setText(ip);
+}
+
 void ClientWindow::setPort(const int port)
 {
     ui->label_port->setText(QString(port));
