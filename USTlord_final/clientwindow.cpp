@@ -50,8 +50,8 @@ void ClientWindow::on_pushButton_join_server_clicked()
     // "new data is available for reading from the device's current read channel"
     connect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
     connect(&my_tool, &MyTools::transferPackage, this, &ClientWindow::received_from_server);
-    client->connectToHost(ui->label_serverIP->text(), static_cast<quint16>(ui->label_port->text().toInt()));
-}
+    client->connectToHost(ui->lineEdit_serverIP->text(), static_cast<quint16>(ui->lineEdit_server_port->text().toInt()));
+    qDebug() << ui->lineEdit_serverIP->text() << static_cast<quint16>(ui->lineEdit_server_port->text().toInt());
 
 void ClientWindow::on_pushButton_stop_joining_clicked()
 {
