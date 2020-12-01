@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QCloseEvent>
 #include "clientwindow.h"
+#include "source/Card.h"
 
 namespace Ui {
 class ServerWindow;
@@ -47,6 +48,8 @@ private:
     ClientWindow* client_window;
     //DataPackage* data_to_send{nullptr};
     QVector<DataPackage*> data_received{};
+
+    void init_game(QVector<Card>& cards_to_deal);
 };
 
 #endif // SERVERWINDOW_H
