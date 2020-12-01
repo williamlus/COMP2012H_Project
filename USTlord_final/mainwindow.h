@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QPaintEvent>
+#include <QEvent>
 #include "clientwindow.h"
 #include "playwindow.h"
 #include "serverwindow.h"
@@ -17,13 +19,16 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void paintEvent(QPaintEvent * event) override;
 
 private slots:
-    void on_pushButton_start_offline_clicked();
+    void on_create_room_button_clicked();
 
-    void on_pushButton_create_room_clicked();
+    void on_start_offline_button_clicked();
 
-    void on_pushButton_join_room_clicked();
+    void on_join_room_button_clicked();
+
+    void on_exit_button_clicked();
 
 private:
     Ui::MainWindow *ui;
