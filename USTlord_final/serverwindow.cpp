@@ -136,7 +136,6 @@ void ServerWindow::receiveData(DataPackage data){
     }}
     else if(data.data_type==2){
         
-        if(received_message==3){
         //choosing the landlord
         received_message = 0;
         qDebug()<< "now it's time for choosing the landlord!";
@@ -145,7 +144,7 @@ void ServerWindow::receiveData(DataPackage data){
         data_landlord.data_type=1;
         data_landlord.message << "Want landlord?";
         tool.send(clients[random_index],data_landlord);
-    }}
+    }
     else if(data.data_type==1){
         choose_landlord(data);
     }
