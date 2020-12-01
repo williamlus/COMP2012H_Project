@@ -127,7 +127,7 @@ void ServerWindow::receiveData(DataPackage data){
         }
     }}
     else if(data.data_type==2){
-        received_message+=1;
+        
         if(received_message==3){
         //choosing the landlord
         received_message = 0;
