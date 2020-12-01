@@ -78,7 +78,7 @@ void ClientWindow::received_from_server(DataPackage data)
         play_window->show();
     }
     else{
-        qDebug() << "Received id: " + QString::number(data.active_player_id);
+        qDebug() << "Received id: " + QString::number(data.id);
         play_window->receive_datapackage(data);
     }
 }
