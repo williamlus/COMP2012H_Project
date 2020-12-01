@@ -112,6 +112,7 @@ void ServerWindow::receiveData(DataPackage data){
         //deal cards
         QVector<Card> cards_to_deal;
         //TO DO: generate 54 cards and shuffle it and store them sequentially in cards_to_deal
+        init_game(cards_to_deal);
         for(int i = 0;i<3;++i){
             player_info.push_back(Player_Info(i,17,-1));
         }
@@ -149,6 +150,53 @@ void ServerWindow::receiveData(DataPackage data){
 }
 
 void ServerWindow::choose_landlord(DataPackage data){
+
+}
+
+void ServerWindow::init_game(QVector<Card>& cards_to_deal){
+    //generate 54 cards
+        QVector<Card> set_of_cards;
+        QChar color;
+        for(int i=0;i<54;++i){
+            char figure;
+            if(i<52){
+                figure = figures_to_int[i%13];
+                int j = i/13;
+                switch(j){
+                    case 0:
+                    color = 's';
+                    break;
+                    case 1:
+                    color = 'h';
+                    break;
+                    case 2:
+                    color = 'd';
+                    break;
+                    case 3:
+                    color = 'c';
+                    break;
+                }
+            }
+            else if(i==52){
+                figure = figures_to_int[NUMBER_OF_FIGURES-1];
+                color = 'b';
+            }
+            else{
+                figure = figures_to_int[NUMBER_OF_FIGURES-1];
+                color = 'r';
+            }
+            set_of_cards.push_back(Card(color.toLatin1(),figure));
+        }
+
+        //shuffle the set_of_cards
+        int i = 0;
+        srand(time(0));
+        for(i = 0; i < 54; i++){
+            swap(set_of_cards[i], set_of_cards[rand()%NUMBER_OF_CARDS]);
+        }
+
+        cards_to_deal=set_of_cards;
+
 
 }
 
