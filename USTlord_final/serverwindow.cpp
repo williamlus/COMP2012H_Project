@@ -107,6 +107,22 @@ void ServerWindow::acceptConnection(){
     connect(clients[clients.size()-1],&QTcpSocket::stateChanged,this,&ServerWindow::handleException);//if clients disconnected, close it
 }
 
+void ServerWindow::handleException(QAbstractSocket::SocketState state)
+{
+    if(state==QAbstractSocket::SocketState::UnconnectedState){
+        for(int i=0;i<clients.size();++i){
+            if(clients[i]->state()==state){
+                QString feedback="Closing " + clients[i]->peerAddress().toString()+": "+QString::number(clients[i]->peerPort());
+                qDebug() << feedback;
+                ui->listWidget_clients->addItem(feedback);
+                clients[i]->close();
+                clients.remove(i);
+                --i;
+            }
+        }
+    }
+}
+
 void ServerWindow::receiveData(DataPackage data){
     qDebug()<<"one data is received!";
     static int received_message = 0;
