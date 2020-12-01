@@ -36,14 +36,15 @@ class DataPackage{
      * 2: deal cards
      * 3: play cards
      */
-    int sender_id; // 0 for server, 1 for client
+    int id; // -1 for server,
+            // 0,1,2 for client, which also stands for the id for the player
     QVector <Card> cards;
     QVector <Player_Info> player_info;
     QVector <QString> message;
-    int active_player_id;
 
-    DataPackage(int data_type=-1, int sender_id=-1, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}, int active_player_id=-1) :
-    data_type(data_type), sender_id(sender_id), cards(cards), player_info(player_info), message(message), active_player_id(active_player_id) {}
+
+    DataPackage(int data_type=-1, int id=-2, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}) :
+    data_type(data_type), id(id), cards(cards), player_info(player_info), message(message) {}
 
     //overloaded >> and << for Card:
     //QString + int (stands for color and value)
@@ -58,13 +59,13 @@ class DataPackage{
     */
     //overloaded << and >> for Player_Info:
     //player_index+cards_remain+role
-    friend QDataStream& operator>>(QDataStream& in, DataPackage& data){
-        in >> data.data_type >> data.sender_id >> data.cards >> data.player_info >> data.active_player_id;
+    friend QDataStream& operator>>(QDataStream& in,  DataPackage& data){
+        in >> data.data_type >> data.id >> data.cards >> data.player_info ;
         return in;
     }
 
-    friend QDataStream& operator<<(QDataStream& out, DataPackage& data){
-        out << data.data_type << data.sender_id << data.cards << data.player_info << data.active_player_id;
+    friend QDataStream& operator<<(QDataStream& out, const DataPackage& data){
+        out << data.data_type << data.id << data.cards << data.player_info ;
         return out;
     }
 };
