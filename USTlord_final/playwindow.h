@@ -16,6 +16,7 @@ class PlayWindow : public QMainWindow
 
 public:
     explicit PlayWindow(QWidget *parent = nullptr);
+    explicit PlayWindow(DataPackage data,QWidget *parent = nullptr);
     void closeEvent(QCloseEvent *event) override;
     ~PlayWindow();
 
