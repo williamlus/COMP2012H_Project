@@ -36,6 +36,20 @@ void MyTools::read(QTcpSocket* socket)
     }
 }
 
+void DataPackage::print(const DataPackage data){
+    //qDebug the data content
+    qDebug()<<data.data_type<<" "<<data.id;
+    for(auto it=data.player_info.begin();it!=data.player_info.end();++it){
+        qDebug()<<"player_index: "<<it->player_index <<"cards_remain: "<<it->cards_remain << "role: "<<it->role;
+    }
+    for(auto it = data.cards.begin();it!=data.cards.end();++it){
+        qDebug() << QString::fromStdString(it->get_string());
+    }
+    for(auto it = data.message.begin();it!=data.message.end();++it){
+        qDebug() << *it;
+    }
+}
+
 
 
 
