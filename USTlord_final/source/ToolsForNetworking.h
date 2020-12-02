@@ -13,7 +13,7 @@ class Player_Info{
     unsigned int cards_remain;
     int role;//-1 for null, 0 for landlord, 1 for farmer
 
-    Player_Info(int player_index=-1, int cards_remain=-1, int role=-1) : player_index(player_index), cards_remain(cards_remain), role(role) {}
+    Player_Info(int player_index=-1, int cards_remain=0, int role=-1) : player_index(player_index), cards_remain(cards_remain), role(role) {}
 
     friend QDataStream& operator>>(QDataStream& in, Player_Info player_info){
         in >> player_info.player_index >>player_info.cards_remain >> player_info.role;
