@@ -19,11 +19,6 @@ ServerWindow::ServerWindow(QWidget *parent) :
 void ServerWindow::closeEvent(QCloseEvent *event)
 {
     if(server){server->close();}
-    for(int i=0,n=clients.size();i<n;++i){
-        if(clients[i]){
-            clients[i]->close();
-        }
-    }
     qDebug() << "close server_window";
     //show the mainwindow
     this->parentWidget()->show();
@@ -83,7 +78,7 @@ void ServerWindow::on_pushButton_start_game_clicked()
             qDebug()<<"Three players are ready!";
             connect(&tool, &MyTools::transferPackage, this, &ServerWindow::receiveData);
             DataPackage send_data;
-            send_data.id = -1;
+            send_data.id = 0;
             send_data.data_type = 0;
             send_data.message << QString::number(QRandomGenerator::global()->bounded(2));
             foreach (auto* socket, clients){
@@ -154,7 +149,7 @@ void ServerWindow::receiveData(DataPackage data){
         }
     }}
     else if(data.data_type==2){
-        
+
         //choosing the landlord
         received_message = 0;
         qDebug()<< "now it's time for choosing the landlord!";
@@ -230,11 +225,10 @@ void ServerWindow::choose_landlord(DataPackage data){
         }
         data_choosing_landlord.player_info = player_info;
         for(int i=0;i<3;++i){
-            tool.send(clients[i],data_choosing_landlord);
-
-            landlord_id = -1;
-            player_ids.clear();
+            tool.send(clients[i],data_choosing_landlord);     
         }
+        landlord_id = -1;
+        player_ids.clear();
     }
 
 }
@@ -288,23 +282,3 @@ void ServerWindow::init_game(QVector<Card>& cards_to_deal){
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
