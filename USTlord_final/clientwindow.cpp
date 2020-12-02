@@ -102,11 +102,12 @@ void ClientWindow::received_from_server(DataPackage data)
 {
     if(data.data_type==-1){return;}
     if(data.data_type==0){
+        if(play_window){play_window->close();}
         play_window = new PlayWindow(data,this);
         connect(play_window,&PlayWindow::send_datapackage,this,&ClientWindow::received_from_playwindow);
         this->hide();
         play_window->show();
-        DataPackage response(0);
+        DataPackage response(0,data.id);
         my_tool.send(client,response);
     }
     else{
