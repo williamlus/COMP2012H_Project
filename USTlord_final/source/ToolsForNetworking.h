@@ -15,6 +15,13 @@ class Player_Info{
 
     Player_Info(int player_index=-1, int cards_remain=0, int role=-1) : player_index(player_index), cards_remain(cards_remain), role(role) {}
 
+    Player_Info& operator=(const Player_Info& player_info){
+        this->player_index = player_info.player_index;
+        this->cards_remain = player_info.cards_remain;
+        this->role = player_info.role;
+        return *this;
+    }
+
     friend QDataStream& operator>>(QDataStream& in, Player_Info player_info){
         in >> player_info.player_index >>player_info.cards_remain >> player_info.role;
         return in;
@@ -151,8 +158,8 @@ public:
         return ipInfo;
     }
 
-    template <class T>
-    void send(QTcpSocket* socket, const T& data)
+
+    void send(QTcpSocket* socket, const DataPackage data)
     {
         QByteArray bytes;
         QDataStream stream(&bytes, QIODevice::WriteOnly);
