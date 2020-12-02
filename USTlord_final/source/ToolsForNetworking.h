@@ -159,7 +159,8 @@ public:
     }
 
 
-    void send(QTcpSocket* socket, const DataPackage data)
+    template <class T>
+    void send(QTcpSocket* socket, const T& data)
     {
         QByteArray bytes;
         QDataStream stream(&bytes, QIODevice::WriteOnly);
