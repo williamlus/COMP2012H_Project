@@ -70,9 +70,7 @@ class DataPackage{
     QVector <Card> cards;
     QVector <Player_Info> player_info;
     QVector <QString> message;
-    /*
 
-     */
 
 
     DataPackage(int data_type=-1, int id=-1, QVector <Card> cards={}, QVector <Player_Info> player_info={}, QVector<QString> message={}) :
@@ -100,6 +98,8 @@ class DataPackage{
         out << data.data_type << data.id << data.cards << data.player_info ;
         return out;
     }
+
+    static void print(DataPackage const data);
 };
 
 class MyTools : public QObject
