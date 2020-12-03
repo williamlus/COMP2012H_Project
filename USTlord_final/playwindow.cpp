@@ -8,6 +8,13 @@ PlayWindow::PlayWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
+PlayWindow::PlayWindow(int id,QWidget *parent):
+    QMainWindow(parent),
+    ui(new Ui::PlayWindow)
+{
+    ui->setupUi(this);
+}
+
 PlayWindow::~PlayWindow()
 {
     delete ui;

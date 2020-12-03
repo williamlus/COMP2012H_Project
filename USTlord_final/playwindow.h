@@ -14,7 +14,7 @@ class PlayWindow : public QMainWindow
 
 public:
     explicit PlayWindow(QWidget *parent = nullptr);
-    explicit PlayWindow(DataPackage data,QWidget *parent=nullptr);
+    explicit PlayWindow(int id,QWidget *parent=nullptr);
     ~PlayWindow();
 
 public slots:
