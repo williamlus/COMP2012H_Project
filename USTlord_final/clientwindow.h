@@ -2,8 +2,8 @@
 #define CLIENTWINDOW_H
 
 #include <QMainWindow>
-#include <QCloseEvent>
-#include "source/ToolsForNetworking.h"
+#include <QTcpSocket>
+#include "source/datapackage.h"
 #include "playwindow.h"
 
 namespace Ui {
@@ -16,40 +16,26 @@ class ClientWindow : public QMainWindow
 
 public:
     explicit ClientWindow(QWidget *parent = nullptr);
-
-    void closeEvent(QCloseEvent *event) override;
-
     ~ClientWindow();
 
-    void setServerIP(QString ip);//modify the ServerIP by line edit
-    void setPort(QString port);//modify the port by line edit
-
 public slots:
-    void on_pushButton_quit_clicked();
+    void handleStateChanged(QAbstractSocket::SocketState state);
+    void handle_server_message();
+    void send_to_server(DataPackage data);
+    void received_from_playwindow(DataPackage data);
 
+private slots:
     void on_pushButton_join_server_clicked();
 
     void on_pushButton_stop_joining_clicked();
 
-    void readyRead();//let my_tool to process the raw data
-
-    void handleSocketEvent(QAbstractSocket::SocketState state);
-
-    void displayError(QAbstractSocket::SocketError);//display error, close the client and set to nullptr
-
-    void received_from_server(DataPackage data);
-    //when ready_read signal occurs, trigger received_from_server
-    //if the data is "start game", create playwindow by conversion constructor ( i.e. PlayWindow(DataPackage,this) )
-    //else, send the data to playwindow by play_window->receive_package(DataPackage)
-    void received_from_playwindow(DataPackage data);
-    //when playwindow emit signal send_datapackage(Datapackage), trigger received_from_playwindow
-    //send the data to server by my_tool
+    void on_pushButton_quit_clicked();
 
 private:
     Ui::ClientWindow *ui;
-    QTcpSocket *client{nullptr};
-    MyTools my_tool;
-    PlayWindow* play_window{nullptr};
+    QTcpSocket *socket{nullptr};
+    PlayWindow *play_window{nullptr};
+    int id{-1};
 };
 
 #endif // CLIENTWINDOW_H
