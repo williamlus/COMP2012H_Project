@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QTcpSocket>
+#include <QCloseEvent>
 #include "source/datapackage.h"
 #include "playwindow.h"
 
@@ -16,6 +17,7 @@ class ClientWindow : public QMainWindow
 
 public:
     explicit ClientWindow(QWidget *parent = nullptr);
+    void closeEvent(QCloseEvent *event) override;
     ~ClientWindow();
 
 public slots:

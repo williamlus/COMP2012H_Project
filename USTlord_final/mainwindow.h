@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPaintEvent>
 #include <QEvent>
+#include <QSound>
 #include "clientwindow.h"
 #include "playwindow.h"
 #include "serverwindow.h"
@@ -20,6 +21,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void paintEvent(QPaintEvent * event) override;
+    void initialize_window();
 
 private slots:
     void on_create_room_button_clicked();
@@ -35,5 +37,6 @@ private:
     ClientWindow* client_window{nullptr};
     PlayWindow* play_window{nullptr};
     ServerWindow* server_window{nullptr};
+    QSound* bgm;
 };
 #endif // MAINWINDOW_H

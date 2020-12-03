@@ -35,6 +35,7 @@ public:
     //it means that you can reuse the same object
 
     //Accessors
+
     const Card* operator[](int i) const;
     //get the i+1-th pointer to Card, return nullptr if index out of range 
     

@@ -8,6 +8,16 @@ ClientWindow::ClientWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
+void ClientWindow::closeEvent(QCloseEvent *event){
+    if(socket){
+        socket->close();
+        socket->deleteLater();
+        qDebug() << "Closing socket";
+    }
+    this->parentWidget()->show();
+    event->accept();
+}
+
 ClientWindow::~ClientWindow()
 {
     delete ui;
@@ -15,7 +25,11 @@ ClientWindow::~ClientWindow()
 
 void ClientWindow::handleStateChanged(QAbstractSocket::SocketState state)
 {
-
+    if(state==QAbstractSocket::SocketState::UnconnectedState){
+        socket->close();
+        ui->listWidget_dialogs->addItem("Disconnected from server");
+        ui->listWidget_dialogs->addItem("Closing the socket");
+    }
 }
 
 void ClientWindow::handle_server_message()
@@ -26,18 +40,27 @@ void ClientWindow::handle_server_message()
         DataPackage data=DataPackage::parse(arr);
         if(data.action==DataPackage::Action::GIVE_ID){
             id=data.content.toInt();
+            DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
+            send_to_server(data_to_send);
+            play_window=new PlayWindow(id,this);
+            connect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
         }
-        if(play_window){
+        else if(play_window){
             play_window->receive_from_client(DataPackage::parse(arr));
         }
     }
 }
 
 void ClientWindow::send_to_server(DataPackage data){
-
+    if(socket){
+        QByteArray arr=data.serialize();
+        socket->write(arr);
+    }
 }
 void ClientWindow::received_from_playwindow(DataPackage data){
-
+    if(socket){
+        this->send_to_server(data);
+    }
 }
 
 void ClientWindow::on_pushButton_join_server_clicked()
@@ -62,5 +85,5 @@ void ClientWindow::on_pushButton_stop_joining_clicked()
 
 void ClientWindow::on_pushButton_quit_clicked()
 {
-
+    this->close();
 }

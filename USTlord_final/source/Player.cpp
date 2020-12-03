@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <QDebug>
 
 Player::Player():id(-1),name("default name"),deck(new Deck()){}
 Player::Player(int id,string name) : id(id), name(name), deck(new Deck()) {}
@@ -11,21 +12,59 @@ void Player::set_id(int id){
 void Player::set_name(string name){
     this->name=name;
 }
+
+void Player::set_choice(char _choice){
+    choice = _choice;
+}
+
 void Player::set_is_landlord(bool is_landlord){
     this->is_landlord=is_landlord;
 }
+
+void Player::set_selected_cards(vector<const Card*> current_selected){
+    selected_cards_group = CardsGroup(current_selected);
+}
+
 int Player::get_id() const{
     return this->id;
 }
 string Player::get_name() const{
     return this->name;
 }
-Deck const* Player::get_deck() const{
+Deck* Player::get_deck() const{
     return this->deck;
 }
+
 int Player::get_num_cards() const{
     return this->deck->get_num_cards();
 }
+
+vector<CardsGroup> Player::get_hints(){
+    return this->hints;
+}
+
+CardsGroup Player::get_selected_cards() const {
+    return selected_cards_group;
+}
+bool Player::turn_end() const{
+    return end_turn;
+}
+
+void Player::clear_hint(){
+    this->hints.clear();
+    this->current_hint = 0;
+}
+
+bool Player::is_winner() const{
+    if(deck->get_num_cards() == 0){
+        return true;
+    }else return false;
+}
+
+void Player::set_turn_end(bool status){
+    this->end_turn = status;
+}
+
 void Player::receive_card(Card const* c){
     this->deck->add_card(c);
     this->deck->rearrange();
@@ -99,13 +138,12 @@ void Player::select_card(Card const * c){
     }
 }//select one card from deck and push its pointer to selected_cards_group, if card exists in selected_cards_group, then unselect it
 
-
-CardsGroup Player::get_hint(){
-    if(this->hints.size()==0){return CardsGroup();}
-    int temp=this->current_hint;
-    this->current_hint=(this->current_hint+1)%this->hints.size();
-    return this->hints[temp];
-}//get one hint according to hints and current_hint, update the selected_cards_group, and display_cards()
+//CardsGroup Player::get_hint(){
+//    if(this->hints.size()==0){return CardsGroup();}
+//    int temp=this->current_hint;
+//    this->current_hint=(this->current_hint+1)%this->hints.size();
+//    return this->hints[temp];
+//}//get one hint according to hints and current_hint, update the selected_cards_group, and display_cards()
 
 bool Player::selected_can_beat(const CurrentPattern& cp){
     if(cp.can_be_beaten_by(this->id,this->selected_cards_group)){
@@ -174,65 +212,35 @@ vector<string*> Player::request_cards_string(){
     return cards;
 }
 
-CardsGroup Player::play(const CurrentPattern& cp, vector<int> players_num_cards){
-    this->calc_hints(cp);
-    char choice;
-    while (true){
-        this->display_cards();
-        cout << "Enter 'h' to get one hint, enter 's' to select cards, enter 'p' to play cards, enter 'q' to give up: ";
-        cin >> choice;
-        cout << endl;
-        if (choice=='h'){
-            this->selected_cards_group=this->get_hint();
-            //this->display_cards();
+CardsGroup Player::play(const CurrentPattern& cp){
+
+    if (choice=='p'){
+        if(this->selected_cards_group.is_valid()){
+             if(cp.can_be_beaten_by(this->id,this->selected_cards_group)){
+                 qDebug() << "here1";
+                 end_turn = true;
+                 return selected_cards_group;
+             }
+             else{
+                 qDebug() << "here2";
+                 return CardsGroup(); }
         }
-        else if (choice=='s'){
-            vector<string*> cards_string(0,nullptr);
-            cout << "Please enter a set of cards, e.g. s3 h3 : ";
-            cards_string=this->request_cards_string();
-            vector<Card const*> cards=this->deck->get_cards();
-            for(int i=0;i<cards_string.size();i++){
-                for(int j=0;j<cards.size();j++){
-                    if(cards[j]->get_string()==*(cards_string[i])){
-                        this->select_card(cards[j]);
-                        break;
-                    }
-                }
-            }
-        }
-        else if (choice=='p'){
-            if(this->selected_cards_group.is_valid()){
-                if(cp.can_be_beaten_by(this->id,this->selected_cards_group)){
-                    break;
-                }
-                else{
-                    cout << "Cannot beat, please enter again." << endl;
-                }
-            }
-            else{
-                cout << "Invalid CardsGroup, please enter again." << endl;
-            }
-        }
-        else if (choice=='q'){
+        else{
+            qDebug() << "here3";
+            return CardsGroup(); }
+     }
+
+    else if (choice=='g'){
             //unselect all selected_cards_group
             vector<Card const*> empty_cards(0,nullptr);
             this->selected_cards_group.reset(empty_cards);
-            break;
+            end_turn = true;
         }
         else{
-            cout << "Invalid choice, please enter again." << endl;
-        }
+        return CardsGroup();
+        //display message : please choose again;
     }
-    //clear all the hints
-    this->hints.clear();
-    this->current_hint=0;
-    //clear the cards to be played in deck
-    this->clear_cards(this->selected_cards_group);
-    CardsGroup temp=this->selected_cards_group;
-    //clear selected_cards_group
-    vector<Card const*> empty_cards(0,nullptr);
-    this->selected_cards_group.reset(empty_cards);
-    return temp;
+    return this->selected_cards_group;
 }//use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
 
 void Player::clear_cards(const CardsGroup& cg){

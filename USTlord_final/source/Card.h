@@ -7,6 +7,7 @@
 
 #include <string>
 #include <QDataStream>
+#include "source/CardPicture.h"
 
 using namespace std;
 
@@ -28,7 +29,7 @@ class Card {
       Color color;
       QString str_color{"E"};
       int value;
-
+      CardPicture* card_picture{nullptr};
     public:
 
       //Constructors and Destructor
@@ -43,12 +44,15 @@ class Card {
       int get_value() const;//get the value of the card
       Color get_color() const;//get the color of the card
       bool is_valid() const;//check if the card is valid
+      CardPicture* get_card_picture() const;//get card picture
+      int get_index() const;
 
       //Mutators
       void reset(char color, char figure);
       void reset(Color color, int value);
       void set_value(int value);
       void set_color(Color color);
+      void set_card_picture(CardPicture* card_pic);
 
       //Binary Operations
       bool operator<(const Card& a) const;//Compare the value of two cards

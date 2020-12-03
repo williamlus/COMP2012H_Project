@@ -93,7 +93,7 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
             vector<Card const*> card_to_add {to_add};
             return CardsGroup(card_to_add);
         }
-        
+
     }
     //if current AIPlayer is landlord, then try to beat everyone
     if(is_landlord){
@@ -104,7 +104,7 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
         if(cp.current_is_landlord()){
             if(hints.empty()){return CardsGroup();}
             return this->hints[0];
-          
+
         }
         else{
             //if current AIPlayer is farmer, then avoid to beat its partner but always beat the landlord
@@ -134,7 +134,7 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
                     }
             }
             else{
-                //partner plays some combination, never beat him unless itself can win 
+                //partner plays some combination, never beat him unless itself can win
                 if(deck->get_num_cards()==cp.get_cards_type().get_num_cards()){
                     if(hints.empty()){return CardsGroup();}
                     return this->hints[0];
@@ -143,13 +143,13 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
                     return CardsGroup();
                 }
             }
-            
+
         }
     }
-    
 
-    
-    
+
+
+
 }//choose cardsgroup according to the situation of board (e.g. num of cards of other players, current_pattern)
 
 CardsGroup AIPlayer::play(const CurrentPattern& cp){
@@ -189,6 +189,6 @@ bool AIPlayer::want_landlord(){
     else{
         return (prob<0.1)? true : false;
     }
-    
+
 }//choose to be landlord or not
 

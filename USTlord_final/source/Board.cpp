@@ -123,33 +123,33 @@ void Board::init_offline_game(){
 }
 
 //Perform the main process of the game
-void Board::start_game(){
-    string action_name;
-    CardsGroup action_cards;
+//void Board::start_game(){
+//    string action_name;
+//    CardsGroup action_cards;
 
-    for(int turn = landlord_id; !game_finish; turn++){
+//    for(int turn = landlord_id; !game_finish; turn++){
 
-        if(turn >= NUMBER_OF_PLAYER){
-            turn = 0;
-        }
-        cout << endl;
-        vector<int> players_num_cards{players[0]->get_num_cards(),players[1]->get_num_cards(),players[2]->get_num_cards()};
-        this->cp->record(players[turn]->get_id(),players[turn]->play(*this->get_current_pattern(),players_num_cards),players[turn]->get_id()==landlord_id);
-        this->cp->display();
+//        if(turn >= NUMBER_OF_PLAYER){
+//            turn = 0;
+//        }
+//        cout << endl;
+//        vector<int> players_num_cards{players[0]->get_num_cards(),players[1]->get_num_cards(),players[2]->get_num_cards()};
+//        this->cp->record(players[turn]->get_id(),players[turn]->play(*this->get_current_pattern(),players_num_cards),players[turn]->get_id()==landlord_id);
+//        this->cp->display();
 
-        //check game state
-        if(players[turn]->get_deck()->get_num_cards() == 0){
-            game_finish = true;
-            landlord_win = (turn == landlord_id);
-            you_win = (turn == CURRENT_PLAYER);
-            //output message
-            if(landlord_win){ cout << "LANDLORD WIN!" << endl; }
-            if(you_win){ cout << "YOU WIN!" << endl;}
-            else{ cout << "YOU LOSE!" << endl; }
-        }
-    }
-    cout << "Start game success!" << endl;
-};
+//        //check game state
+//        if(players[turn]->get_deck()->get_num_cards() == 0){
+//            game_finish = true;
+//            landlord_win = (turn == landlord_id);
+//            you_win = (turn == CURRENT_PLAYER);
+//            //output message
+//            if(landlord_win){ cout << "LANDLORD WIN!" << endl; }
+//            if(you_win){ cout << "YOU WIN!" << endl;}
+//            else{ cout << "YOU LOSE!" << endl; }
+//        }
+//    }
+//    cout << "Start game success!" << endl;
+//};
 
 //Choose landlord according to the rule
 int Board::choose_landlord(){

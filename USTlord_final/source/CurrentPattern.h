@@ -13,8 +13,12 @@ class CurrentPattern : public CardsGroup{
       int player_index;//index of last player who played these cards
       bool is_landlord;
     public:
-      CurrentPattern():CardsGroup(),player_index(-1){};
+      CurrentPattern():CardsGroup(),player_index(0){};
+      CurrentPattern(vector<const Card*>selected_cards,int active_player_id):CardsGroup(selected_cards),player_index(active_player_id){}
+      CurrentPattern(CardsGroup last_player,int active_player_id):CardsGroup(last_player),player_index(active_player_id){}
+
       void display();
+      void set_cardsgroup();
       int get_player_index() const;
       void set_player_index(int id);
       bool can_be_beaten_by(int id,const CardsGroup& cg) const;//check whether current_pattern can be beaten by cardsgroup played by the player with the id

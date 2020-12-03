@@ -25,6 +25,19 @@ Card::Color Card::get_color() const{
     return this->color;
 }//get the color of the card
 
+CardPicture* Card::get_card_picture() const {
+    return card_picture;
+}
+
+int Card::get_index() const {
+    if(color == EMPTY) return -1;
+    else if(color == SPADE) return value;
+    else if(color == HEART) return 13+value;
+    else if(color == DIAMOND) return 26+value;
+    else if(color == CLUB) return 39+value;
+    else if(color == BLACK_JOKER) return 52;
+    else return 53;
+}
 bool Card::is_valid() const{
     if(this->color==EMPTY || this->value==ERROR){
         return false;
@@ -55,6 +68,9 @@ void Card::set_color(Color color){
     this->color=color;
 }
 
+void Card::set_card_picture(CardPicture *card_pic) {
+    this->card_picture = card_pic;
+}
 /*Binary Operations*/
 bool Card::operator<(const Card& a) const{
     return Card::compare_value(this,&a);

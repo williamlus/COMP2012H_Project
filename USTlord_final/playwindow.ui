@@ -6,87 +6,108 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>1200</width>
     <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>images/icon.jpg</normaloff>images/icon.jpg</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="layoutWidget">
+   <widget class="QPushButton" name="start_button">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>751</width>
-      <height>501</height>
+      <x>550</x>
+      <y>200</y>
+      <width>100</width>
+      <height>50</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QGraphicsView" name="graphicsView_opponent1"/>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <widget class="QGraphicsView" name="graphicsView_landlord_bonus_cards"/>
-         </item>
-         <item>
-          <widget class="QGraphicsView" name="graphicsView_current_pattern"/>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <widget class="QGraphicsView" name="graphicsView_opponent2"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QPushButton" name="pushButton_play">
-         <property name="text">
-          <string>Play</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_hint">
-         <property name="text">
-          <string>Hint</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_give_up">
-         <property name="text">
-          <string>Give Up</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_want_landlord">
-         <property name="text">
-          <string>Want Landlord</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_want_farmer">
-         <property name="text">
-          <string>Want Farmer</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QGraphicsView" name="graphicsView_mycards"/>
-     </item>
-    </layout>
+    <property name="text">
+     <string>START</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="hit_button">
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>300</y>
+      <width>80</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PLAY</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="call_lord_button">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>300</y>
+      <width>80</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>CALL LORD</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="hint_button">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>300</y>
+      <width>80</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>HINT</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="refuse_button">
+    <property name="geometry">
+     <rect>
+      <x>660</x>
+      <y>300</y>
+      <width>80</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>REFUSE</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="give_up_button">
+    <property name="geometry">
+     <rect>
+      <x>760</x>
+      <y>300</y>
+      <width>80</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>GIVE UP</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="info_bar">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>30</y>
+      <width>261</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -94,12 +115,11 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>26</height>
+     <width>1200</width>
+     <height>22</height>
     </rect>
    </property>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>
