@@ -1,5 +1,7 @@
 #include "serverwindow.h"
 #include "ui_serverwindow.h"
+#include <QMessageBox>
+#include <QRandomGenerator>
 
 ServerWindow::ServerWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -88,7 +90,20 @@ void ServerWindow::on_pushButton_create_clicked()
 
 void ServerWindow::on_pushButton_start_game_clicked()
 {
+    if(clients.size()==3){
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this,"START",tr("Start game? :)"),QMessageBox::Yes|QMessageBox::No);
+        if(reply==QMessageBox::Yes){
+            qDebug()<<"Three players are ready!";
+            give_id();
+            this->hide();
+        }
+        else{
+            qDebug()<<"Players refuse to start game >.<";
+            return;
+        }
 
+    }
 }
 
 void ServerWindow::handleConnection()
@@ -133,22 +148,30 @@ void ServerWindow::handle_clients_message()
             QString msg=QString::fromStdString(arr.toStdString());
             QString addr=clients[i]->peerAddress().toString() + ":" + QString::number(clients[i]->peerPort());
             ui->listWidget_dialogs->addItem(addr+" : "+msg);
+            DataPackage data(msg);
+            receiveData(data);
         }
     }
+
+
 }
 
-void ServerWindow::sendData(DataPackage data)
+void ServerWindow::sendData(QTcpSocket* socket, DataPackage data)
 {
     QByteArray arr=data.serialize();
-    for(int i=0;i<clients.size();++i){
-        clients[i]->write(arr);
-        ui->listWidget_dialogs->addItem("Send text to client: " + clients[i]->peerAddress().toString() + ":" + QString::number(clients[i]->peerPort()));
-    }
+
+        socket->write(arr);
+        ui->listWidget_dialogs->addItem("Send text to client: " + socket->peerAddress().toString() + ":" + QString::number(socket->peerPort()));
+
 }
 
 void ServerWindow::give_id()
 {
+    for(int i=0;i<3;++i){
+        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString(i));
+        sendData(clients[i],confirm_data);
 
+    }
 }
 
 void ServerWindow::confirm_ready()
@@ -158,15 +181,156 @@ void ServerWindow::confirm_ready()
 
 void ServerWindow::deal_cards()
 {
+    DataPackage data(-1,-1,DataPackage::Action::DEAL_CARDS,cards);
+    for(int i =0;i<3;++i){
 
+        sendData(clients[i],data);
+    }
 }
 
-void ServerWindow::choose_landlord()
+void ServerWindow::choose_landlord(DataPackage data)
 {
+    static int landlord_id = -1;
+    static QVector<int> player_ids;
+    player_ids.push_back(data.sender);
+    bool want_landlord = false;
+    if(data.content == DataPackage::Content::ACCEPT){
+        landlord_id = data.sender;
+        if(player_ids.size()==3){
+            //now all players respond, we can determine the landlord
+            qDebug()<< "decide the landlord: "<< landlord_id;
+            want_landlord=true;
+        }
+        else{
+            DataPackage data_landlord(-1,-1,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::REQUEST);
+            sendData(clients[(data.sender+1)%3],data_landlord);
+        }
+    }
+    else{
+        if(player_ids.size()==3){
+            landlord_id = (landlord_id==-1)? player_ids[0] : landlord_id;
+            qDebug()<< "decide the landlord: "<< landlord_id;
+            want_landlord=true;
+        }
+        else{
+            DataPackage data_landlord(-1,-1,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::REQUEST);
+            sendData(clients[(data.sender+1)%3],data_landlord);
+        }
+    }
+    if(want_landlord){
+        //first anounce the landlord
+        DataPackage data_landlord_id(-1,landlord_id,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::BE_LANDLORD);
 
+        //give bonus card
+        DataPackage data_bonus_cards(-1,-1,DataPackage::Action::LANDLORD_BONUS,bonus_cards);
+
+        for(int i=0;i<3;++i){
+            sendData(clients[i],data_landlord_id);
+            sendData(clients[i],data_bonus_cards);
+        }
+
+    }
 }
 
 void ServerWindow::init_game()
 {
+    //generate 54 cards
+            QVector<Card> set_of_cards;
+            QChar color;
+            for(int i=0;i<54;++i){
+                char figure;
+                if(i<52){
+                    figure = figures_to_int[i%13];
+                    int j = i/13;
+                    switch(j){
+                        case 0:
+                        color = 'S';
+                        break;
+                        case 1:
+                        color = 'H';
+                        break;
+                        case 2:
+                        color = 'D';
+                        break;
+                        case 3:
+                        color = 'C';
+                        break;
+                    }
+                }
+                else if(i==52){
+                    figure = figures_to_int[NUMBER_OF_FIGURES-1];
+                    color = 'B';
+                }
+                else{
+                    figure = figures_to_int[NUMBER_OF_FIGURES-1];
+                    color = 'R';
+                }
+                set_of_cards.push_back(Card(color.toLatin1(),figure));
+            }
+
+            //shuffle the set_of_cards
+            int i = 0;
+            srand(time(0));
+            for(i = 0; i < 54; i++){
+                swap(set_of_cards[i], set_of_cards[rand()%NUMBER_OF_CARDS]);
+            }
+            string str_cards;
+            for(int i=0;i<54;++i){
+                if(i<54)
+                str_cards=str_cards+set_of_cards[i].get_string()+",";
+                if(i==53)
+                    str_cards+=set_of_cards[i].get_string();
+            }
+            cards = QString::fromStdString(str_cards);
+
+            bonus_cards=bonus_cards+QString::fromStdString(set_of_cards[51].get_string())+",";
+            bonus_cards=bonus_cards+QString::fromStdString(set_of_cards[52].get_string())+",";
+            bonus_cards=bonus_cards+QString::fromStdString(set_of_cards[53].get_string());
+
 
 }
+
+void ServerWindow::receiveData(DataPackage data){
+    qDebug()<<"one data is received!";
+    static int received_message = 0;
+    cards.clear();
+    if(data.action==DataPackage::Action::CONFIRM_READY){
+        qDebug() << "ready is confirmed: "<<++received_message << data.sender;
+        if(received_message==3){
+            qDebug()<<"players are all ready to play!";
+            init_game();
+            received_message=0;
+            //randomly choose a player to be the first one to determine being a landlord or not
+            int random_index = QRandomGenerator::global()->bounded(3);
+            DataPackage data(-1,-1,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::REQUEST);
+            sendData(clients[random_index],data);
+        }
+    }
+    else if(data.action==DataPackage::Action::CHOOSE_LANDLORD){
+        choose_landlord(data);
+    }
+    else if(data.action==DataPackage::Action::PLAY_CARDS){
+        DataPackage data_play(-1,data.actioner,data.action,data.content);
+        for(int i=0;i<3;++i){
+            sendData(clients[i],data_play);
+        }
+    }
+    else if(data.action==DataPackage::Action::ANNOUNCE){
+        DataPackage data_end_game(-1,-1,DataPackage::Action::ANNOUNCE,DataPackage::Content::END_GAME);
+        for(int i=0;i<3;++i){
+            sendData(clients[i],data_end_game);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
