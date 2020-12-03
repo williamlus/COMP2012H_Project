@@ -69,7 +69,7 @@ DataPackage DataPackage::parse(QByteArray arr)
     return DataPackage(whole_msg);
 }
 
-void DataPackage::read(DataPackage data, QString raw_data){
+void DataPackage::read(DataPackage& data, QString raw_data){
     //the format of raw_data should be:
     //(int sender_id);(int actioner_id);(Action action);(QString content)
     //each seperated by ;
