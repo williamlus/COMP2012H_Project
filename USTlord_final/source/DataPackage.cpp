@@ -111,6 +111,6 @@ QVector<Card> DataPackage::generate_cards(){
 //        }
 //        Card card_to_add (color,value);
 //        cards_vector.push_back(card_to_add);
-    }
+//    }
     return cards_vector;
 }
