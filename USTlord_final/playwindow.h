@@ -2,9 +2,7 @@
 #define PLAYWINDOW_H
 
 #include <QMainWindow>
-#include <QMessageBox>
-#include <QCloseEvent>
-#include "source/ToolsForNetworking.h"
+#include "source/datapackage.h"
 
 namespace Ui {
 class PlayWindow;
@@ -16,25 +14,14 @@ class PlayWindow : public QMainWindow
 
 public:
     explicit PlayWindow(QWidget *parent = nullptr);
-    explicit PlayWindow(DataPackage data,QWidget *parent = nullptr);
-    void closeEvent(QCloseEvent *event) override;
+    explicit PlayWindow(DataPackage data,QWidget *parent=nullptr);
     ~PlayWindow();
 
-private slots:
-    void on_pushButton_play_clicked();
-
-    void on_pushButton_hint_clicked();
-
-    void on_pushButton_give_up_clicked();
-
-    void on_pushButton_want_landlord_clicked();
-
-    void on_pushButton_want_farmer_clicked();
+public slots:
+    void receive_from_client(DataPackage data);
 
 signals:
-    void send_datapackage(DataPackage dp);
-public slots:
-    void receive_datapackage(DataPackage dp);
+    void send_to_client(DataPackage data);
 
 private:
     Ui::PlayWindow *ui;
