@@ -1,5 +1,6 @@
 #include "source/DataPackage.h"
 #include <QDebug>
+#include <QChar>
 
 DataPackage::DataPackage()
 {
@@ -95,22 +96,25 @@ QVector<Card> DataPackage::generate_cards(){
     }
     QVector<Card> cards_vector;
     QStringList cards = content.split(',');
-//    for(QStringList::iterator it = cards.begin();it!=cards.end();++it){
-//        if((*it).size()==2){
-//            char color = (*it).at(0).toAscii();
-//            int value = (*it).at(1).toInt();
-//        }
-//        else if((*it).size()==3){
-//            char color = (*it)[0].toAscii();
-//            QStringRef str_value(&(*it),1,2);
-//            int value = str_value.toInt();
-//        }
-//        else{
-//            qDebug()<<"Invalid card format in content!";
-//            return {};
-//        }
-//        Card card_to_add (color,value);
-//        cards_vector.push_back(card_to_add);
-//    }
+    for(QStringList::iterator it = cards.begin();it!=cards.end();++it){
+        if((*it).size()==2){
+            char color = (*it)[0].toLatin1();
+            int value = (int)(*it)[1].toLatin1();
+            Card card_to_add (color,value);
+            cards_vector.push_back(card_to_add);
+        }
+        else if((*it).size()==3){
+            char color = (*it)[0].toLatin1();
+            QStringRef str_value(&(*it),1,2);
+            int value = str_value.toInt();
+            Card card_to_add (color,value);
+            cards_vector.push_back(card_to_add);
+        }
+        else{
+            qDebug()<<"Invalid card format in content!";
+            return {};
+        }
+
+    }
     return cards_vector;
 }
