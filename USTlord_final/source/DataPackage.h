@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QVector>
+#include "source/Card.h"
 
 class DataPackage
 {
@@ -44,20 +45,20 @@ public:
     void reset(int,int,Action,QString);
     QString to_string() const;
     QByteArray serialize() const;
-    static QString cards_to_string(QVector<QString/*Card*/> cards);
+    static QString cards_to_string(QVector<Card> cards);
     static DataPackage parse(QByteArray arr);
-    static void read(Datapackage,QString);//reading raw data to DataPackage
-    QVector(Card) generate_cards();//generate cards if the content consists of cards
+    static void read(DataPackage,QString);//reading raw data to DataPackage
+    QVector<Card> generate_cards();//generate cards if the content consists of cards
 };
 
-QString DataPackage::Content::REQUEST = "request";
-QString DataPackage::Content::ACCEPT="accept";
-QString DataPackage::Content::REJECT="reject";
-QString DataPackage::Content::BE_LANDLORD="be";
-QString DataPackage::Content::DO_NOT_PLAY="noplay";
-QString DataPackage::Content::WIN_GAME="win";
-QString DataPackage::Content::LOSE_GAME="lose";
-QString DataPackage::Content::END_GAME="end";
-QString DataPackage::Content::QUIT="quit";
+//QString DataPackage::Content::REQUEST = "request";
+//QString DataPackage::Content::ACCEPT="accept";
+//QString DataPackage::Content::REJECT="reject";
+//QString DataPackage::Content::BE_LANDLORD="be";
+//QString DataPackage::Content::DO_NOT_PLAY="noplay";
+//QString DataPackage::Content::WIN_GAME="win";
+//QString DataPackage::Content::LOSE_GAME="lose";
+//QString DataPackage::Content::END_GAME="end";
+//QString DataPackage::Content::QUIT="quit";
 
 #endif // DATAPACKAGE_H
