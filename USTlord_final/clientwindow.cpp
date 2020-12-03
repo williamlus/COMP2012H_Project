@@ -43,6 +43,7 @@ void ClientWindow::handle_server_message()
             DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
             send_to_server(data_to_send);
             play_window=new PlayWindow(id,this);
+            play_window->show();
             connect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
         }
         else if(play_window){
