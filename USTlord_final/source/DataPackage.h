@@ -20,15 +20,15 @@ public:
                 EXCEPTION//quit
                };
     struct Content{
-        static QString REQUEST;
-        static QString ACCEPT;
-        static QString REJECT;
-        static QString BE_LANDLORD;
-        static QString DO_NOT_PLAY;
-        static QString WIN_GAME;
-        static QString LOSE_GAME;
-        static QString END_GAME;
-        static QString QUIT;
+        static const QString REQUEST;
+        static const QString ACCEPT;
+        static const QString REJECT;
+        static const QString BE_LANDLORD;
+        static const QString DO_NOT_PLAY;
+        static const QString WIN_GAME;
+        static const QString LOSE_GAME;
+        static const QString END_GAME;
+        static const QString QUIT;
     };
 
 public:
