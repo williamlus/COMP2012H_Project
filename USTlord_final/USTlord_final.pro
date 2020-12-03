@@ -22,7 +22,7 @@ SOURCES += \
     source/CurrentPattern.cpp \
     source/Deck.cpp \
     source/Player.cpp \
-    source/ToolsForNetworking.cpp
+    source/DataPackage.cpp
 
 HEADERS += \
     clientwindow.h \
@@ -37,7 +37,7 @@ HEADERS += \
     source/CurrentPattern.h \
     source/Deck.h \
     source/Player.h \
-    source/ToolsForNetworking.h
+    source/DataPackage.h
 
 FORMS += \
     clientwindow.ui \
