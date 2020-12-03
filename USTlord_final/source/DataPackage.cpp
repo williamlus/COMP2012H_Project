@@ -45,7 +45,18 @@ QByteArray DataPackage::serialize() const
 QString DataPackage::cards_to_string(QVector<QString/*Card*/> cards)
 {
     //TODO
-    return QString();
+    QString str_cards;
+    for(auto it = cards.begin(),it!=cards.end();it++){
+        Card::Color enum_color = (*it).get_color();
+        int value = (*it).get_value();
+        string str = Card::to_string(enum_color,value);
+        QString qstr = QString::fromStdString(str);
+        if((it+1)!=cards.end())
+            std_cards = str_cards+qstr+",";
+        else
+            str_cards += qstr;
+    }
+    return str_cards;
 }
 
 DataPackage DataPackage::parse(QByteArray arr)
@@ -53,13 +64,7 @@ DataPackage DataPackage::parse(QByteArray arr)
     //TODO
     qDebug() << "Parsing QByteArray";
     QString whole_msg=QString::fromStdString(arr.toStdString());
-    QStringList list=whole_msg.split(QLatin1Char(';'), Qt::SkipEmptyParts);
-    for(int i=0;i<list.size();++i){
-        QString msg=list[i];
-        QStringList sublist=msg.split(QLatin1Char(':'),Qt::SkipEmptyParts);
-        qDebug() <<
-    }
-    return DataPackage();
+    return DataPackage(whole_msg);
 }
 
 void DataPackage::read(DataPackage data, QString raw_data){
