@@ -299,6 +299,7 @@ void ServerWindow::receiveData(DataPackage data){
         if(received_message==3){
             qDebug()<<"players are all ready to play!";
             init_game();
+            deal_cards();
             received_message=0;
             //randomly choose a player to be the first one to determine being a landlord or not
             int random_index = QRandomGenerator::global()->bounded(3);
