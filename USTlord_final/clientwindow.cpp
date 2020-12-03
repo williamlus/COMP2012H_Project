@@ -6,6 +6,18 @@ ClientWindow::ClientWindow(QWidget *parent) :
     ui(new Ui::ClientWindow)
 {
     ui->setupUi(this);
+    this->setFixedSize(800,600);
+
+}
+
+void ClientWindow::closeEvent(QCloseEvent *event)
+{
+    //close the tcpsocket
+    on_pushButton_stop_joining_clicked();
+    //show the mainwindow
+    this->parentWidget()->show();
+    //allow to close the second window
+    event->accept();
 }
 
 ClientWindow::~ClientWindow()
@@ -13,54 +25,100 @@ ClientWindow::~ClientWindow()
     delete ui;
 }
 
-void ClientWindow::handleStateChanged(QAbstractSocket::SocketState state)
+void ClientWindow::setServerIP(QString ip)
 {
-
+    ui->lineEdit_serverIP->setText(ip);
 }
 
-void ClientWindow::handle_server_message()
+void ClientWindow::setPort(QString port)
 {
-    if(socket){
-        QByteArray arr=socket->readAll();
-        ui->listWidget_dialogs->addItem(QString::fromStdString(arr.toStdString()));
-        DataPackage data=DataPackage::parse(arr);
-        if(data.action==DataPackage::Action::GIVE_ID){
-            id=data.content.toInt();
-        }
-        if(play_window){
-            play_window->receive_from_client(DataPackage::parse(arr));
-        }
-    }
-}
-
-void ClientWindow::send_to_server(DataPackage data){
-
-}
-void ClientWindow::received_from_playwindow(DataPackage data){
-
-}
-
-void ClientWindow::on_pushButton_join_server_clicked()
-{
-    if(socket==nullptr){
-        socket=new QTcpSocket(this);
-        ui->listWidget_dialogs->addItem("New socket is created");
-        connect(socket,&QTcpSocket::connected,[=](){ui->listWidget_dialogs->addItem("Connected to server");});
-        connect(socket,&QTcpSocket::stateChanged,this,&ClientWindow::handleStateChanged);
-        connect(socket,&QTcpSocket::readyRead,this,&ClientWindow::handle_server_message);
-    }
-    socket->close();
-    socket->connectToHost(ui->lineEdit_serverIP->text(),ui->lineEdit_server_port->text().toInt());
-}
-
-void ClientWindow::on_pushButton_stop_joining_clicked()
-{
-    if(socket){
-        socket->close();
-    }
+    ui->lineEdit_server_port->setText(port);
 }
 
 void ClientWindow::on_pushButton_quit_clicked()
 {
+    this->close();
+}
 
+void ClientWindow::on_pushButton_join_server_clicked()
+{
+    if(client){
+        client->close();
+    }
+    client = new QTcpSocket();
+    // connected with the server
+    connect(client, &QTcpSocket::stateChanged,this,&ClientWindow::handleSocketEvent);
+    connect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
+    // "new data is available for reading from the device's current read channel"
+    connect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
+    connect(&my_tool, &MyTools::transferPackage, this, &ClientWindow::received_from_server);
+    client->connectToHost(ui->lineEdit_serverIP->text(), static_cast<quint16>(ui->lineEdit_server_port->text().toInt()));
+    qDebug() << ui->lineEdit_serverIP->text() << static_cast<quint16>(ui->lineEdit_server_port->text().toInt());
+    ui->listWidget_dialogs->addItem(QString("Server IP: ")+ui->lineEdit_serverIP->text()+":"+ui->lineEdit_server_port->text());
+}
+
+void ClientWindow::on_pushButton_stop_joining_clicked()
+{
+    if(client){
+        disconnect(client, &QTcpSocket::stateChanged,this,&ClientWindow::handleSocketEvent);
+        disconnect(client,SIGNAL(error(QAbstractSocket::SocketError)),this,SLOT(displayError(QAbstractSocket::SocketError)));
+        // "new data is available for reading from the device's current read channel"
+        disconnect(client, &QTcpSocket::readyRead, this, &ClientWindow::readyRead);
+        disconnect(&my_tool, &MyTools::transferPackage, this, &ClientWindow::received_from_server);
+        client->close();
+        client=nullptr;
+        qDebug() << "Client closed.";
+        ui->listWidget_dialogs->addItem(QString("Client closed"));
+    }
+}
+
+void ClientWindow::readyRead()
+{
+    my_tool.read(client);
+}
+
+void ClientWindow::handleSocketEvent(QAbstractSocket::SocketState state)
+{
+    if(state==QAbstractSocket::SocketState::UnconnectedState){
+        if(client){
+            qDebug() << "Disconnected from server";
+            ui->listWidget_dialogs->addItem(QString("Disconnected from server"));
+            on_pushButton_stop_joining_clicked();
+        }
+    }
+    else if(state==QAbstractSocket::SocketState::ConnectedState){
+        qDebug() << "connected to server";
+        ui->listWidget_dialogs->addItem(QString("Connected to server"));
+    }
+}
+
+void ClientWindow::displayError(QAbstractSocket::SocketError)
+{
+    qDebug() << "Error: " << client->errorString();
+    ui->listWidget_dialogs->addItem(QString("error ")+client->errorString());
+}//display error and close the client
+
+void ClientWindow::received_from_server(DataPackage data)
+{
+    if(data.data_type==-1){return;}
+    if(data.data_type==0){
+        if(play_window){play_window->close();}
+        play_window = new PlayWindow(data,this);
+        connect(play_window,&PlayWindow::send_datapackage,this,&ClientWindow::received_from_playwindow);
+        this->hide();
+        play_window->show();
+        DataPackage response(0,data.id);
+        my_tool.send(client,response);
+    }
+    else{
+        qDebug() << "Received id: " + QString::number(data.id);
+        ui->listWidget_dialogs->addItem(QString("Received package, data id: ")+QString::number(data.id));
+        play_window->receive_datapackage(data);
+    }
+}
+
+void ClientWindow::received_from_playwindow(DataPackage data){
+    if(client!=nullptr){
+        my_tool.send(client,data);
+    }
 }
