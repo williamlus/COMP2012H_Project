@@ -3,8 +3,12 @@
 
 #include <QMainWindow>
 #include <QCloseEvent>
+#include <QTcpServer>
+#include <QTcpSocket>
+#include <QHostInfo>
 #include "clientwindow.h"
 #include "source/Card.h"
+#include "source/datapackage.h"
 
 namespace Ui {
 class ServerWindow;
@@ -17,42 +21,36 @@ class ServerWindow : public QMainWindow
 public:
     explicit ServerWindow(QWidget *parent = nullptr);
     void closeEvent(QCloseEvent *event) override;
+    QVector<QString> get_local_IP() const;
     ~ServerWindow();
 
 private slots:
-    void on_pushButton_quit_clicked();
+    void on_pushButton_stop_clicked();
 
     void on_pushButton_create_clicked();
 
     void on_pushButton_start_game_clicked();
 
-    void acceptConnection();
-    
-    void handleException(QAbstractSocket::SocketState state);
+    void handleConnection();
 
-    void receiveData(DataPackage data);
+    void handleStateChanged(QAbstractSocket::SocketState state);
+    void handle_clients_message();
+    void sendData(DataPackage data);
 
-    void choose_landlord(DataPackage data);
+    void give_id();
+    void confirm_ready();
+    void deal_cards();
+    void choose_landlord();
+    void init_game();
 
 private:
     Ui::ServerWindow *ui;
 
-    MyTools tool;
-    QVector<Card> cards{};
-    QVector<Card> bonus_cards{};
-    QVector<Player_Info> player_info{};
-    QVector<QString> message{};
-
-
-
-
     QTcpServer* server{nullptr};
-    QVector<QTcpSocket*> clients;
+    QVector<QTcpSocket*> clients{};
     ClientWindow* client_window{nullptr};
-    //DataPackage* data_to_send{nullptr};
+    DataPackage* data_to_send{nullptr};
     QVector<DataPackage*> data_received{};
-
-    void init_game(QVector<Card>& cards_to_deal);
 };
 
 #endif // SERVERWINDOW_H
