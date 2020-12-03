@@ -47,7 +47,7 @@ public:
     QByteArray serialize() const;
     static QString cards_to_string(QVector<Card> cards);
     static DataPackage parse(QByteArray arr);
-    static void read(DataPackage,QString);//reading raw data to DataPackage
+    static void read(DataPackage&,QString);//reading raw data to DataPackage
     QVector<Card*> generate_cards();//generate cards if the content consists of cards
 };
 
