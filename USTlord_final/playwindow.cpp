@@ -390,7 +390,12 @@ void PlayWindow::choose_landlord(){
         AIplayer_action(i);
         i = (++i)%3;
     }
-    ui->info_bar->setText("Your turn now");
+    if(cp->get_player_index()!=0){
+        ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+    else{
+        ui->info_bar->setText("Now it's your turn.");
+    }
+
     sleep(1000);
     qDebug() << "ok1";
     ui->hit_button->setVisible(true);
@@ -409,7 +414,11 @@ void PlayWindow::on_hint_button_clicked()
     if(players[0]->get_hints().size() == 0){
         ui->info_bar->setText("No hints.");
         sleep(1000);
-        ui->info_bar->setText("Your turn");
+        if(cp->get_player_index()!=0){
+            ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+        else{
+            ui->info_bar->setText("Now it's your turn.");
+        }
         return;
     }else{
         current_selection.clear();
@@ -650,12 +659,15 @@ void PlayWindow::on_hit_button_clicked()
         players[0]->set_turn_end(false);
 
         sleep(1000);
-        ui->info_bar->setText("Your turn.");
+        if(cp->get_player_index() !=0 ){
+        ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+        else{
+            ui->info_bar->setText("Now it's your turn.");}
+        }
         ui->hit_button->setVisible(true);
         ui->hint_button->setVisible(true);
         ui->give_up_button->setVisible(true);
     }
-}
 /*
  * Helper Functions
  */
@@ -761,4 +773,6 @@ void PlayWindow::closeEvent(QCloseEvent *event) {
     shuffle_music->stop();
     exit(0);
 }
+
+
 
