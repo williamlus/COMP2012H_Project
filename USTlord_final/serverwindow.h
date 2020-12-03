@@ -8,7 +8,7 @@
 #include <QHostInfo>
 #include "clientwindow.h"
 #include "source/Card.h"
-#include "source/datapackage.h"
+#include "source/DataPackage.h"
 
 namespace Ui {
 class ServerWindow;
