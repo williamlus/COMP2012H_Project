@@ -1,8 +1,9 @@
 #include "AIPlayer.h"
-#include <random>
-#include <ctime>
+#include <QDebug>
 #include <cstdlib>
 #include <vector>
+#include <QRandomGenerator>
+#include <QtGlobal>
 
 AIPlayer::AIPlayer():Player(-1,"default name"){}
 AIPlayer::AIPlayer(int id,string name):Player(id,name){}
@@ -56,7 +57,7 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
         if(count[smallest_index]==2){
             //first check whether it's PAIR_CONTINUOUS
             int count_continuous =1;
-            while(count[smallest_index+count_continuous]==2){++count_continuous;}
+            while(count[smallest_index+count_continuous]==2&&smallest_index+count_continuous<NUMBER_OF_FIGURES-2){++count_continuous;}
             if(count_continuous>=3){
                 vector<Card const*> card_to_add;
                 for(int i=0;i<count_continuous;++i){
@@ -77,7 +78,7 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
         }
         //check whether it's SINGLE_CONTINUOUS
         int count_continuous =1;
-        while(count[smallest_index+count_continuous]!=0){++count_continuous;}
+        while(count[smallest_index+count_continuous]!=0&&smallest_index+count_continuous<NUMBER_OF_FIGURES-2){++count_continuous;}
         if(count_continuous>=5){//this implies that the smallest_index is in a SINGLE_CONTINUOUS CardsGroup
             vector<Card const*> card_to_add;
             for(int i = 0;i<count_continuous;++i){
@@ -106,7 +107,11 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
           
         }
         else{
-            //if current AIPlayer is farmer, then avoid to beat its partner 
+            //if current AIPlayer is farmer, then avoid to beat its partner but always beat the landlord
+            if(cp.current_is_landlord()){
+                if(hints.empty()){return CardsGroup();}
+                return this->hints[0];
+            }
             //when its partner play same combination except small PAIR and small SINGLE unless can win
             if(cp.get_cards_type().get_type()==CardsType::Type::SINGLE){
                 if(deck->get_num_cards()==1){return this->hints[0];}
@@ -147,7 +152,7 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
     
 }//choose cardsgroup according to the situation of board (e.g. num of cards of other players, current_pattern)
 
-CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_cards){
+CardsGroup AIPlayer::play(const CurrentPattern& cp){
     CardsGroup cg=CardsGroup();
     if(!deck->split_important_combination){
     this->calc_hints(cp);
@@ -156,9 +161,12 @@ CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_card
     this->hints.clear();
     this->current_hint=0;
     this->clear_cards(cg);
-    if(!cg.is_valid()){cout << this->name << " " << this->id << " " << "do not play." << endl;}
+    if(!cg.is_valid()){
+        this->end_turn = true;
+        cout << this->name << " " << this->id << " " << "do not play." << endl;}
     else{
         cout << this->name << " " << this->id << " play : " << cg.get_cards_type().to_string() << endl;
+        this->end_turn = true;
     }
     return cg;
     }
@@ -166,19 +174,21 @@ CardsGroup AIPlayer::play(const CurrentPattern& cp, vector<int> players_num_card
 
 bool AIPlayer::want_landlord(){
     //if num_of_important_combination >=3, the probability of want_lanlord is 0.75
-    //if num_of_important_combination==2, the probability of want_landload is 0.6
+    //if num_of_important_combination==2, the probability of want_landload is 0.5
     //if num_of_important_combination<2, the probability of want_landlord is 0.3
-    srand((unsigned)time(NULL));
-    float prob = static_cast<float>(rand()/RAND_MAX);
+    float prob = QRandomGenerator::global()->bounded(1.0);
+    qDebug() << "probability:" << prob;
     int num_of_important_combination = deck->get_num_important_combination();
+    qDebug() << "important combinations:" << num_of_important_combination;
     if(num_of_important_combination>=3){
         return (prob<0.75)? true : false;
     }
     else if(num_of_important_combination==2){
-        return (prob<0.6)? true : false;
+        return (prob<0.5)? true : false;
     }
     else{
-        return (prob<0.3)? true : false;
+        return (prob<0.1)? true : false;
     }
     
 }//choose to be landlord or not
+
