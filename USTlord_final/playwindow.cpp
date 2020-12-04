@@ -31,6 +31,7 @@ void PlayWindow::receive_from_client(DataPackage data)
         set_of_cards = data.generate_cards();
         initialize_cards();
         for(int i=0; i < NUMBER_OF_PLAYERS; i++) update_player_cards(i);
+        emit send_to_client(DataPackage(my_id,my_id,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::ACCEPT));
     }
     else if(data.action == DataPackage::CHOOSE_LANDLORD) {
         if(data.content == DataPackage::Content::REQUEST) {
