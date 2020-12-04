@@ -25,8 +25,10 @@ public slots:
     void handle_server_message();
     void send_to_server(DataPackage data);
     void received_from_playwindow(DataPackage data);
+    void set_port(QString port);
+    void set_serverIP(QString ip);
 
-private slots:
+public slots:
     void on_pushButton_join_server_clicked();
 
     void on_pushButton_stop_joining_clicked();
