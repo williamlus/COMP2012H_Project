@@ -164,14 +164,5 @@ Single Player game:
 
 * Choose landlord：
 
-![Screen Shot 2020-12-04 at 10.46.26 AM](/Users/gloria/Library/Application Support/typora-user-images/Screen Shot 2020-12-04 at 10.46.26 AM.png)
-
-* Players take turns to play
-
-![Screen Shot 2020-12-04 at 11.00.13 AM](/Users/gloria/Library/Application Support/typora-user-images/Screen Shot 2020-12-04 at 11.00.13 AM.png)
-
-* View hints:
-
-![Screen Shot 2020-12-04 at 11.05.49 AM](/Users/gloria/Library/Application Support/typora-user-images/Screen Shot 2020-12-04 at 11.05.49 AM.png)
 
 ### 5. Summary
