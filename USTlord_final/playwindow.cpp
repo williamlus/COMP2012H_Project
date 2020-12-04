@@ -300,6 +300,7 @@ void PlayWindow::initialize_cards() {
                 card->set_card_picture(card_picture);
                 card_pic_map.insert(card_picture, card);
                 players[i]->receive_card(card);
+                update_player_cards(i);
             }
         }
     }
