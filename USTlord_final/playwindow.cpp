@@ -118,7 +118,12 @@ void PlayWindow::receive_from_client(DataPackage data)
         }
     }
     else if(data.action == DataPackage::ANNOUNCE && data.content == DataPackage::Content::END_GAME) {
-        game_finished(cp->get_player_index());
+        for(int p=0; p<NUMBER_OF_PLAYERS; p++) {
+            if(players[p]->get_num_cards() == 0) {
+                game_finished(p);
+                break;
+            }
+        }
     }
 }
 
