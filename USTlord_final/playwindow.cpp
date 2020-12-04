@@ -63,6 +63,11 @@ void PlayWindow::receive_from_client(DataPackage data)
             }
         }
     }
+    else if(data.action == DataPackage::PLAY_CARDS && data.content!=DataPackage::Content::DO_NOT_PLAY && data.actioner == my_id) {
+        if(players[my_id]->get_num_cards() == 0) {
+            emit send_to_client(DataPackage(my_id, my_id, DataPackage::ANNOUNCE, DataPackage::Content::WIN_GAME));
+        }
+    }
     else if(data.action == DataPackage::PLAY_CARDS && data.content!=DataPackage::Content::DO_NOT_PLAY && data.actioner != my_id) {
         current_selection.clear();
         QVector<Card*> generated_cards=data.generate_cards();
@@ -928,9 +933,6 @@ void PlayWindow::on_hit_button_clicked()
                 DataPackage data(DataPackage(my_id, my_id, DataPackage::PLAY_CARDS, DataPackage::cards_to_string(cards_to_send)));
                 qDebug() << "Play cards:" <<data.to_string();
                 emit send_to_client(data);
-                if(players[my_id]->get_num_cards() == 0) {
-                    emit send_to_client(DataPackage(my_id, my_id, DataPackage::ANNOUNCE, DataPackage::Content::WIN_GAME));
-                }
                 ui->hit_button->setVisible(false);
                 ui->hint_button->setVisible(false);
                 ui->give_up_button->setVisible(false);
