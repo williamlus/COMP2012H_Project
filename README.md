@@ -2,6 +2,8 @@
 
 By COMP2012H 2020FALL Group21, ZHENG Hantao, SU Hong, LU Weiqi, GUO Bingcan
 
+
+
 ### 1. Introduction
 
 Dou dizhu is described as easy to learn but hard to master, requiring mathematical and strategic thinking as well as carefully planned execution. Suits are irrelevant in playing doudizhu. Players can easily play the game with a set of dou dizhu playing cards, without the suits printed on the cards. Less popular variations of the game do exist in China, such as four-player and five-player dou dizhu played with two packs of cards. 
@@ -13,10 +15,14 @@ Making a Qt GUIbased game has moderate difficulty and can be expanded with many 
 Apply OOP to develop a landlord game with GUI based on QT with followingfeatures:
 
 1. A computer “AI” player written based on simple game logic as human
+
 2. Multip-player mode, which is the most important part of the game.
+
 3. Background music and fancy GUI.
 
-**Basic Rules**
+   
+
+**Basic Rules and Strateges**
 
 1.**A player can deal with an unrelated or useless card by making it the kicker card.**
 
@@ -30,6 +36,8 @@ For example, since the two peasants come after one another, the first peasant mi
 (Reference: https://en.wikipedia.org/wiki/Dou_dizhu#Rules)
 
 
+
+
 ### 3. Design
 
 * **Class Design**
@@ -41,7 +49,7 @@ For example, since the two peasants come after one another, the first peasant mi
   * CardsGroup
   * CardsType
   * CurrentPattern
-  * Deck
+  * Deck 
   * Player
 
   Networking：
@@ -53,61 +61,62 @@ For example, since the two peasants come after one another, the first peasant mi
 
   * playerwindow
   * mainwindow
-  * 
+  * serverwindow
+  * clientwindow
 
   
 
 * **AI Player Design**
 
   AI Logic：  
-  
+
   `const CardsGroup choose_hint(const CurrentPattern& cp);`
-    
+
     * AI player with some common sense strategies:
 
     * if the AI player is the first one to play or the CurrentPattern is played by himself
-         he will play cards with the following logic:
+      he will play cards with the following logic:
 
-         First find the smallest card in hand,
-         if it is inside a bomb, then DO NOT play it, and find the second smallest one unless he only has one card left
-         if not, then if this card is inside any other cards_combination, then just play this combination
-         otherwise just play this SINGLE card
+      First find the smallest card in hand,
+      if it is inside a bomb, then DO NOT play it, and find the second smallest one unless he only has one card left
+      if not, then if this card is inside any other cards_combination, then just play this combination
+      otherwise just play this SINGLE card
 
     * if the AI player is landlord, then try to beat everyone
 
     * if the AI player is farmer, then beat landlord all the time
-         
+
     * if the CurrentPattern is played by another farmer
-         Only give cards in these cases:
-         * the AI player can directly win the game
-         * the partner played a small SINGLE or PAIR     
-         
+      Only give cards in these cases:
 
-       
+      * the AI player can directly win the game
+      * the partner played a small SINGLE or PAIR     
 
-      
+
+
   `bool want_landlord() override;//choose to be landlord or not automatically`
       
+
     * the probability of choosing lord is determined by how good the cards in hand are
-    
-         The evaluation is basically determined by the number of cards_combination
-         
-         The cards_combination considered here are:
-         
-         TRIO,BOMB, ROCKET
 
-       
+      The evaluation is basically determined by the number of cards_combination
 
+      The cards_combination considered here are:
+
+      TRIO,BOMB, ROCKET
 
 
 * **UI Design**
 
-1. Distribu
+1. Distribute cards effect.
+2. Show buttons according to game process.
+3. Info bar displays game process to players.
+4. Play cards effect and view other players' cards.
+5. Serverwindow and Clientwindow design.
 
 
 
 * **Networking Design**
-
 
 **Transfer principle:** 
       Using Transmission Control Protocol (TCP)\
@@ -115,6 +124,7 @@ For example, since the two peasants come after one another, the first peasant mi
       Before sending and after receiving the raw_data, the information is stored in user_defined object: **Datapackage**\
       For more details of the usages of DataPackage, please refer to `DataPackage.h`
       
+
         class DataPackage
               {
               public:
@@ -142,14 +152,14 @@ For example, since the two peasants come after one another, the first peasant mi
                       static const QString END_GAME;
                       static const QString QUIT;
                   };
-
+    
         public:
                   
                   int sender;
                   int actioner;
                   Action action;
                   QString content;
-
+    
         };
 
 
@@ -159,24 +169,21 @@ Before sending  **DataPackage**, we will first convert it to the formatted QStri
 
 After receiving **raw_data(QByteArray)**, we will first convert it to QString, then convert it to DataPackage
 
-      
-      
-      
 
-      
-  
-  
+
 ### 4. UI Display
 
-Main window:
-
-
+Main window
 
 Single Player game:
 
-
-
 * Choose landlord：
+* Player cards:
+* View hints:
+* Game over:
+
+Multiplayer Player game:
+
 
 
 ### 5. Summary
