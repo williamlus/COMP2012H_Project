@@ -72,6 +72,8 @@ private slots:
     void on_hint_button_clicked();
     void on_give_up_button_clicked();
 
+    void on_enter_button_clicked();
+
 public slots:
     void receive_from_client(DataPackage data);
 
