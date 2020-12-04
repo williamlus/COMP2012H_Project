@@ -48,10 +48,10 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
   AI Logic：
   
         const CardsGroup choose_hint(const CurrentPattern& cp);
-      /*
-       * AI player with some common sense strategies:
+    
+    * AI player with some common sense strategies:
 
-       * if the AI player is the first one to play or the CurrentPattern is played by himself
+    * if the AI player is the first one to play or the CurrentPattern is played by himself
          he will play cards with the following logic:
 
          First find the smallest card in hand,
@@ -67,17 +67,17 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
          * the AI player can directly win the game
          * the partner played a small SINGLE or PAIR
 
-       */
+       
 
       
-      bool want_landlord() override;//choose to be landlord or not automatically
-      /*
+               bool want_landlord() override;//choose to be landlord or not automatically
+      
        * the probability of choosing lord is determined by how good the cards in hand are
          The evaluation is basically determined by the number of cards_combination
          The cards_combination considered here are:
          TRIO,BOMB, ROCKET
 
-       */
+       
 
 
 
@@ -170,6 +170,3 @@ Single Player game:
 ![Screen Shot 2020-12-04 at 11.05.49 AM](/Users/gloria/Library/Application Support/typora-user-images/Screen Shot 2020-12-04 at 11.05.49 AM.png)
 
 ### 5. Summary
-
-
-
