@@ -32,6 +32,13 @@ void PlayWindow::receive_from_client(DataPackage data)
         initialize_cards();
         for(int i=0; i < NUMBER_OF_PLAYERS; i++) update_player_cards(i);
         emit send_to_client(DataPackage(my_id,my_id,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::ACCEPT));
+        for(int i=51; i<NUMBER_OF_CARDS; i++) {
+            CardPicture* landlord_card = set_of_cards[i]->get_card_picture();
+            landlord_card->select(false);
+            landlord_card->turn(true);
+            landlord_card->setGeometry(510+(i-52)*CARD_WIDTH, 160, CARD_WIDTH, CARD_HEIGHT);
+            landlord_card->show();
+        }
     }
     else if(data.action == DataPackage::CHOOSE_LANDLORD) {
         if(data.content == DataPackage::Content::REQUEST) {
