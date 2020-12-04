@@ -54,6 +54,11 @@ void PlayWindow::receive_from_client(DataPackage data)
                 ui->hint_button->setVisible(true);
                 ui->give_up_button->setVisible(true);
             }
+            else{
+                ui->hit_button->setVisible(false);
+                ui->hint_button->setVisible(false);
+                ui->give_up_button->setVisible(false);
+            }
         }
     }
     else if(data.action == DataPackage::PLAY_CARDS && data.actioner != my_id) {
