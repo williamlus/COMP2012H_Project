@@ -504,7 +504,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
         if(CardsGroup::count_max_continuous_times(count,2)>=num_input/2){
         int num_continuous = num_input/2;
         int value_of_ref = cp.get_reference_card()->get_value();
-        for(int i = value_of_ref;i+num_continuous<=12;++i){
+        for(int i = value_of_ref+1;i+num_continuous<=12;++i){
             //consequent checking is meaningful iff the last card in the consecutive term is less or equal than A
                 bool check = true;
                 for(int j = i;j<i+num_continuous;++j){
@@ -546,11 +546,11 @@ void Player::calc_hints(const CurrentPattern& cp) {
         
         if(CardsGroup::count_max_continuous_times(count,3)>=num_continuous){
             
-            for(int i = value_of_ref;i<value_of_ref+num_continuous;++i){
+            for(int i = value_of_ref+1;i+num_continuous<=12;++i){
                 //consequent checking is meaningul iff the last card in the consecutive term is less or equal than A
-                if(i+num_continuous<=11){
+
                     bool check = true;
-                    for(int j = i;j<value_of_ref+num_continuous;++j){
+                    for(int j = i;j<i+num_continuous;++j){
                         if(count[j]<3){check = false; return;}
                     }
                     //check is true means that such consecutive terms are found, then add them to hint
@@ -617,7 +617,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
                             }
                         }
                     }
-                }
+
             }
         }
         //then get all possible BOMB
