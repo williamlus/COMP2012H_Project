@@ -26,6 +26,9 @@ ClientWindow::~ClientWindow()
 void ClientWindow::handleStateChanged(QAbstractSocket::SocketState state)
 {
     if(state==QAbstractSocket::SocketState::UnconnectedState){
+        if(play_window){
+            play_window->close();
+        }
         socket->close();
         ui->listWidget_dialogs->addItem("Disconnected from server");
         ui->listWidget_dialogs->addItem("Closing the socket");
