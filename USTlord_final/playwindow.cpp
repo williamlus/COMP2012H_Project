@@ -173,6 +173,7 @@ PlayWindow::~PlayWindow()
 
 void PlayWindow::initialize_window() {
     setFixedSize(1200, 600);
+    ui->info_bar->setStyleSheet("color:white;");
     ui->start_button->setStyleSheet(
                                           "QPushButton{"
                                           "background-color:white;"//color
@@ -381,8 +382,11 @@ void PlayWindow::initialize_players() {
     player3_pic->setGeometry(PLAYER3_X, PLAYER3_Y, 84, 120);
     //set names displayed in ui.
     ui->player0_name->setText("YOU");
+    ui->player0_name->setStyleSheet("color:white;");
     ui->player1_name->setText(QString::fromStdString(players[(my_id+1)%NUMBER_OF_PLAYERS]->get_name()));
+    ui->player1_name->setStyleSheet("color:white;");
     ui->player2_name->setText(QString::fromStdString(players[(my_id+2)%NUMBER_OF_PLAYERS]->get_name()));
+    ui->player2_name->setStyleSheet("color:white;");
 }
 
 void PlayWindow::initialize_players(QVector<QString> names) {
@@ -400,8 +404,11 @@ void PlayWindow::initialize_players(QVector<QString> names) {
     player3_pic->setGeometry(PLAYER3_X, PLAYER3_Y, 84, 120);
     //set names displayed in ui.
     ui->player0_name->setText("YOU");
+    ui->player0_name->setStyleSheet("color:white;");
     ui->player1_name->setText(QString::fromStdString(players[(my_id+1)%NUMBER_OF_PLAYERS]->get_name()));
+    ui->player1_name->setStyleSheet("color:white;");
     ui->player2_name->setText(QString::fromStdString(players[(my_id+2)%NUMBER_OF_PLAYERS]->get_name()));
+    ui->player2_name->setStyleSheet("color:white;");
 }
  /*
  * Game Processing Functions
@@ -446,7 +453,7 @@ void PlayWindow::update_player_cards(int player_id)
     {
         for(int j = 0; j < players[player_id]->get_deck()->get_num_cards(); j++)
         {
-            int top_border = 400;                           //upper border
+            int top_border = 450;                           //upper border
             int left_border = (1200-CARD_WIDTH*players[my_id]->get_num_cards())/2;  //left border
             CardPicture* card_picture = players[player_id]->get_deck()->get_cards()[j]->get_card_picture();
             card_picture->turn(false);

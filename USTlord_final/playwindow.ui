@@ -101,16 +101,20 @@
      <rect>
       <x>400</x>
       <y>30</y>
-      <width>391</width>
-      <height>31</height>
+      <width>400</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
+      <family>Comic Sans MS</family>
+      <pointsize>16</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -124,16 +128,23 @@
      <rect>
       <x>20</x>
       <y>10</y>
-      <width>191</width>
-      <height>16</height>
+      <width>150</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <family>Comic Sans MS</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -145,16 +156,25 @@
    <widget class="QLabel" name="player2_name">
     <property name="geometry">
      <rect>
-      <x>1020</x>
+      <x>1030</x>
       <y>10</y>
-      <width>161</width>
-      <height>20</height>
+      <width>150</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <family>Comic Sans MS</family>
+      <pointsize>16</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -166,18 +186,25 @@
    <widget class="QLabel" name="player0_name">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>360</y>
-      <width>181</width>
-      <height>16</height>
+      <x>20</x>
+      <y>400</y>
+      <width>150</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <family>Comic Sans MS</family>
+      <pointsize>16</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
     </property>
     <property name="text">
      <string/>
@@ -193,7 +220,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>22</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
