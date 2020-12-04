@@ -59,10 +59,11 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
          if not, then if this card is inside any other cards_combination, then just play this combination
          otherwise just play this SINGLE card
 
-       * if the AI player is landlord, then try to beat everyone
+    * if the AI player is landlord, then try to beat everyone
 
-       * if the AI player is farmer, then beat landlord all the time
-         if the CurrentPattern is played by another farmer
+    * if the AI player is farmer, then beat landlord all the time
+         
+    *if the CurrentPattern is played by another farmer
          Only give cards in these cases:
          * the AI player can directly win the game
          * the partner played a small SINGLE or PAIR
@@ -70,9 +71,9 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
        
 
       
-               bool want_landlord() override;//choose to be landlord or not automatically
+        bool want_landlord() override;//choose to be landlord or not automatically
       
-       * the probability of choosing lord is determined by how good the cards in hand are
+    * the probability of choosing lord is determined by how good the cards in hand are
          The evaluation is basically determined by the number of cards_combination
          The cards_combination considered here are:
          TRIO,BOMB, ROCKET
