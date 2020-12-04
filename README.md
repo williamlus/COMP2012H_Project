@@ -18,9 +18,18 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
 
 **Basic Rules**
 1. **A player can deal with an unrelated or useless card by making it the kicker card.**
-2. **Rocket and bomb are the ultimate weapons in the game.** If they either is in one's hand, one should make full use of it when time comes. If players do not possess high confidence in winning, they may think twice about dealing a rocket or bomb, because once the dealt, the risk stake of the round will be doubled (players will either win or lose double) with each rocket or bomb dealt.
-3.**Peasants must co-operate to fight against the landlord.** For example, since the two peasants come after one another, the first peasant might play a low single card if the second peasant has a sole card left.
-4.**Bid high for landlord with the best hand.** If a player has the best hand, bidding high for the position of landlord enables him to win a bigger pot.
+
+2. **Rocket and bomb are the ultimate weapons in the game.** 
+
+If they either is in one's hand, one should make full use of it when time comes. If players do not possess high confidence in winning, they may think twice about dealing a rocket or bomb, because once the dealt, the risk stake of the round will be doubled (players will either win or lose double) with each rocket or bomb dealt.
+
+3.**Peasants must co-operate to fight against the landlord.**
+
+For example, since the two peasants come after one another, the first peasant might play a low single card if the second peasant has a sole card left.
+
+4.**Bid high for landlord with the best hand.** 
+
+If a player has the best hand, bidding high for the position of landlord enables him to win a bigger pot.
 (Reference: https://en.wikipedia.org/wiki/Dou_dizhu#Rules)
 
 
