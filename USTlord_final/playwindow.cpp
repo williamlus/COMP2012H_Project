@@ -449,13 +449,13 @@ void PlayWindow::AIplayer_action(int active_AIplayer){
         sleep(200);
         cp = new CurrentPattern(tmp,active_AIplayer);
         qDebug() << QString::fromStdString(" play " + cp->get_cards_type().to_string());
-        ui->info_bar->setText(QString::fromStdString("Player ") +QString::number(active_AIplayer)+ QString::fromStdString(" play " + cp->get_cards_type().to_string()));
+        ui->info_bar->setText(QString::fromStdString("Player ") +QString::number(active_AIplayer)+ QString::fromStdString(" plays " + cp->get_cards_type().to_string()));
         update_player_cards(active_AIplayer);
         qDebug() << QString::fromStdString(" play " + cp->get_cards_type().to_string());
         sleep(1000);
         current_selection.clear();
     }else{
-        ui->info_bar->setText(QString::fromStdString("Player ") +QString::number(active_AIplayer)+ QString::fromStdString(" give up."));
+        ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(active_AIplayer)+ QString::fromStdString(" gives up."));
         sleep(1000);
     }
 }
@@ -498,7 +498,11 @@ void PlayWindow::choose_landlord(){
             AIplayer_action(i);
             i = (++i)%3;
         }
-        ui->info_bar->setText("Your turn now");
+        if(cp->get_player_index()!=0){
+            ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+        else{
+            ui->info_bar->setText("Now it's your turn.");
+        }
         sleep(1000);
     }
     else {
@@ -547,6 +551,7 @@ void PlayWindow::on_give_up_button_clicked()
     players[my_id]->set_selected_cards(players[my_id]->play(*cp).get_cards());
     current_selection.clear();
     update_player_cards(my_id);
+    
     qDebug() << cp->get_player_index();
     for(int i = 0; i < players[my_id]->get_num_cards(); i++){
         players[my_id]->get_deck()->get_cards()[i]->get_card_picture()->select(false);
@@ -558,11 +563,8 @@ void PlayWindow::on_give_up_button_clicked()
             ui->hint_button->setVisible(false);
             ui->give_up_button->setVisible(false);
             players[0]->clear_hint();
-            if(cp->get_player_index() == 1){
-                hide_past_cards();
-                cp = new CurrentPattern();
-                cp->set_player_index(1);
-            }
+            
+            if(cp->get_player_index() == 1){ hide_past_cards();}
             AIplayer_action(1);
             sleep(300);
             if(players[1]->is_winner()){
@@ -570,11 +572,8 @@ void PlayWindow::on_give_up_button_clicked()
                 sleep(1000);
                 game_finished(1);
             }
-            if(cp->get_player_index() == 2){
-                hide_past_cards();
-                cp = new CurrentPattern();
-                cp->set_player_index(2);
-            }
+            
+            if(cp->get_player_index() == 2){ hide_past_cards();}
             AIplayer_action(2);
             sleep(300);
             if(players[2]->is_winner()){
@@ -582,14 +581,15 @@ void PlayWindow::on_give_up_button_clicked()
                 sleep(1000);
                 game_finished(2);
             }
+            
             players[1]->set_turn_end(false);
             players[2]->set_turn_end(false);
             players[0]->set_turn_end(false);
-            sleep(1000);
-            ui->hit_button->setVisible(true);
-            ui->hint_button->setVisible(true);
-            ui->give_up_button->setVisible(true);
         }
+         sleep(1000);
+         ui->hit_button->setVisible(true);
+         ui->hint_button->setVisible(true);
+         ui->give_up_button->setVisible(true);
     }
     else {
         emit DataPackage(my_id, my_id, DataPackage::PLAY_CARDS, DataPackage::Content::DO_NOT_PLAY);
@@ -727,12 +727,7 @@ void PlayWindow::on_refuse_button_clicked()
 
 void PlayWindow::on_hit_button_clicked()
 {
-    ui->info_bar->clear();
-    if(cp->get_player_index() == 0){
-        if(!cp->get_cards().empty()){
-        current_selection.clear();}
-        clear_cp(0);
-    }
+    sleep(10);
 
     sleep(100);
     //current_selected //current+_pattern
@@ -760,6 +755,7 @@ void PlayWindow::on_hit_button_clicked()
         ui->hit_button->setVisible(false);
         ui->hint_button->setVisible(false);
         ui->give_up_button->setVisible(false);
+        
         sleep(1000);
         if(mode == OFFLINE) {
             if(players[0]->is_winner()){
@@ -767,10 +763,8 @@ void PlayWindow::on_hit_button_clicked()
                 sleep(1000);
                 game_finished(0);
             }
+            
             ui->info_bar->setText("Player 1's turn!");
-            if(cp->get_player_index() == 1){
-                clear_cp(1);
-            }
             AIplayer_action(1);
             sleep(1000);
             if(players[1]->is_winner()){
@@ -778,10 +772,8 @@ void PlayWindow::on_hit_button_clicked()
                 sleep(1000);
                 game_finished(1);
             }
+            
             ui->info_bar->setText("Player 2's turn!");
-            if(cp->get_player_index() == 2){
-                clear_cp(2);
-            }
             AIplayer_action(2);
             sleep(1000);
             if(players[2]->is_winner()){
@@ -789,6 +781,7 @@ void PlayWindow::on_hit_button_clicked()
                 sleep(1000);
                 game_finished(2);
             }
+            
             players[1]->set_turn_end(false);
             players[2]->set_turn_end(false);
             players[0]->set_turn_end(false);
@@ -806,7 +799,11 @@ void PlayWindow::on_hit_button_clicked()
             }
         }
         sleep(1000);
-        ui->info_bar->setText("Your turn.");
+        if(cp->get_player_index() !=0 ){
+            ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+        else{
+            ui->info_bar->setText("Now it's your turn.");}
+        }
         ui->hit_button->setVisible(true);
         ui->hint_button->setVisible(true);
         ui->give_up_button->setVisible(true);
