@@ -17,6 +17,7 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
 3. Background music and fancy GUI.
 
 **Basic Rules**
+
 1. **A player can deal with an unrelated or useless card by making it the kicker card.**
 
 2. **Rocket and bomb are the ultimate weapons in the game.** 
