@@ -111,6 +111,8 @@ void PlayWindow::receive_from_client(DataPackage data)
     else if(data.action == DataPackage::PLAY_CARDS && data.content == DataPackage::Content::DO_NOT_PLAY && data.actioner!=my_id) {
         players[data.actioner]->set_choice('g');
         players[data.actioner]->set_selected_cards(players[data.actioner]->play(*cp).get_cards());
+        players[data.actioner]->clear_hint(); //clear the cards to be played in deck
+        hint_id=-1;
         current_selection.clear();
         update_player_cards(data.actioner);
         players[(data.actioner+1)%3]->set_turn_end(false);
