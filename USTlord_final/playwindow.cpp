@@ -857,12 +857,6 @@ void PlayWindow::set_chara_pic() {
     }
 }
 
-void PlayWindow::clear_cp(int player_id){
-        hide_past_cards();
-        cp = new CurrentPattern();
-        cp->set_player_index(player_id);
-}
-
 void PlayWindow::hide_past_cards() {
     for(auto card : cp->get_cards()) {
         card->get_card_picture()->hide();
