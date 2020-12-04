@@ -23,28 +23,28 @@ bool CurrentPattern::can_be_beaten_by(int id,const CardsGroup& cg) const{
     if(cg.is_valid() && this->get_cards().size()==0){return true;}
     if(this->player_index==id){
         if(cg.is_valid()){
-            //cout << "Next round!\n";
+            cout << "Next round!\n";
             return true;
         }
-        //cout << "Your play is invalid.\n";
+        cout << "Your play is invalid.\n";
         return false;
     }
     else{
         int compare_value=this->compare(cg);
         if(compare_value==-1){
-            //cout << "Current Pattern can be beaten.\n";
+            cout << "Current Pattern can be beaten.\n";
             return true;
         }
         else if(compare_value==-2){
-            //cout << "Not comparable.\n";
+            cout << "Not comparable.\n";
             return false;
         }
         else if(compare_value==0){
-            //cout << "They are the same.\n";
+            cout << "They are the same.\n";
             return false;
         }
         else if(compare_value==1){
-            //cout << "Current Pattern is greater.\n";
+            cout << "Current Pattern is greater.\n";
             return false;
         }
         return false;

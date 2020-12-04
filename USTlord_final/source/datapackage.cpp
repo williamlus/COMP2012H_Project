@@ -34,6 +34,9 @@ QString DataPackage::to_string() const
     QString action_msg="action:"+QString::number(static_cast<int>(action))+";";
     QString content_msg="content:"+content+";";
     whole_msg=sender_msg+actioner_msg+action_msg+content_msg;
+    //debugging
+    qDebug() << "datapackage to string";
+    qDebug() << whole_msg;
     return whole_msg;
 }
 
@@ -41,6 +44,9 @@ QByteArray DataPackage::serialize() const
 {
     //TODO
     QByteArray arr=this->to_string().toUtf8();
+    //debugging
+    qDebug() << "serializing";
+    qDebug() << QString::fromStdString(arr.toStdString());
     return arr;
 }
 
@@ -58,6 +64,9 @@ QString DataPackage::cards_to_string(QVector<Card> cards)
         else
             str_cards += qstr;
     }
+    //debugging
+    qDebug() << "cards to string";
+    qDebug() << str_cards;
     return str_cards;
 }
 
@@ -69,15 +78,16 @@ DataPackage DataPackage::parse(QByteArray arr)
     return DataPackage(whole_msg);
 }
 
-void DataPackage::read(DataPackage& data, QString raw_data){
+void DataPackage::read(DataPackage& data, QString raw_data){/////////////
     //the format of raw_data should be:
-    //sender:(int sender_id);actioner:(int actioner_id);(Action action);(QString content)
+    //(int sender_id);(int actioner_id);(Action action);(QString content)
     //each seperated by ;
     //for the content part, if the content is cards
     //then it is seperated one COMMA
 
     //first split the raw_data into four parts
     QStringList derived_data = raw_data.split(QLatin1Char(';'));
+    //derived_data[0].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt();////////////////
     data.sender = derived_data[0].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt();
     data.actioner = derived_data[1].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt();
     data.action = static_cast<Action>(derived_data[2].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt());
@@ -86,7 +96,7 @@ void DataPackage::read(DataPackage& data, QString raw_data){
 }
 
 QVector<Card*> DataPackage::generate_cards(){
-    
+
     QVector<Card*> cards_vector;
     QStringList cards = content.split(',');
     for(QStringList::iterator it = cards.begin();it!=cards.end();++it){

@@ -88,4 +88,3 @@ public:
 */
 
 #endif // DATAPACKAGE_H
-

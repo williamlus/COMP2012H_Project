@@ -93,7 +93,7 @@ void Player::display_cards() const{
 bool Player::want_landlord(){
     char ans='\0';
     while (ans!='Y' && ans!='y' && ans!='N' && ans!='n'){
-        cout << "Player"<<this->id<<" : "<<this->name<< endl; 
+        cout << "Player"<<this->id<<" : "<<this->name<< endl;
         cout << "Do you want to be the lanlord? (Y/N) : ";
         cin >> ans;
         cin.ignore(999,'\n');
@@ -274,7 +274,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
                 Card const* second = deck->get_certain_card(Card::Color::HEART,i);
                 Card const* third = deck->get_certain_card(Card::Color::CLUB,i);
                 Card const* fourth = deck->get_certain_card(Card::Color::DIAMOND,i);
-                
+
                 vector<Card const*> temp_cards_combination {first,second,third,fourth};
                 CardsGroup group_to_add(temp_cards_combination);
                 bombs.push_back(group_to_add);
@@ -305,7 +305,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
         }
         //then get all possible BOMB
         if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
@@ -329,12 +329,12 @@ void Player::calc_hints(const CurrentPattern& cp) {
         }
         //then get all possible BOMB
         if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
         }
-        
+
         }
     //TRIO
     else if(type==CardsType::Type::TRIO){
@@ -355,7 +355,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     }
     //then get all possible BOMB
         if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
@@ -385,7 +385,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
         }
         //then get all possible BOMB
         if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
@@ -421,7 +421,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
         }
         //then get all possible BOMB
         if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
@@ -454,7 +454,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
             }
             //then get all possible BOMB
             if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
@@ -475,7 +475,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
         }
         //check is true means that such consecutive terms are found, then add them to hint
         if(check){
-            
+
             vector<Card const*> card_to_add;
             for(int p = i;p<i+num_continuous;++p){
                 Card const* to_add = deck->get_certain_card(p,card_to_add);
@@ -486,13 +486,13 @@ void Player::calc_hints(const CurrentPattern& cp) {
                         hints.push_back(temp);
                     }
         }
-        
+
 
         }
         }
         //then get all possible BOMB
             if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
@@ -529,7 +529,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     }
     //then get all possible BOMB
             if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
@@ -543,9 +543,9 @@ void Player::calc_hints(const CurrentPattern& cp) {
         //get the number of and reference card of consecutive TRIO
         int num_continuous = CardsGroup::count_max_continuous_times(cp_distribution,3);
         int value_of_ref = cp.get_reference_card()->get_value();
-        
+
         if(CardsGroup::count_max_continuous_times(count,3)>=num_continuous){
-            
+
             for(int i = value_of_ref+1;i+num_continuous<=12;++i){
                 //consequent checking is meaningul iff the last card in the consecutive term is less or equal than A
 
@@ -622,7 +622,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
         }
         //then get all possible BOMB
             if(bombs.size()>0){
-            
+
             for(int j=0;j<bombs.size();++j){
                 hints.push_back(bombs[j]);
             }
@@ -636,8 +636,8 @@ void Player::calc_hints(const CurrentPattern& cp) {
             if(bombs[i].compare(cp)==1){hints.push_back(bombs[i]);}
         }
     }}
-      
-    
+
+
     }
 
 void Player::set_is_landlord(){

@@ -195,10 +195,10 @@ int CardsGroup::compare(const CardsGroup& a) const{
 		if(!CardsType::is_comparable(this->cards_type,a.cards_type)){return -2;}
 		//if both are the same type, compare the reference card
 		if(this->cards_type==a.cards_type){
-            		if(*this->reference_card<*a.reference_card){
+            if(*this->reference_card<*a.reference_card){
 				return -1;
 			}
-            		else if(*this->reference_card==*a.reference_card){
+            else if(*this->reference_card==*a.reference_card){
 				return 0;
 			}
 			else{

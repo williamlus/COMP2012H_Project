@@ -181,24 +181,14 @@ bool AIPlayer::want_landlord(){
     int num_of_important_combination = deck->get_num_important_combination();
     qDebug() << "important combinations:" << num_of_important_combination;
     if(num_of_important_combination>=3){
-        if(prob<0.75){
-            is_landlord=true;
-        }
-        //return (prob<0.75)? true : false;
+        return (prob<0.75)? true : false;
     }
     else if(num_of_important_combination==2){
-        if(prob<0.5){
-            is_landlord=true;
-        }
-        //return (prob<0.5)? true : false;
+        return (prob<0.5)? true : false;
     }
     else{
-        if(prob<0.1){
-            is_landlord=true;
-        }
-        //return (prob<0.1)? true : false;
+        return (prob<0.1)? true : false;
     }
-    return is_landlord;
 
 }//choose to be landlord or not
 

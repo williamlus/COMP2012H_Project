@@ -73,6 +73,7 @@ void ServerWindow::on_pushButton_create_clicked()
         foreach (auto& ip, ipVec){
             ui->listWidget_serverIP->addItem(ip);
         }
+        ////////////////////////
         //create a client window
         client_window=new ClientWindow(this);
         client_window->show();
@@ -86,9 +87,16 @@ void ServerWindow::on_pushButton_create_clicked()
         ui->listWidget_dialogs->addItem("Server fails to listen");
     }
 
+    ///////////////
     //debugging
-    DataPackage dp(1,2,DataPackage::Action::CHAT,DataPackage::Content::WIN_GAME);
-    ui->listWidget_dialogs->addItem(dp.to_string());////
+//    DataPackage dp(1,2,DataPackage::Action::CHAT,DataPackage::Content::WIN_GAME);
+//    ui->listWidget_dialogs->addItem(dp.to_string());////
+//    ui->listWidget_dialogs->addItem("After parsing");
+//    ui->listWidget_dialogs->addItem(DataPackage::parse(dp.serialize()).to_string());
+//    DataPackage dd(1,2,DataPackage::Action::PLAY_CARDS,"s3,h4,d5,d6,rW,bW,s2,cA");
+//    ui->listWidget_dialogs->addItem(dd.to_string());////
+//    ui->listWidget_dialogs->addItem("After parsing");
+//    ui->listWidget_dialogs->addItem(DataPackage::parse(dd.serialize()).to_string());
 }
 
 void ServerWindow::on_pushButton_start_game_clicked()
@@ -117,6 +125,9 @@ void ServerWindow::handleConnection()
     this->clients.push_back(client);
     ui->listWidget_dialogs->addItem("New connection"+client->peerAddress().toString() + ":" + QString::number(client->peerPort())+ " accepted");
     ui->listWidget_dialogs->addItem("Clients left: " + QString::number(clients.size()));
+//    //debugging
+//    DataPackage dd(-2,-2,DataPackage::Action::PLAY_CARDS,"s3,h4,d5,d6,rW,bW,s2,cA");
+//    client->write(dd.serialize());
 }
 
 void ServerWindow::handleStateChanged(QAbstractSocket::SocketState state)
@@ -165,13 +176,13 @@ void ServerWindow::sendData(QTcpSocket* socket, DataPackage data)
 
         socket->write(arr);
         ui->listWidget_dialogs->addItem("Send text to client: " + socket->peerAddress().toString() + ":" + QString::number(socket->peerPort()));
-        ui->listWidget_dialogs->addItem(data.to_string());
+        ui->listWidget_dialogs->addItem(data.to_string());//////////////////
 }
 
 void ServerWindow::give_id()
 {
     for(int i=0;i<3;++i){
-        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString::number(i));
+        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString::number(i));//////////
         sendData(clients[i],confirm_data);
 
     }
@@ -224,8 +235,12 @@ void ServerWindow::choose_landlord(DataPackage data)
         //first anounce the landlord
         DataPackage data_landlord_id(-1,landlord_id,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::BE_LANDLORD);
 
+        //give bonus card
+        //DataPackage data_bonus_cards(-1,-1,DataPackage::Action::LANDLORD_BONUS,bonus_cards);
+
         for(int i=0;i<3;++i){
             sendData(clients[i],data_landlord_id);
+            //sendData(clients[i],data_bonus_cards);////////////////////////
         }
 
     }
@@ -281,6 +296,7 @@ void ServerWindow::init_game()
                     str_cards+=set_of_cards[i].get_string();
             }
             cards = QString::fromStdString(str_cards);
+
             deal_cards();
             bonus_cards=bonus_cards+QString::fromStdString(set_of_cards[51].get_string())+",";
             bonus_cards=bonus_cards+QString::fromStdString(set_of_cards[52].get_string())+",";
@@ -299,7 +315,6 @@ void ServerWindow::receiveData(DataPackage data){
             qDebug()<<"players are all ready to play!";
             init_game();
             received_message=0;
-
         }
     }
     else if(data.action==DataPackage::Action::DEAL_CARDS){
@@ -328,6 +343,12 @@ void ServerWindow::receiveData(DataPackage data){
         }
     }
 }
+
+
+
+
+
+
 
 
 

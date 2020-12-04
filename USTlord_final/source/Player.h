@@ -54,10 +54,6 @@ class Player {
       //Member functions
       virtual bool want_landlord();//choose to be landlord or not
       virtual void calc_hints(const CurrentPattern& cp);//find all possible hints according to current pattern, and stored them in hints.
-      /*
-        The order of hints stored is as followed:
-        CardsGroup with the same type from small to big, then stores BOMB (if any)
-       */
       CardsGroup get_hint();//get one hint according to hints and current_hint, update the selected_cards_group, and display_cards()
       void select_card(Card const * c);//select one card from deck and push its pointer to selected_cards_group, if card exists in selected_cards_group, then unselect it
       bool selected_can_beat(const CurrentPattern& cp);//check whether the player's selected cards can beat the last player's CardsGroup

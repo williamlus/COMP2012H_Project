@@ -37,21 +37,26 @@ void ClientWindow::handleStateChanged(QAbstractSocket::SocketState state)
 
 void ClientWindow::handle_server_message()
 {
+    ui->listWidget_dialogs->addItem("Handle server msg");
     if(socket){
         QByteArray arr=socket->readAll();
         ui->listWidget_dialogs->addItem(QString::fromStdString(arr.toStdString()));
         DataPackage data=DataPackage::parse(arr);
         ui->listWidget_dialogs->addItem("Received from server:"+data.to_string());
+//        qDebug()<< "data.action==DataPackage::Action::GIVE_ID?";/////
+//        qDebug() << (data.action==DataPackage::Action::GIVE_ID);//////////
         if(data.action==DataPackage::Action::GIVE_ID){
             id=data.content.toInt();
+            ui->listWidget_dialogs->addItem("data.conent="+data.content);///////
             DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
             send_to_server(data_to_send);
             play_window=new PlayWindow(id,this);
-            play_window->show();
-            //this->hide();
+            play_window->show();/////////
+//            this->hide();
             connect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
         }
         else if(play_window){
+            ui->listWidget_dialogs->addItem("send msg to playwindow"+data.to_string());/////////////
             play_window->receive_from_client(DataPackage::parse(arr));
         }
     }

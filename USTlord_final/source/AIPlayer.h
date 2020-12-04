@@ -19,7 +19,7 @@ class AIPlayer : public Player {
       ~AIPlayer();
       const CardsGroup choose_hint(const CurrentPattern& cp);
       /*
-       * AI player with some common sense strategies:
+       * AI player with some common sense strategy:
 
        * if the AI player is the first one to play or the CurrentPattern is played by himself
          he will play cards with the following logic:
@@ -45,7 +45,7 @@ class AIPlayer : public Player {
        * the probability of choosing lord is determined by how good the cards in hand are
          The evaluation is basically determined by the number of cards_combination
          The cards_combination considered here are:
-         TRIO,BOMB, ROCKET
+         TRIO, BOMB, ROCKET
        */
 };
 
