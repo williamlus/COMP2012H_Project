@@ -86,12 +86,7 @@ void DataPackage::read(DataPackage& data, QString raw_data){
 }
 
 QVector<Card*> DataPackage::generate_cards(){
-    // ensure the content consists of cards
-    if(!content.contains(',')){
-        qDebug() << "Invalid content!";
-        return {};
-
-    }
+    
     QVector<Card*> cards_vector;
     QStringList cards = content.split(',');
     for(QStringList::iterator it = cards.begin();it!=cards.end();++it){
