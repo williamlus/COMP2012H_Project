@@ -385,10 +385,10 @@ void PlayWindow::initialize_players() {
     ui->player2_name->setText(QString::fromStdString(players[(my_id+2)%NUMBER_OF_PLAYERS]->get_name()));
 }
 
-void initialize_players(QVector<QString> names) {
+void PlayWindow::initialize_players(QVector<QString> names) {
     for(int i=0; i<NUMBER_OF_PLAYERS; i++) {
         Player* new_player;
-        new_player = Player(i, names[i]);
+        new_player = Player(i, names[i].toStdString());
         this->players.append(new_player);
         new_player->set_turn_end(true);
         }
