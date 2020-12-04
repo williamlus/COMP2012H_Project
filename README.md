@@ -61,7 +61,7 @@ For example, since the two peasants come after one another, the first peasant mi
 
   AI Logic：  
   
-         const CardsGroup choose_hint(const CurrentPattern& cp);
+  `const CardsGroup choose_hint(const CurrentPattern& cp);`
     
     * AI player with some common sense strategies:
 
@@ -80,13 +80,13 @@ For example, since the two peasants come after one another, the first peasant mi
     * if the CurrentPattern is played by another farmer
          Only give cards in these cases:
          * the AI player can directly win the game
-         * the partner played a small SINGLE or PAIR   
-         \
+         * the partner played a small SINGLE or PAIR     
+         
 
        
 
       
-          bool want_landlord() override;//choose to be landlord or not automatically
+  `bool want_landlord() override;//choose to be landlord or not automatically`
       
     * the probability of choosing lord is determined by how good the cards in hand are
     
