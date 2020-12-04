@@ -47,7 +47,7 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
 
   AI Logic：
   
-  ```const CardsGroup choose_hint(const CurrentPattern& cp);
+  `const CardsGroup choose_hint(const CurrentPattern& cp);
       /*
        * AI player with some common sense strategies:
 
@@ -67,17 +67,17 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
          * the AI player can directly win the game
          * the partner played a small SINGLE or PAIR
 
-       */```
+       */`
 
       
-      ```bool want_landlord() override;//choose to be landlord or not automatically
+      `bool want_landlord() override;//choose to be landlord or not automatically
       /*
        * the probability of choosing lord is determined by how good the cards in hand are
          The evaluation is basically determined by the number of cards_combination
          The cards_combination considered here are:
          TRIO,BOMB, ROCKET
 
-       */```
+       */`
 
 
 
