@@ -80,7 +80,7 @@ For example, since the two peasants come after one another, the first peasant mi
     * if the CurrentPattern is played by another farmer
          Only give cards in these cases:
          * the AI player can directly win the game
-         * the partner played a small SINGLE or PAIR
+         * the partner played a small SINGLE or PAIR   
          
 
        
