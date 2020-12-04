@@ -63,7 +63,7 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
 
     * if the AI player is farmer, then beat landlord all the time
          
-    *if the CurrentPattern is played by another farmer
+    * if the CurrentPattern is played by another farmer
          Only give cards in these cases:
          * the AI player can directly win the game
          * the partner played a small SINGLE or PAIR
