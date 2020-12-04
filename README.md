@@ -192,12 +192,12 @@ Multiplayer Player game:
   
   -Deenpen the understanding of object-oriented programming
   
-      Different from process-oriented program，object-oriented programming involves class, object, inheritance, polymorphism etc., which greatly enhance the resuability of the codes, and also provide convinience for deleveloping projects in team.
+Different from process-oriented program，object-oriented programming involves class, object, inheritance, polymorphism etc., which greatly enhance the resuability of the codes, and also provide convinience for deleveloping projects in team.
     
  -Modern development concept
  
-    In a program involving multiple modules, the more modern development method is encapsulation. After determining the structure of the program, encapsulate the different modules. On the one hand, it is easy to combine and use the modules. On the other hand, clear and clear interfaces are also the cornerstone of efficient cooperation.
+In a program involving multiple modules, the more modern development method is encapsulation. After determining the structure of the program, encapsulate the different modules. On the one hand, it is easy to combine and use the modules. On the other hand, clear and clear interfaces are also the cornerstone of efficient cooperation.
    
 -Development tools and multi-person collaboration
 
-     Modern program development is not alone. Multi-person remote collaboration and project management are a very important part of program specification development. The use of Git for version control and project management in this program design has brought great convenience to the development of the program, and also allowed us to deepen our understanding of the actual software engineering process.
+Modern program development is not alone. Multi-person remote collaboration and project management are a very important part of program specification development. The use of Git for version control and project management in this program design has brought great convenience to the development of the program, and also allowed us to deepen our understanding of the actual software engineering process.
