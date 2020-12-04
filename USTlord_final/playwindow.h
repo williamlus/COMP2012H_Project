@@ -60,8 +60,10 @@ public:
     void reveal_current_selection();
     void AIplayer_action(int active_AIplayer);
     void clear_cp(int player_id);
+    //Events
     void closeEvent(QCloseEvent *event) override;
     void paintEvent(QPaintEvent * event) override;
+    void keyPressEvent(QKeyEvent *) override;
 
 private slots:
     void on_start_button_clicked();
