@@ -539,6 +539,9 @@ void PlayWindow::AIplayer_action(int active_AIplayer){
 }
 
 void PlayWindow::choose_landlord(){
+    players[my_id]->set_turn_end(true);
+    players[my_id+1]->set_turn_end(true);
+    players[my_id+2]->set_turn_end(true);
     if(mode == OFFLINE) {
         bool decision;
         decision = players[1]->want_landlord();
