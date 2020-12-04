@@ -45,7 +45,7 @@ void PlayWindow::receive_from_client(DataPackage data)
             ui->call_lord_button->setVisible(true);
             ui->refuse_button->setVisible(true);
         }
-        else {
+        else if(data.content==DataPackage::Content::BE_LANDLORD){
             landlord_id = data.actioner;
             choose_landlord();
             landlord_bonus(landlord_id);
