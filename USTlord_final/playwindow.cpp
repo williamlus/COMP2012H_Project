@@ -802,7 +802,7 @@ void PlayWindow::on_hit_button_clicked()
         if(cp->get_player_index() !=0 ){
             ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
         else{
-            ui->info_bar->setText("Now it's your turn.");}
+            ui->info_bar->setText("Now it's your turn.");
         }
         ui->hit_button->setVisible(true);
         ui->hint_button->setVisible(true);
