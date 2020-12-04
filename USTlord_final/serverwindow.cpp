@@ -96,7 +96,7 @@ void ServerWindow::on_pushButton_start_game_clicked()
         if(reply==QMessageBox::Yes){
             qDebug()<<"Three players are ready!";
             give_id();
-            this->hide();
+            //this->hide();
         }
         else{
             qDebug()<<"Players refuse to start game >.<";
@@ -162,13 +162,13 @@ void ServerWindow::sendData(QTcpSocket* socket, DataPackage data)
 
         socket->write(arr);
         ui->listWidget_dialogs->addItem("Send text to client: " + socket->peerAddress().toString() + ":" + QString::number(socket->peerPort()));
-
+        ui->listWidget_dialogs->addItem(data.to_string());
 }
 
 void ServerWindow::give_id()
 {
     for(int i=0;i<3;++i){
-        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString(i));
+        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString::number(i));
         sendData(clients[i],confirm_data);
 
     }
