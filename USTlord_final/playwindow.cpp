@@ -532,7 +532,10 @@ void PlayWindow::choose_landlord(){
     }
     else {
         game_status = PLAYING;
-        ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(landlord_id) + QString::fromStdString(" is the landlord now!"));
+        if(landlord_id == my_id){
+               ui->info_bar->setText("You are the landlord now!");
+        }else{
+               ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(landlord_id) + QString::fromStdString(" is the landlord now!"));}
         set_chara_pic();
     }
     ui->hit_button->setVisible(true);
