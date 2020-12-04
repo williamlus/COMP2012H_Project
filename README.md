@@ -1,2 +1,141 @@
-# COMP2012H_Project
-UST Landlord Game
+# USTlandlord Game
+
+By COMP2012H 2020FALL Group21, ZHENG Hantao, SU Hong, LU Weiqi, GUO Bingcan
+
+### 1. Introduction
+
+Dou dizhu is described as easy to learn but hard to master, requiring mathematical and strategic thinking as well as carefully planned execution. Suits are irrelevant in playing doudizhu. Players can easily play the game with a set of dou dizhu playing cards, without the suits printed on the cards. Less popular variations of the game do exist in China, such as four-player and five-player dou dizhu played with two packs of cards. 
+
+Making a Qt GUIbased game has moderate difficulty and can be expanded with many other features such as multi-player, background music and even a chat box for players to communicate with their teammates and opponents, while the project is relatively s itable to apply beginner’slevel OOP to achieve.
+
+### 2. Overview
+
+Apply OOP to develop a landlord game with GUI based on QT with followingfeatures:
+
+1. A computer “AI” player written based on simple game logic as human
+2. Multip-player mode, which is the most important part of the game.
+3. Background music and fancy GUI.
+
+### 3. Design
+
+* **Class Design**
+
+  Console Game：
+
+  * Board
+  * Cards
+  * CardsGroup
+  * CardsType
+  * CurrentPattern
+  * Deck
+  * Player
+
+  Networking：
+
+  * Datapackage
+
+  GUI：
+
+  * playerwindow
+  * mainwindow
+  * 
+
+  
+
+* **AI Player Design**
+
+  AI Logic：
+
+
+
+* **UI Design**
+
+1. Distribu
+
+
+
+* **Networking Design**
+
+
+**Transfer principle:** 
+      Using Transmission Control Protocol (TCP)
+      The one created room will simultaneously be SERVER and CLIENT, the rest two are just CLIENT
+      Before sending and after receiving the raw_data, the information is stored in user_defined object: **Datapackage**
+      For more details of the usages of DataPackage, please refer to `DataPackage.h`
+      
+        class DataPackage
+              {
+              public:
+                  enum Action{
+                                  NONE=-1,
+                                  GIVE_ID,
+                                  CONFIRM_READY,
+                                  DEAL_CARDS,
+                                  CHOOSE_LANDLORD,
+                                  LANDLORD_BONUS,
+                                  PLAY_CARDS,
+                                  ANNOUNCE,
+                                  CHAT,
+                                  EXCEPTION
+                                 };
+                      
+        struct Content{
+                      static const QString REQUEST;
+                      static const QString ACCEPT;
+                      static const QString REJECT;
+                      static const QString BE_LANDLORD;
+                      static const QString DO_NOT_PLAY;
+                      static const QString WIN_GAME;
+                      static const QString LOSE_GAME;
+                      static const QString END_GAME;
+                      static const QString QUIT;
+                  };
+
+        public:
+                  //server id=-1, player id=0,1,2
+                  int sender{-2};
+                  int actioner{-2};
+                  Action action{NONE};
+                  QString content{};
+
+        };
+
+
+**DataPackage** is equivalent to a formatted QString: "sender:`(int) sender_id`;actioner:`(int) actioner_id`;Action;Content"
+
+Before sending  **DataPackage**, we will first convert it to the formatted QString, then serialize it to QByteArray
+
+After receiving **raw_data(QByteArray)**, we will first convert it to QString, then convert it to DataPackage
+
+      
+      
+      
+
+      
+  
+  
+### 4. UI Display
+
+Main window:
+
+
+
+Single Player game:
+
+
+
+* Choose landlord：
+
+![Screen Shot 2020-12-04 at 10.46.26 AM](/Users/gloria/Library/Application Support/typora-user-images/Screen Shot 2020-12-04 at 10.46.26 AM.png)
+
+* Players take turns to play
+
+![Screen Shot 2020-12-04 at 11.00.13 AM](/Users/gloria/Library/Application Support/typora-user-images/Screen Shot 2020-12-04 at 11.00.13 AM.png)
+
+* View hints:
+
+![Screen Shot 2020-12-04 at 11.05.49 AM](/Users/gloria/Library/Application Support/typora-user-images/Screen Shot 2020-12-04 at 11.05.49 AM.png)
+
+### 5. Summary
+
+
