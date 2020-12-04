@@ -504,6 +504,7 @@ void PlayWindow::AIplayer_action(int active_AIplayer){
         qDebug() << QString::fromStdString(" play " + cp->get_cards_type().to_string());
         ui->info_bar->setText(QString::fromStdString("Player ") +QString::number(active_AIplayer)+ QString::fromStdString(" plays " + cp->get_cards_type().to_string()));
         update_player_cards(active_AIplayer);
+        current_selection.clear();
         qDebug() << QString::fromStdString(" play " + cp->get_cards_type().to_string());
         sleep(1000);
         current_selection.clear();
@@ -581,6 +582,8 @@ void PlayWindow::on_hint_button_clicked()
     players[my_id]->calc_hints(*cp);
     if(players[my_id]->get_hints().size() == 0){
         ui->info_bar->setText("No hints.");
+        current_selection.clear();
+        update_player_cards(my_id);
         sleep(800);
 
         if(cp->get_player_index()!=0){
@@ -835,6 +838,7 @@ void PlayWindow::on_hit_button_clicked()
             players[my_id]->set_selected_cards(empty_cards);
             ui->info_bar->setText(QString::fromStdString("You play " + cp->get_cards_type().to_string()));
             update_player_cards(my_id);
+            current_selection.clear();
 
             ui->hit_button->setVisible(false);
             ui->hint_button->setVisible(false);
@@ -1005,4 +1009,3 @@ void PlayWindow::closeEvent(QCloseEvent *event) {
     shuffle_music->stop();
     exit(0);
 }
-
