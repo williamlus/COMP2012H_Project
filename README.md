@@ -188,7 +188,7 @@ Multiplayer Player game:
 
 ### 5. Summary
   
-  **This project design is a comprehensive OOP program design. The development of USTlord game involves object-oriented** **programming, data structure, TCP networking and GUI design. We encounted and overcame quite a lot problems due to lack of** **knowledge and communication problems of multi-person collaboration. The experience we gain are as follows:  **
+  **This project design is a comprehensive OOP program design. The development of USTlord game involves object-oriented programming, data structure, TCP networking and GUI design. We encounted and overcame quite a lot problems due to lack of knowledge and communication problems of multi-person collaboration. The experience we gain are as follows:**
   
 - Deenpen the understanding of object-oriented programming
   
