@@ -592,7 +592,13 @@ void PlayWindow::on_give_up_button_clicked()
             players[0]->clear_hint();
             hint_id = -1;
             
-            if(cp->get_player_index() == 1){ hide_past_cards();}
+            if(cp->get_player_index() == my_id){
+                hide_past_cards();
+                cp->record((my_id+1)%NUMBER_OF_PLAYERS,CardsGroup(),(my_id+1)%NUMBER_OF_PLAYERS);
+                hint_id=-1;
+            }
+            
+            if(cp->get_player_index() == my_id+1){ hide_past_cards();}
             AIplayer_action(1);
             sleep(300);
             if(players[1]->is_winner()){
@@ -601,7 +607,12 @@ void PlayWindow::on_give_up_button_clicked()
                 game_finished(1);
             }
             
-            if(cp->get_player_index() == 2){ hide_past_cards();}
+             if(cp->get_player_index() == my_id+2){
+                hide_past_cards();
+                cp->record((my_id+2)%NUMBER_OF_PLAYERS,CardsGroup(),(my_id+2)%NUMBER_OF_PLAYERS);
+            }
+            
+            if(cp->get_player_index() == my_id + 2){ hide_past_cards();}
             AIplayer_action(2);
             sleep(300);
             if(players[2]->is_winner()){
