@@ -73,6 +73,9 @@ void ServerWindow::on_pushButton_create_clicked()
         foreach (auto& ip, ipVec){
             ui->listWidget_serverIP->addItem(ip);
         }
+        //create a client window
+        client_window=new ClientWindow(this);
+        client_window->show();
     }
     server->listen(QHostAddress::Any,ui->lineEdit_port->text().toInt());
     if(server->isListening()){
