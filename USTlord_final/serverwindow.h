@@ -21,8 +21,14 @@ class ServerWindow : public QMainWindow
 
 public:
     explicit ServerWindow(QWidget *parent = nullptr);
+
     void closeEvent(QCloseEvent *event) override;
+    //Override closeEvent
+    //Show the MainWindow when ServerWindow is closed
+
     QVector<QString> get_local_IP() const;
+    //Find all the local IPv4/IPv6 addresses and store them in a QVector<QString>
+
     ~ServerWindow();
 
     signals:
@@ -30,18 +36,32 @@ public:
 
 private slots:
     void on_pushButton_stop_clicked();
+    //Close the QTcpServer and close all QTcpSocket(s)
 
     void on_pushButton_create_clicked();
+    //Create a QTcpServer and a local QTcpSocket
+    //Create a ClientWindow for the host to connect to ServerWindow
 
     void on_pushButton_start_game_clicked();
+    //Start the game if there are 3 clients connected to the ServerWindow
 
     void handleConnection();
+    //Add new client to server
 
     void handleStateChanged(QAbstractSocket::SocketState state);
-    void handle_clients_message();
-    void sendData(QTcpSocket* socket,DataPackage data);
-    void receiveData(DataPackage data);
+    //Remove the disconnected sockets
 
+    void handle_clients_message();
+    //Receive clients' messages if there are bytes avaible to read
+
+    void sendData(QTcpSocket* socket,DataPackage data);
+    //Send the data to the corresponding socket (client)
+
+    void receiveData(DataPackage data);
+    //Receive the data from clients and perform corresponding actions
+    //Send feedback DataPackage to clients if required
+
+    //Game logic controlled by server
     void give_id();
     void confirm_ready();
     void deal_cards();
@@ -58,7 +78,7 @@ private:
     QVector<DataPackage> data_received{};
     QString cards;
     QString bonus_cards;
-    QVector<QString> names={"","",""};
+    QVector<QString> names={"","",""};//players' names
 };
 
 #endif // SERVERWINDOW_H
