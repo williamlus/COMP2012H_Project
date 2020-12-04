@@ -307,10 +307,14 @@ void ServerWindow::receiveData(DataPackage data){
         }
     }
     else if(data.action==DataPackage::Action::DEAL_CARDS){
-        //randomly choose a player to be the first one to determine being a landlord or not
-        int random_index = QRandomGenerator::global()->bounded(3);
-        DataPackage data(-1,-1,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::REQUEST);
-        sendData(clients[random_index],data);
+        qDebug() << "received cards: "<<++received_message << data.sender;
+        if(received_message==3){
+            //randomly choose a player to be the first one to determine being a landlord or not
+            int random_index = QRandomGenerator::global()->bounded(3);
+            DataPackage data(-1,-1,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::REQUEST);
+            sendData(clients[random_index],data);
+            received_message=0;
+        }
     }
     else if(data.action==DataPackage::Action::CHOOSE_LANDLORD){
         choose_landlord(data);
