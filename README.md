@@ -67,6 +67,7 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
          Only give cards in these cases:
          * the AI player can directly win the game
          * the partner played a small SINGLE or PAIR
+         
 
        
 
