@@ -468,10 +468,9 @@ void Player::calc_hints(const CurrentPattern& cp) {
         int num_continuous = cp.get_cards_type().get_num_cards();
         int value_of_ref = cp.get_reference_card()->get_value();
         //find the starting point of such consecutive terms
-        for(int i=value_of_ref;i<value_of_ref+num_continuous;++i){
-        if(i+num_continuous<=11){
+        for(int i=value_of_ref+1;i+num_continuous<=12;++i){
             bool check = true;
-        for( int j =i;j<value_of_ref+num_continuous;++j){
+        for( int j =i;j<i+num_continuous;++j){
             if(count[j]==0){check=false;break;}
         }
         //check is true means that such consecutive terms are found, then add them to hint
@@ -488,7 +487,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
                     }
         }
         
-        }
+
         }
         }
         //then get all possible BOMB
@@ -505,12 +504,11 @@ void Player::calc_hints(const CurrentPattern& cp) {
         if(CardsGroup::count_max_continuous_times(count,2)>=num_input/2){
         int num_continuous = num_input/2;
         int value_of_ref = cp.get_reference_card()->get_value();
-        for(int i = value_of_ref;i<value_of_ref+num_continuous;++i){
+        for(int i = value_of_ref;i+num_continuous<=12;++i){
             //consequent checking is meaningful iff the last card in the consecutive term is less or equal than A
-            if(i+num_continuous<=11){
                 bool check = true;
-                for(int j = i;j<value_of_ref+num_continuous;++j){
-                    if(count[j]<2){check == false; return;}
+                for(int j = i;j<i+num_continuous;++j){
+                    if(count[j]<2){check = false; return;}
                 }
                 //check is true means that such consecutive terms are found, then add them to hint
                 if(check){
@@ -526,7 +524,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
                         hints.push_back(temp);
                     }
                 }
-            }
+
         }
     }
     //then get all possible BOMB
@@ -641,3 +639,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
       
     
     }
+
+void Player::set_is_landlord(){
+    is_landlord=true;
+}
