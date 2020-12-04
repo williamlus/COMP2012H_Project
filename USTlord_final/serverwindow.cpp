@@ -96,7 +96,7 @@ void ServerWindow::on_pushButton_start_game_clicked()
         if(reply==QMessageBox::Yes){
             qDebug()<<"Three players are ready!";
             give_id();
-            //this->hide();
+            this->hide();
         }
         else{
             qDebug()<<"Players refuse to start game >.<";
@@ -162,14 +162,13 @@ void ServerWindow::sendData(QTcpSocket* socket, DataPackage data)
 
         socket->write(arr);
         ui->listWidget_dialogs->addItem("Send text to client: " + socket->peerAddress().toString() + ":" + QString::number(socket->peerPort()));
-        ui->listWidget_dialogs->addItem(data.to_string());
 
 }
 
 void ServerWindow::give_id()
 {
     for(int i=0;i<3;++i){
-        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString::number(i));
+        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString(i));
         sendData(clients[i],confirm_data);
 
     }
@@ -277,13 +276,13 @@ void ServerWindow::init_game()
             }
             string str_cards;
             for(int i=0;i<54;++i){
-                if(i<54)
+                if(i<53)
                 str_cards=str_cards+set_of_cards[i].get_string()+",";
                 if(i==53)
                     str_cards+=set_of_cards[i].get_string();
             }
             cards = QString::fromStdString(str_cards);
-
+            deal_cards();
             bonus_cards=bonus_cards+QString::fromStdString(set_of_cards[51].get_string())+",";
             bonus_cards=bonus_cards+QString::fromStdString(set_of_cards[52].get_string())+",";
             bonus_cards=bonus_cards+QString::fromStdString(set_of_cards[53].get_string());
@@ -300,7 +299,6 @@ void ServerWindow::receiveData(DataPackage data){
         if(received_message==3){
             qDebug()<<"players are all ready to play!";
             init_game();
-            deal_cards();
             received_message=0;
             //randomly choose a player to be the first one to determine being a landlord or not
             int random_index = QRandomGenerator::global()->bounded(3);
