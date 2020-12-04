@@ -388,7 +388,7 @@ void PlayWindow::initialize_players() {
 void PlayWindow::initialize_players(QVector<QString> names) {
     for(int i=0; i<NUMBER_OF_PLAYERS; i++) {
         Player* new_player;
-        new_player = Player(i, names[i].toStdString());
+        new_player = new Player(i, names[i].toStdString());
         this->players.append(new_player);
         new_player->set_turn_end(true);
         }
