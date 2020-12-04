@@ -464,7 +464,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     //SINGLE_CONTINUOUS case
     else if(type==CardsType::Type::SINGLE_CONTINUOUS){
         //do searching iff there exists possible consecutive terms
-        if(CardsGroup::count_max_continuous_times(count,1)>=num_input){
+
         int num_continuous = cp.get_cards_type().get_num_cards();
         int value_of_ref = cp.get_reference_card()->get_value();
         //find the starting point of such consecutive terms
@@ -489,7 +489,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
 
 
         }
-        }
+
         //then get all possible BOMB
             if(bombs.size()>0){
 
@@ -501,7 +501,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
     //PAIR_CONTINUOUS case
     else if(type==CardsType::Type::PAIR_CONTINUOUS){
         //do searching iff there exists possible consecutive terms
-        if(CardsGroup::count_max_continuous_times(count,2)>=num_input/2){
+
         int num_continuous = num_input/2;
         int value_of_ref = cp.get_reference_card()->get_value();
         for(int i = value_of_ref+1;i+num_continuous<=12;++i){
@@ -526,7 +526,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
                 }
 
         }
-    }
+
     //then get all possible BOMB
             if(bombs.size()>0){
 
@@ -544,7 +544,6 @@ void Player::calc_hints(const CurrentPattern& cp) {
         int num_continuous = CardsGroup::count_max_continuous_times(cp_distribution,3);
         int value_of_ref = cp.get_reference_card()->get_value();
 
-        if(CardsGroup::count_max_continuous_times(count,3)>=num_continuous){
 
             for(int i = value_of_ref+1;i+num_continuous<=12;++i){
                 //consequent checking is meaningul iff the last card in the consecutive term is less or equal than A
@@ -619,7 +618,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
                     }
 
             }
-        }
+
         //then get all possible BOMB
             if(bombs.size()>0){
 
@@ -639,6 +638,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
 
 
     }
+
 
 void Player::set_is_landlord(){
     is_landlord=true;
