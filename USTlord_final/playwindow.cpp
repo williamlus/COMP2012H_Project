@@ -303,6 +303,20 @@ void PlayWindow::initialize_cards() {
                 update_player_cards(i);
             }
         }
+        for(int i=51; i<NUMBER_OF_CARDS; i++) {
+            Card* card = set_of_cards[i++];
+            string pic_name = ":/card/images/" + to_string(card->get_index()+1) + ".png";
+            QPixmap pic;
+            pic.load(QString::fromStdString(pic_name));
+            qDebug() << QString::fromStdString(pic_name);
+            CardPicture* card_picture = new CardPicture(this);
+            connect(card_picture, SIGNAL(selected_signal()),this,SLOT(card_selected()));
+            card_picture->setPic(pic);
+            card_picture->hide();
+            card_picture->setGeometry(570, 260, CARD_WIDTH, CARD_HEIGHT);
+            card->set_card_picture(card_picture);
+            card_pic_map.insert(card_picture, card);
+        }
     }
 }
 
