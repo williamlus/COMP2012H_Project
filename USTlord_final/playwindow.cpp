@@ -597,7 +597,11 @@ void PlayWindow::on_give_up_button_clicked()
             
             if(cp->get_player_index() == my_id){
                 hide_past_cards();
-                cp->record((my_id+1)%NUMBER_OF_PLAYERS,CardsGroup(),(my_id+1)%NUMBER_OF_PLAYERS);
+                 if(!cp->get_cards().empty()){
+                    delete cp;
+                }
+                cp = new CurrentPattern();
+                cp->set_player_index((my_id+1)%NUMBER_OF_PLAYERS);
                 hint_id=-1;
             }
             
@@ -612,7 +616,11 @@ void PlayWindow::on_give_up_button_clicked()
             
              if(cp->get_player_index() == my_id+2){
                 hide_past_cards();
-                cp->record((my_id+2)%NUMBER_OF_PLAYERS,CardsGroup(),(my_id+2)%NUMBER_OF_PLAYERS);
+                 if(!cp->get_cards().empty()){
+                    delete cp;
+                }
+                cp = new CurrentPattern();
+                cp->set_player_index((my_id+2)%NUMBER_OF_PLAYERS);
             }
             
             if(cp->get_player_index() == my_id + 2){ hide_past_cards();}
