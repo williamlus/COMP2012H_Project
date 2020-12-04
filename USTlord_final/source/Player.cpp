@@ -475,7 +475,7 @@ void Player::calc_hints(const CurrentPattern& cp) {
         }
         //check is true means that such consecutive terms are found, then add them to hint
         if(check){
-            \
+            
             vector<Card const*> card_to_add;
             for(int p = i;p<i+num_continuous;++p){
                 Card const* to_add = deck->get_certain_card(p,card_to_add);
