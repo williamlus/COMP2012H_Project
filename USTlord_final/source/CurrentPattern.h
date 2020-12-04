@@ -18,7 +18,6 @@ class CurrentPattern : public CardsGroup{
       CurrentPattern(CardsGroup last_player,int active_player_id):CardsGroup(last_player),player_index(active_player_id){}
 
       void display();
-      void set_cardsgroup();
       int get_player_index() const;
       void set_player_index(int id);
       bool can_be_beaten_by(int id,const CardsGroup& cg) const;//check whether current_pattern can be beaten by cardsgroup played by the player with the id
