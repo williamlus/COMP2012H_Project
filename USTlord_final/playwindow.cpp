@@ -652,9 +652,10 @@ void PlayWindow::on_give_up_button_clicked()
                 if(cp->get_player_index() == my_id){//last time still me, clear the current pattern stored.
                    hide_past_cards();
                     //recreate a new pattern.
-                   if(!cp->get_cards().empty()){ delete cp;}
-                   cp = new CurrentPattern();
-                   cp->set_player_index((my_id+1)%NUMBER_OF_PLAYERS);
+//                    if(!cp->get_cards().empty()){ delete cp;}
+//                    cp = new CurrentPattern();
+//                    cp->set_player_index((my_id+1)%NUMBER_OF_PLAYERS);
+                   cp->record(my_id,CardsGroup(),my_id==landlord_id);
                    hint_id=-1;
                  }
 
