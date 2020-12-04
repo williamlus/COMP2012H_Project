@@ -144,11 +144,11 @@ For example, since the two peasants come after one another, the first peasant mi
                   };
 
         public:
-                  //server id=-1, player id=0,1,2
-                  int sender{-2};
-                  int actioner{-2};
-                  Action action{NONE};
-                  QString content{};
+                  
+                  int sender;
+                  int actioner;
+                  Action action;
+                  QString content;
 
         };
 
