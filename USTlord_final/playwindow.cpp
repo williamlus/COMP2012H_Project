@@ -983,37 +983,39 @@ void PlayWindow::hide_past_cards() {
 
 void PlayWindow::game_finished(int current_player){
     game_finish = true;
-    if(current_player == my_id){
-        you_win = true;
-    }else{
-        you_win = false;
-    }
-    if(current_player == landlord_id){
-        landlord_win = true;
-    }else{
-        landlord_win = false;
-    }
 
-    if(!you_win && landlord_win){
-        bgm->stop();
-        lose_music->play();
-         QMessageBox::information(NULL, "", "Game End!! \n You Lose na :(! \n Landlord wins!", QMessageBox::Yes, QMessageBox::Yes);
-    }
-    else if(you_win && landlord_win){
-        bgm->stop();
-        win_music->play();
-         QMessageBox::information(NULL, "", "Game End!! \n You Win na :)! \n Landlord win!", QMessageBox::Yes, QMessageBox::Yes);
-    }
-    else if(!you_win && !landlord_win){
-        bgm->stop();
-        lose_music->play();
-         QMessageBox::information(NULL, "", "Game End!! \n You Lose na :(! \n Farmer wins!", QMessageBox::Yes, QMessageBox::Yes);
-    }
-    else if(you_win && !landlord_win){
-        bgm->stop();
-        win_music->play();
-         QMessageBox::information(NULL, "", "Game End!! \n You Win na :)! \n Farmer win! ", QMessageBox::Yes, QMessageBox::Yes);
-    }
+        if(current_player == landlord_id){
+            landlord_win = true;
+        }else{
+            landlord_win = false;
+        }
+
+        if((my_id != landlord_id && !landlord_win)||(my_id == landlord_id && landlord_win)){
+            you_win = true;
+        }else{
+            you_win = false;
+        }
+
+        if(!you_win && landlord_win){
+            bgm->stop();
+            lose_music->play();
+             QMessageBox::information(NULL, "", "Game End!! \n You Lose na :(! \n Landlord wins!", QMessageBox::Yes, QMessageBox::Yes);
+        }
+        else if(you_win && landlord_win){
+            bgm->stop();
+            win_music->play();
+             QMessageBox::information(NULL, "", "Game End!! \n You Win na :)! \n Landlord win!", QMessageBox::Yes, QMessageBox::Yes);
+        }
+        else if(!you_win && !landlord_win){
+            bgm->stop();
+            lose_music->play();
+             QMessageBox::information(NULL, "", "Game End!! \n You Lose na :(! \n Farmers win!", QMessageBox::Yes, QMessageBox::Yes);
+        }
+        else if(you_win && !landlord_win){
+            bgm->stop();
+            win_music->play();
+             QMessageBox::information(NULL, "", "Game End!! \n You Win na :)! \n Farmers win!", QMessageBox::Yes, QMessageBox::Yes);
+        }
     close();
 }
 
