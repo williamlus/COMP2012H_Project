@@ -154,7 +154,8 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
 
 CardsGroup AIPlayer::play(const CurrentPattern& cp){
     CardsGroup cg=CardsGroup();
-    if(!deck->split_important_combination){
+    if(
+    if(!deck->split_important_combination||cp.get_player_index()==id){
     this->calc_hints(cp);
     cg=this->choose_hint(cp);
     }
