@@ -339,7 +339,7 @@ void ServerWindow::receiveData(DataPackage data){
             received_message=0;
         }
     }
-    else if(data.action==DataPackage::Action::DEAL_CARDS || data.action==DataPackage::Action::CHAT){
+    else if(data.action==DataPackage::Action::DEAL_CARDS){
         qDebug() << "received cards: "<<++received_message << data.sender;
         if(received_message==3){
             //randomly choose a player to be the first one to determine being a landlord or not
@@ -352,7 +352,7 @@ void ServerWindow::receiveData(DataPackage data){
     else if(data.action==DataPackage::Action::CHOOSE_LANDLORD){
         choose_landlord(data);
     }
-    else if(data.action==DataPackage::Action::PLAY_CARDS){
+    else if(data.action==DataPackage::Action::PLAY_CARDS || data.action==DataPackage::Action::CHAT){
         DataPackage data_play(-1,data.actioner,data.action,data.content);
         for(int i=0;i<3;++i){
             sendData(clients[i],data_play);
