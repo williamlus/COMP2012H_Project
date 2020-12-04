@@ -96,7 +96,7 @@ void ServerWindow::on_pushButton_start_game_clicked()
         if(reply==QMessageBox::Yes){
             qDebug()<<"Three players are ready!";
             give_id();
-            this->hide();
+            //this->hide();
         }
         else{
             qDebug()<<"Players refuse to start game >.<";
