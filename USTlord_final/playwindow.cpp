@@ -60,6 +60,11 @@ void PlayWindow::receive_from_client(DataPackage data)
             }
         }
     }
+    else if(data.action == DataPackage::PLAY_CARDS && data.content!=DataPackage::Content::DO_NOT_PLAY && data.actioner == my_id){
+        if(players[my_id]->get_num_cards() == 0) {
+            emit send_to_client(DataPackage(my_id, my_id, DataPackage::ANNOUNCE, DataPackage::Content::WIN_GAME));
+        }
+    }
     else if(data.action == DataPackage::PLAY_CARDS && data.content!=DataPackage::Content::DO_NOT_PLAY && data.actioner != my_id) {
         current_selection.clear();
         QVector<Card*> generated_cards=data.generate_cards();
