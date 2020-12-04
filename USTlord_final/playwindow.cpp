@@ -799,6 +799,7 @@ void PlayWindow::on_hit_button_clicked()
             }
         }
         sleep(1000);
+        current_selection.clear();
         if(cp->get_player_index() !=0 ){
             ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
         else{
