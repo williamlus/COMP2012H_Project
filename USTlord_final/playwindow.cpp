@@ -549,7 +549,7 @@ void PlayWindow::on_hint_button_clicked()
     if(players[0]->get_hints().size() == 0){
         ui->info_bar->setText("No hints.");
         sleep(1000);
-        ui->info_bar->setText("Your turn");
+        ui->info_bar->setText("Now it's your turn");
         return;
     }else{
         current_selection.clear();
