@@ -146,7 +146,7 @@ PlayWindow::PlayWindow(QWidget *parent) :
     initialize_music();
 }
 
-PlayWindow::PlayWindow(int id,QWidget *parent):
+PlayWindow::PlayWindow(int id, QVector<QString> names, QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::PlayWindow)
 {
@@ -156,7 +156,7 @@ PlayWindow::PlayWindow(int id,QWidget *parent):
     mode = ONLINE;
     initialize_window();
     initialize_music();
-    initialize_players();
+    initialize_players(names);
 }
 
 /*
@@ -369,24 +369,12 @@ void PlayWindow::initialize_offline_game() {
 
 void PlayWindow::initialize_players() {
     qDebug() << "Azhe";
-    if(mode == OFFLINE) {
-        Player* player1 = new Player(0,"You");
-        Player* player2 = new AIPlayer(1,"AI "+to_string(1));
-        Player* player3 = new AIPlayer(2,"AI "+to_string(2));
-        this->players.append(player1);
-        this->players.append(player2);
-        this->players.append(player3);
-    }
-    else {
-        for(int i=0; i<NUMBER_OF_PLAYERS; i++) {
-            Player* new_player;
-            if(i == my_id) { new_player = new Player(my_id, "You"); }
-            else { new_player = new Player(i, "FRIEND "+to_string(i)); }
-            this->players.append(new_player);
-            new_player->set_turn_end(true);
-        }
-    }
-
+    Player* player1 = new Player(0,"You");
+    Player* player2 = new AIPlayer(1,"AI "+to_string(1));
+    Player* player3 = new AIPlayer(2,"AI "+to_string(2));
+    this->players.append(player1);
+    this->players.append(player2);
+    this->players.append(player3);
     player1_pic = new QLabel(this);
     player1_pic->setGeometry(PLAYER1_X, PLAYER1_Y, 84, 120);
     player2_pic = new QLabel(this);
@@ -395,8 +383,18 @@ void PlayWindow::initialize_players() {
     player3_pic->setGeometry(PLAYER3_X, PLAYER3_Y, 84, 120);
 }
 
-void PlayWindow::initialize_online_game() {
-
+void PlayWindow::initialize_players(QVector<QString> names) {
+    for(int i=0; i<NUMBER_OF_PLAYERS; i++) {
+        Player* new_player = new Player(i, names[i].toStdString());
+        this->players.append(new_player);
+        new_player->set_turn_end(true);
+    }
+    player1_pic = new QLabel(this);
+    player1_pic->setGeometry(PLAYER1_X, PLAYER1_Y, 84, 120);
+    player2_pic = new QLabel(this);
+    player2_pic->setGeometry(PLAYER2_X, PLAYER2_Y, 84, 120);
+    player3_pic = new QLabel(this);
+    player3_pic->setGeometry(PLAYER3_X, PLAYER3_Y, 84, 120);
 }
 /*
  * Game Processing Functions
