@@ -936,7 +936,7 @@ void PlayWindow::on_hit_button_clicked()
 void PlayWindow::on_enter_button_clicked() {
     if(ui->line_edit->text().isEmpty()) return;
     else send_to_client(DataPackage(my_id, my_id, DataPackage::CHAT, ui->line_edit->text()));
-    ui->line_edit->text().clear();
+    ui->line_edit->clear();
 }
 /*
  * Helper Functions
