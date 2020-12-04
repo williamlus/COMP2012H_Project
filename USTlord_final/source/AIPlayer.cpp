@@ -176,7 +176,7 @@ CardsGroup AIPlayer::play(const CurrentPattern& cp){
 bool AIPlayer::want_landlord(){
     //if num_of_important_combination >=3, the probability of want_lanlord is 0.85
     //if num_of_important_combination==2, the probability of want_landload is 0.5
-    //if num_of_important_combination<2, the probability of want_landlord is 0.3
+    //if num_of_important_combination<2, the probability of want_landlord is 0.1
     float prob = QRandomGenerator::global()->bounded(1.0);
     qDebug() << "probability:" << prob;
     int num_of_important_combination = deck->get_num_important_combination();
