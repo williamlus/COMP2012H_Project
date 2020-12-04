@@ -58,7 +58,6 @@ public:
     void hide_past_cards();
     void reveal_current_selection();
     void AIplayer_action(int active_AIplayer);
-    void set_button(bool is_visible);
     void closeEvent(QCloseEvent *event) override;
     void paintEvent(QPaintEvent * event) override;
 
