@@ -36,16 +36,15 @@ class PlayWindow : public QMainWindow
     Q_OBJECT
 public:
     explicit PlayWindow(QWidget *parent = nullptr);
-    explicit PlayWindow(int id, QVector<QString> names, QWidget *parent=nullptr);
+    explicit PlayWindow(int id,QWidget *parent=nullptr);
     ~PlayWindow();
     //Game initializer
     void initialize_music();
     void initialize_window();
     void initialize_players();
-    void initialize_players(QVector<QString> names);
     void initialize_cards();
     void initialize_offline_game();
-    void initialize_online_game();
+
     //Game Process Functions
     void landlord_bonus(int landlord_id); //Add 3 bonus cards to landlord
     void shuffle(); //shuffle cards, distribute cards, call Deck::rearrange() to sort cards
