@@ -29,8 +29,11 @@ void PlayWindow::receive_from_client(DataPackage data)
     //TODO
     if(data.action == DataPackage::DEAL_CARDS) {
         set_of_cards = data.generate_cards();
+        qDebug() << "number of cards:" << set_of_cards.size();///////
         initialize_cards();
+        qDebug() << "initailize success";
         for(int i=0; i < NUMBER_OF_PLAYERS; i++) update_player_cards(i);
+        qDebug() << "render landlord cards";
         for(int i=51; i<NUMBER_OF_CARDS; i++) {
             CardPicture* landlord_card = set_of_cards[i]->get_card_picture();
             landlord_card->select(false);
@@ -38,6 +41,7 @@ void PlayWindow::receive_from_client(DataPackage data)
             landlord_card->setGeometry(510+(i-51)*CARD_WIDTH, 160, CARD_WIDTH, CARD_HEIGHT);
             landlord_card->show();
         }
+        qDebug() << "emit deal cards accept";
         emit send_to_client(DataPackage(my_id,my_id,DataPackage::Action::DEAL_CARDS,DataPackage::Content::ACCEPT));
     }
     else if(data.action == DataPackage::CHOOSE_LANDLORD) {
@@ -45,7 +49,7 @@ void PlayWindow::receive_from_client(DataPackage data)
             ui->call_lord_button->setVisible(true);
             ui->refuse_button->setVisible(true);
         }
-        else if(data.content==DataPackage::Content::BE_LANDLORD){
+        else if(data.content==DataPackage::Content::BE_LANDLORD){////////////
             landlord_id = data.actioner;
             choose_landlord();
             landlord_bonus(landlord_id);
@@ -56,51 +60,70 @@ void PlayWindow::receive_from_client(DataPackage data)
             }
         }
     }
-    else if(data.action == DataPackage::PLAY_CARDS && data.actioner != my_id) {
+    else if(data.action == DataPackage::PLAY_CARDS && data.content!=DataPackage::Content::DO_NOT_PLAY && data.actioner != my_id) {
         current_selection.clear();
         QVector<Card*> generated_cards=data.generate_cards();
         for(int i=0,n=generated_cards.size();i<n;++i){
             for(int j=0,m=set_of_cards.size();j<m;++j){
                 if(Card::strictly_equal(generated_cards[i],set_of_cards[j])){
+                    qDebug() << "xixi";
                     current_selection.push_back(set_of_cards[j]);
+                    qDebug() << "Other player play:"<<QString::fromStdString(set_of_cards[j]->get_string());
                     break;
                 }
             }
         }
+        qDebug() << "All cards found";
         for(int i=0,n=generated_cards.size();i<n;++i){
             delete generated_cards[i];
             generated_cards[i]=nullptr;
         }
+        qDebug() << "delete temp generated cards";
         players[data.actioner]->set_selected_cards(current_selection);
         players[data.actioner]->set_choice('p');
-        //qDebug() << players[data.actioner]->play(*cp).get_cards();
+        qDebug() << players[data.actioner]->play(*cp).get_cards();
         players[data.actioner]->set_selected_cards(players[data.actioner]->play(*cp).get_cards());
         hide_past_cards();
         sleep(200);
+        reveal_current_selection();
         cp->record(data.actioner,current_selection,data.actioner==landlord_id);
+        qDebug() << "current pattern:" << QString::fromStdString(cp->get_cards_type().to_string());
+        qDebug() << "current pattern player index: " << cp->get_player_index();
         players[data.actioner]->clear_hint(); //clear the cards to be played in deck
-        hint_id = -1;
+        hint_id=-1;
         players[data.actioner]->clear_cards(current_selection);
         vector<Card const*> empty_cards(0,nullptr);
         players[my_id]->set_selected_cards(empty_cards);
         ui->info_bar->setText(QString::fromStdString("Player " + to_string(data.actioner) + " play " + cp->get_cards_type().to_string()));
         players[(data.actioner+1)%3]->set_turn_end(false);
         update_player_cards(data.actioner);
-        if((my_id-1)%3 == data.actioner) {
+        current_selection.clear();//////
+        qDebug() << "My id:" << my_id;
+        if((my_id+2)%3 == data.actioner) {
             ui->hit_button->setVisible(true);
             ui->hint_button->setVisible(true);
             ui->give_up_button->setVisible(true);
         }
     }
-    else if(data.action == DataPackage::PLAY_CARDS && data.content == DataPackage::Content::DO_NOT_PLAY) {
+    else if(data.action == DataPackage::PLAY_CARDS && data.content == DataPackage::Content::DO_NOT_PLAY && data.actioner!=my_id) {
         players[data.actioner]->set_choice('g');
         players[data.actioner]->set_selected_cards(players[data.actioner]->play(*cp).get_cards());
         current_selection.clear();
         update_player_cards(data.actioner);
         players[(data.actioner+1)%3]->set_turn_end(false);
+        if((my_id+2)%3 == data.actioner) {
+            ui->hit_button->setVisible(true);
+            ui->hint_button->setVisible(true);
+            ui->give_up_button->setVisible(true);
+        }
     }
     else if(data.action == DataPackage::ANNOUNCE && data.content == DataPackage::Content::END_GAME) {
-        game_finished(cp->get_player_index());
+        for(int p=0; p<NUMBER_OF_PLAYERS; p++) {
+            if(players[p]->get_num_cards() == 0) {
+                game_finished(p);
+                break;
+            }
+        }
     }
 }
 
@@ -118,7 +141,7 @@ PlayWindow::PlayWindow(QWidget *parent) :
     initialize_music();
 }
 
-PlayWindow::PlayWindow(int id,QWidget *parent):
+PlayWindow::PlayWindow(int id,QWidget *parent): //initialize online game.
     QMainWindow(parent),
     ui(new Ui::PlayWindow)
 {
@@ -162,6 +185,7 @@ void PlayWindow::initialize_window() {
                                           "padding:6px;"                          //padding
                                           "}");
     ui->start_button->setCursor(Qt::PointingHandCursor);
+    if(mode==ONLINE){ui->start_button->setVisible(false);}
     ui->hit_button->setVisible(false);
     ui->hit_button->setStyleSheet(
                                           "QPushButton{"
@@ -294,7 +318,7 @@ void PlayWindow::initialize_cards() {
                 pic.load(QString::fromStdString(pic_name));
                 qDebug() << QString::fromStdString(pic_name);
                 CardPicture* card_picture = new CardPicture(this);
-                if(i == my_id) { connect(card_picture, SIGNAL(selected_signal()),this,SLOT(card_selected())); }
+                connect(card_picture, SIGNAL(selected_signal()),this,SLOT(card_selected()));
                 card_picture->setPic(pic);
                 card_picture->hide();
                 card_picture->setGeometry(570, 260, CARD_WIDTH, CARD_HEIGHT);
@@ -302,6 +326,7 @@ void PlayWindow::initialize_cards() {
                 card_pic_map.insert(card_picture, card);
                 players[i]->receive_card(card);
                 update_player_cards(i);
+                sleep(50);////////
             }
         }
         for(int i=51; i<NUMBER_OF_CARDS; i++) {
@@ -322,7 +347,9 @@ void PlayWindow::initialize_cards() {
 }
 
 void PlayWindow::initialize_offline_game() {
+
     my_id = 0;
+
     initialize_cards();
     ui->start_button->setVisible(false);
     initialize_players();
@@ -353,6 +380,7 @@ void PlayWindow::initialize_players() {
             if(i == my_id) { new_player = new Player(my_id, "You"); }
             else { new_player = new Player(i, "FRIEND "+to_string(i)); }
             this->players.append(new_player);
+            new_player->set_turn_end(true);
         }
     }
 
@@ -362,17 +390,18 @@ void PlayWindow::initialize_players() {
     player2_pic->setGeometry(PLAYER2_X, PLAYER2_Y, 84, 120);
     player3_pic = new QLabel(this);
     player3_pic->setGeometry(PLAYER3_X, PLAYER3_Y, 84, 120);
+    //set names displayed in ui.
+    ui->player0_name->setText("YOU");
+    ui->player1_name->setText(QString::fromStdString(players[(my_id+1)%NUMBER_OF_PLAYERS]->get_name()));
+    ui->player2_name->setText(QString::fromStdString(players[(my_id+2)%NUMBER_OF_PLAYERS]->get_name()));
 }
 
-void PlayWindow::initialize_online_game() {
-
-}
 /*
  * Game Processing Functions
  */
 void PlayWindow::card_selected() {
     if(game_status == DEFAULT || game_status == DEALING_CARDS) return;
-    if(players[0]->turn_end()) return;
+    if(players[my_id]->turn_end()) return;
     qDebug() << "Signal Received!";
     CardPicture* card_pic = (CardPicture*) sender();
     qDebug() << card_pic->is_selected();
@@ -398,7 +427,7 @@ void PlayWindow::card_selected() {
         //m_Selected.insert(cardpic); add this card to selected set
     }
 
-    update_player_cards(0);
+    update_player_cards(my_id);
 }
 
 void PlayWindow::update_player_cards(int player_id)
@@ -411,7 +440,7 @@ void PlayWindow::update_player_cards(int player_id)
         for(int j = 0; j < players[player_id]->get_deck()->get_num_cards(); j++)
         {
             int top_border = 400;                           //upper border
-            int left_border = (1200-CARD_WIDTH*players[0]->get_num_cards())/2;  //left border
+            int left_border = (1200-CARD_WIDTH*players[my_id]->get_num_cards())/2;  //left border
             CardPicture* card_picture = players[player_id]->get_deck()->get_cards()[j]->get_card_picture();
             card_picture->turn(false);
             if(card_picture->is_selected()) top_border-=20;
@@ -421,7 +450,7 @@ void PlayWindow::update_player_cards(int player_id)
             players[my_id]->display_cards();
         }
     }
-    else if(player_id == (my_id+1)%3) {
+    else if(player_id == (my_id+1)%NUMBER_OF_PLAYERS) {
         int left_border = 40;
         int top_border = 40;
         for(int j = 0; j < players[player_id]->get_deck()->get_num_cards(); j++) {
@@ -471,7 +500,6 @@ void PlayWindow::AIplayer_action(int active_AIplayer){
         sleep(300);
         reveal_current_selection();
         sleep(200);
-        
         cp->record(active_AIplayer,tmp,active_AIplayer==landlord_id);
         qDebug() << QString::fromStdString(" play " + cp->get_cards_type().to_string());
         ui->info_bar->setText(QString::fromStdString("Player ") +QString::number(active_AIplayer)+ QString::fromStdString(" plays " + cp->get_cards_type().to_string()));
@@ -480,7 +508,7 @@ void PlayWindow::AIplayer_action(int active_AIplayer){
         sleep(1000);
         current_selection.clear();
     }else{
-        ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(active_AIplayer)+ QString::fromStdString(" gives up."));
+        ui->info_bar->setText(QString::fromStdString("Player ") +QString::number(active_AIplayer)+ QString::fromStdString(" gives up."));
         sleep(1000);
     }
 }
@@ -489,22 +517,22 @@ void PlayWindow::choose_landlord(){
     if(mode == OFFLINE) {
         bool decision;
         decision = players[1]->want_landlord();
-        players[1]->display_cards();
+        players[(my_id+1)%NUMBER_OF_PLAYERS]->display_cards();
         if(decision) {
             ui->info_bar->setText("Player 1 calls landlord!");
-            sleep(1000);
-            call_landlord_list.push_front(1);
+            sleep(800);
+            call_landlord_list.push_front((my_id+1)%NUMBER_OF_PLAYERS);
         }
-        decision = players[2]->want_landlord();
-        players[2]->display_cards();
+        decision = players[(my_id+2)%NUMBER_OF_PLAYERS]->want_landlord();
+        players[(my_id+2)%NUMBER_OF_PLAYERS]->display_cards();
         if(decision) {
             ui->info_bar->setText("Player 2 calls landlord!");
-            sleep(1000);
-            call_landlord_list.push_front(2);
+            sleep(800);
+            call_landlord_list.push_front((my_id+2)%NUMBER_OF_PLAYERS);
         }
         if(call_landlord_list.size() == 0) {
             ui->info_bar->setText("No one calls landlord! Redistribute the cards now.");
-            sleep(1000);
+            sleep(800);
             restart();
             return;
         }
@@ -514,60 +542,66 @@ void PlayWindow::choose_landlord(){
             landlord_bonus(landlord_id);
             game_status = PLAYING;
             ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(landlord_id) + QString::fromStdString(" is the landlord now!"));
-            sleep(1000);
+            sleep(800);
             set_chara_pic();
         }
-        for(int i = landlord_id; i != 0;){
+        for(int i = landlord_id; i != my_id;){
             ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(i) + QString::fromStdString("'s turn now"));
-            sleep(1000);
+            sleep(800);
             AIplayer_action(i);
-            i = (++i)%3;
+            i = (++i)%NUMBER_OF_PLAYERS;
         }
-        if(cp->get_player_index()!=0){
-            ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+
+        if(cp->get_player_index()!= my_id){
+           ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
         else{
-            ui->info_bar->setText("Now it's your turn.");
+           ui->info_bar->setText("Now it's your turn.");
         }
+
         sleep(1000);
+        ui->hit_button->setVisible(true);
+        ui->hint_button->setVisible(true);
+        ui->give_up_button->setVisible(true);
     }
     else {
         game_status = PLAYING;
-        if(landlord_id == my_id){
-               ui->info_bar->setText("You are the landlord now!");
-        }else{
-               ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(landlord_id) + QString::fromStdString(" is the landlord now!"));}
+        ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(landlord_id) + QString::fromStdString(" is the landlord now!"));
+        players[landlord_id]->set_turn_end(false);
+        vector<const Card*> empty_cards{};
+        cp=new CurrentPattern(empty_cards,landlord_id);
         set_chara_pic();
     }
-    ui->hit_button->setVisible(true);
-    ui->hint_button->setVisible(true);
-    ui->give_up_button->setVisible(true);
 }
 
 void PlayWindow::on_hint_button_clicked()
 {
-    for(auto card : players[0]->get_deck()->get_cards()) {
+    for(auto card : players[my_id]->get_deck()->get_cards()) {
         card->get_card_picture()->select(false);
     }
-    players[0]->calc_hints(*cp);
-    if(players[0]->get_hints().size() == 0){
+    players[my_id]->calc_hints(*cp);
+    if(players[my_id]->get_hints().size() == 0){
         ui->info_bar->setText("No hints.");
-        current_selection.clear();
-        sleep(1000);
-        update_player_cards(my_id);
-        ui->info_bar->setText("Now it's your turn");
+        sleep(800);
+
+        if(cp->get_player_index()!=0){
+           ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+        else{
+           ui->info_bar->setText("Now it's your turn.");
+        }
+
         return;
     }else{
         current_selection.clear();
         if(hint_id == -1){ hint_id = 0;}
         else{
-            hint_id = (hint_id+1)%players[0]->get_hints().size();
+            hint_id = (hint_id+1)%players[my_id]->get_hints().size();
         }
-        for(auto card : players[0]->get_hints()[hint_id].get_cards()) {
+        for(auto card : players[my_id]->get_hints()[hint_id].get_cards()) {
             card->get_card_picture()->select(true);
             current_selection.push_back(card);
         }
-        players[0]->set_selected_cards(players[0]->get_hints()[hint_id].get_cards());
-        update_player_cards(0);
+        players[my_id]->set_selected_cards(players[my_id]->get_hints()[hint_id].get_cards());
+        update_player_cards(my_id);
     }
     //display calculated hints
 }
@@ -575,77 +609,72 @@ void PlayWindow::on_hint_button_clicked()
 void PlayWindow::on_give_up_button_clicked()
 {
 
-    ui->info_bar->setText("You give up, next player's turn.");
-    sleep(1000);
-    players[my_id]->set_choice('g');
-    players[my_id]->set_selected_cards(players[my_id]->play(*cp).get_cards());
-    current_selection.clear();
-    update_player_cards(my_id);
-    
-    qDebug() << cp->get_player_index();
-    for(int i = 0; i < players[my_id]->get_num_cards(); i++){
-        players[my_id]->get_deck()->get_cards()[i]->get_card_picture()->select(false);
-    }
-    update_player_cards(my_id);
-    if(mode == OFFLINE) {
-        if(players[0]->turn_end()){
-            ui->hit_button->setVisible(false);
-            ui->hint_button->setVisible(false);
-            ui->give_up_button->setVisible(false);
-            players[0]->clear_hint();
-            hint_id = -1;
-            
-            if(cp->get_player_index() == my_id){
-                hide_past_cards();
-                 if(!cp->get_cards().empty()){
-                    delete cp;
-                }
-                cp = new CurrentPattern();
-                cp->set_player_index((my_id+1)%NUMBER_OF_PLAYERS);
-                hint_id=-1;
-            }
-            
-            if(cp->get_player_index() == my_id+1){ hide_past_cards();}
-            AIplayer_action(1);
-            sleep(300);
-            if(players[1]->is_winner()){
-                ui->info_bar->setText("Game Finished!");
-                sleep(1000);
-                game_finished(1);
-            }
-            
-             if(cp->get_player_index() == my_id+2){
-                hide_past_cards();
-                 if(!cp->get_cards().empty()){
-                    delete cp;
-                }
-                cp = new CurrentPattern();
-                cp->set_player_index((my_id+2)%NUMBER_OF_PLAYERS);
-            }
-            
-            if(cp->get_player_index() == my_id + 2){ hide_past_cards();}
-            AIplayer_action(2);
-            sleep(300);
-            if(players[2]->is_winner()){
-                ui->info_bar->setText("Game Finished!");
-                sleep(1000);
-                game_finished(2);
-            }
-            
-            players[1]->set_turn_end(false);
-            players[2]->set_turn_end(false);
-            players[0]->set_turn_end(false);
+        ui->info_bar->setText("You give up, next player's turn.");
+        sleep(1000);
+        players[my_id]->set_choice('g');
+        players[my_id]->set_selected_cards(players[my_id]->play(*cp).get_cards());
+        current_selection.clear();
+        update_player_cards(my_id);
+
+        for(int i = 0; i < players[my_id]->get_num_cards(); i++){
+            players[my_id]->get_deck()->get_cards()[i]->get_card_picture()->select(false);
         }
-         sleep(1000);
-         ui->hit_button->setVisible(true);
-         ui->hint_button->setVisible(true);
-         ui->give_up_button->setVisible(true);
+        update_player_cards(my_id);
+        if(mode == OFFLINE) {
+            if(players[my_id]->turn_end()){
+                ui->hit_button->setVisible(false);
+                ui->hint_button->setVisible(false);
+                ui->give_up_button->setVisible(false);
+                hint_id = -1;
+
+                if(cp->get_player_index() == my_id){//last time still me, clear the current pattern stored.
+                   hide_past_cards();
+                    //recreate a new pattern.
+                   if(!cp->get_cards().empty()){ delete cp;}
+                   cp = new CurrentPattern();
+                   cp->set_player_index((my_id+1)%NUMBER_OF_PLAYERS);
+                   hint_id=-1;
+                 }
+
+                if(cp->get_player_index() == (my_id+1)%NUMBER_OF_PLAYERS){ //last time still player1, hide the cards it played.
+                   hide_past_cards();
+                }
+                AIplayer_action((my_id+1)%NUMBER_OF_PLAYERS);
+                sleep(300);
+                if(players[(my_id+1)%NUMBER_OF_PLAYERS]->is_winner()){//check if it is winner.
+                    ui->info_bar->setText("Game Finished!");
+                    sleep(800);
+                    game_finished((my_id+1)%NUMBER_OF_PLAYERS);
+                }
+
+                if(cp->get_player_index() == (my_id+2)%NUMBER_OF_PLAYERS){
+                   hide_past_cards();
+                }
+                AIplayer_action((my_id+2)%NUMBER_OF_PLAYERS);
+                sleep(300);
+                if(players[(my_id+2)%NUMBER_OF_PLAYERS]->is_winner()){
+                    ui->info_bar->setText("Game Finished!");
+                    sleep(800);
+                    game_finished((my_id+2)%NUMBER_OF_PLAYERS);
+                }
+
+                players[1]->set_turn_end(false);
+                players[2]->set_turn_end(false);
+                players[0]->set_turn_end(false);
+
+                sleep(800);
+
+                ui->hit_button->setVisible(true);
+                ui->hint_button->setVisible(true);
+                ui->give_up_button->setVisible(true);
+        }
     }
     else {
-        emit DataPackage(my_id, my_id, DataPackage::PLAY_CARDS, DataPackage::Content::DO_NOT_PLAY);
+        players[my_id]->clear_hint();/////
         ui->hit_button->setVisible(false);
         ui->hint_button->setVisible(false);
         ui->give_up_button->setVisible(false);
+        emit send_to_client(DataPackage(my_id, my_id, DataPackage::PLAY_CARDS, DataPackage::Content::DO_NOT_PLAY));
     }
 }
 
@@ -666,6 +695,7 @@ void PlayWindow::landlord_bonus(int landlord_id)
         card_picture->turn(true);
         card_picture->repaint();
     }
+    qDebug()<< "Current num cards:" << players[landlord_id]->get_num_cards();
     update_player_cards(landlord_id);
 };
 
@@ -737,7 +767,6 @@ void PlayWindow::on_start_button_clicked()
     }
     else {
         ui->info_bar->setText("Game Start");
-        initialize_online_game();
         ui->info_bar->setText("Please choose landlord");
     }
 }
@@ -747,15 +776,15 @@ void PlayWindow::on_call_lord_button_clicked()
     ui->info_bar->setText("You call landlord!");
     sleep(500);
     if(mode == OFFLINE) {
-        call_landlord_list.push_front(0);
+        call_landlord_list.push_front((my_id+0)%NUMBER_OF_PLAYERS);
         ui->refuse_button->setVisible(false);
         ui->call_lord_button->setVisible(false);
         choose_landlord();
     }
     else {
-        emit DataPackage(my_id, my_id, DataPackage::CHOOSE_LANDLORD, DataPackage::Content::ACCEPT);
         ui->call_lord_button->setVisible(false);
         ui->refuse_button->setVisible(false);
+        emit send_to_client(DataPackage(my_id, my_id, DataPackage::CHOOSE_LANDLORD, DataPackage::Content::ACCEPT));
     }
 }
 
@@ -763,31 +792,36 @@ void PlayWindow::on_refuse_button_clicked()
 {
     ui->info_bar->setText("You refuse to be the landlord!");
     sleep(500);
+
     if(mode == OFFLINE) {
         ui->refuse_button->setVisible(false);
         ui->call_lord_button->setVisible(false);
         choose_landlord();
     }
     else {
-        emit DataPackage(my_id, my_id, DataPackage::CHOOSE_LANDLORD, DataPackage::Content::REJECT);
         ui->call_lord_button->setVisible(false);
         ui->refuse_button->setVisible(false);
+        emit send_to_client(DataPackage(my_id, my_id, DataPackage::CHOOSE_LANDLORD, DataPackage::Content::REJECT));
     }
 }
 
 void PlayWindow::on_hit_button_clicked()
 {
-    sleep(10);
+    ui->info_bar->clear();
 
     sleep(100);
-    //current_selected //current+_pattern
     players[my_id]->set_selected_cards(current_selection);
     players[my_id]->set_choice('p');
-    qDebug() << players[my_id]->play(*cp).get_cards();
     players[my_id]->set_selected_cards(players[my_id]->play(*cp).get_cards());
+
     if(players[my_id]->get_selected_cards().get_cards().size() == 0){
         ui->info_bar->setText("Invalid cards group! \n Please choose again!");
         sleep(500);
+        if(cp->get_player_index()!=0){
+           ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+        else{
+           ui->info_bar->setText("Now it's your turn.");
+        }
         return;
     }
     else {
@@ -795,72 +829,77 @@ void PlayWindow::on_hit_button_clicked()
             sleep(200);
             cp->record(my_id,current_selection,my_id == landlord_id);
             players[my_id]->clear_hint(); //clear the cards to be played in deck
-            hint_id = -1;
+            hint_id=-1;
             players[my_id]->clear_cards(current_selection);
             vector<Card const*> empty_cards(0,nullptr);
             players[my_id]->set_selected_cards(empty_cards);
-
             ui->info_bar->setText(QString::fromStdString("You play " + cp->get_cards_type().to_string()));
-            update_player_cards(0);
+            update_player_cards(my_id);
 
-        current_selection.clear();
-        ui->hit_button->setVisible(false);
-        ui->hint_button->setVisible(false);
-        ui->give_up_button->setVisible(false);
-        
-        sleep(1000);
-        if(mode == OFFLINE) {
-            if(players[0]->is_winner()){
-                ui->info_bar->setText("Game Finished!");
-                sleep(1000);
-                game_finished(0);
+            ui->hit_button->setVisible(false);
+            ui->hint_button->setVisible(false);
+            ui->give_up_button->setVisible(false);
+            sleep(800);
+
+
+            if(mode == OFFLINE) {
+                if(players[0]->is_winner()){
+                    ui->info_bar->setText("Game Finished!");
+                    sleep(800);
+                    game_finished((my_id+0)%NUMBER_OF_PLAYERS);
+                }
+
+                ui->info_bar->setText("Player 1's turn!");
+                AIplayer_action((my_id+1)%NUMBER_OF_PLAYERS);
+                sleep(800);
+                if(players[1]->is_winner()){
+                    ui->info_bar->setText("Game Finished!");
+                    sleep(800);
+                    game_finished((my_id+1)%NUMBER_OF_PLAYERS);
+                }
+
+                ui->info_bar->setText("Player 2's turn!");
+                AIplayer_action((my_id+2)%NUMBER_OF_PLAYERS);
+                sleep(800);
+                if(players[2]->is_winner()){
+                    ui->info_bar->setText("Game Finished!");
+                    sleep(800);
+                    game_finished((my_id+2)%NUMBER_OF_PLAYERS);
+                }
+
+                players[1]->set_turn_end(false);
+                players[2]->set_turn_end(false);
+                players[0]->set_turn_end(false);
+                sleep(800);
+
+                if(cp->get_player_index()!=0){
+                   ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
+                else{
+                   ui->info_bar->setText("Now it's your turn.");
+                }
+
+                ui->hit_button->setVisible(true);
+                ui->hint_button->setVisible(true);
+                ui->give_up_button->setVisible(true);
             }
-            
-            ui->info_bar->setText("Player 1's turn!");
-            AIplayer_action(1);
-            sleep(1000);
-            if(players[1]->is_winner()){
-                ui->info_bar->setText("Game Finished!");
-                sleep(1000);
-                game_finished(1);
+            else {
+                vector<const Card*> cards = cp->get_cards();
+                QVector<Card> cards_to_send{};
+                for(int i=0,n=cards.size();i<n;++i){
+                    Card c=*cards[i];
+                    cards_to_send.push_back(c);
+                }
+                DataPackage data(DataPackage(my_id, my_id, DataPackage::PLAY_CARDS, DataPackage::cards_to_string(cards_to_send)));
+                qDebug() << "Play cards:" <<data.to_string();
+                emit send_to_client(data);
+                if(players[my_id]->get_num_cards() == 0) {
+                    emit send_to_client(DataPackage(my_id, my_id, DataPackage::ANNOUNCE, DataPackage::Content::WIN_GAME));
+                }
+                ui->hit_button->setVisible(false);
+                ui->hint_button->setVisible(false);
+                ui->give_up_button->setVisible(false);
             }
-            
-            ui->info_bar->setText("Player 2's turn!");
-            AIplayer_action(2);
-            sleep(1000);
-            if(players[2]->is_winner()){
-                ui->info_bar->setText("Game Finished!");
-                sleep(1000);
-                game_finished(2);
-            }
-            
-            players[1]->set_turn_end(false);
-            players[2]->set_turn_end(false);
-            players[0]->set_turn_end(false);
         }
-        else {
-            vector<const Card*> cards=cp->get_cards();
-            QVector<Card> cards_to_send{};
-            for(int i=0,n=cards.size();i<n;++i){
-                Card c=*cards[i];
-                cards_to_send.push_back(c);
-            }
-            emit DataPackage(my_id, my_id, DataPackage::PLAY_CARDS, DataPackage::cards_to_string(cards_to_send));
-            if(players[my_id]->get_num_cards() == 0) {
-                emit DataPackage(my_id, my_id, DataPackage::ANNOUNCE, DataPackage::Content::WIN_GAME);
-            }
-        }
-        sleep(1000);
-        current_selection.clear();
-        if(cp->get_player_index() !=0 ){
-            ui->info_bar->setText(QString::fromStdString("Player ") + QString::number(cp->get_player_index()) + QString::fromStdString(" played. \n Now it's your turn."));}
-        else{
-            ui->info_bar->setText("Now it's your turn.");
-        }
-        ui->hit_button->setVisible(true);
-        ui->hint_button->setVisible(true);
-        ui->give_up_button->setVisible(true);
-    }
 }
 /*
  * Helper Functions
