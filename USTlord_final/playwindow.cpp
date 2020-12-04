@@ -873,9 +873,9 @@ void PlayWindow::on_hit_button_clicked()
             DataPackage data(DataPackage(my_id, my_id, DataPackage::PLAY_CARDS, DataPackage::cards_to_string(cards_to_send)));
             qDebug() << "Play cards:" <<data.to_string();
             emit send_to_client(data);
-            if(players[my_id]->get_num_cards() == 0) {
-                emit send_to_client(DataPackage(my_id, my_id, DataPackage::ANNOUNCE, DataPackage::Content::WIN_GAME));
-            }
+//             if(players[my_id]->get_num_cards() == 0) {
+//                 emit send_to_client(DataPackage(my_id, my_id, DataPackage::ANNOUNCE, DataPackage::Content::WIN_GAME));
+//             }
             ui->hit_button->setVisible(false);
             ui->hint_button->setVisible(false);
             ui->give_up_button->setVisible(false);
