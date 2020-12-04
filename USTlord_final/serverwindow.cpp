@@ -309,7 +309,26 @@ void ServerWindow::receiveData(DataPackage data){
     qDebug()<<"one data is received!";
     static int received_message = 0;
     cards.clear();
-    if(data.action==DataPackage::Action::CONFIRM_READY){
+    /////
+    if(data.action==DataPackage::Action::GIVE_ID){
+        qDebug() << "Record names: "<<++received_message << data.sender;
+        names[data.actioner]=data.content;
+        if(received_message==3){
+            qDebug()<<"players all have names!";
+            received_message=0;
+
+            QString names_str;
+            for(int i=0;i<names.size();++i){
+                if(i!=2){names_str+=names[i]+",";}
+                else{names_str+=names[i];}
+            }
+            DataPackage data(-1,-1,DataPackage::CONFIRM_READY,names_str);
+            for(int i=0;i<3;++i){
+                sendData(clients[i],data);
+            }
+        }
+    }
+    else if(data.action==DataPackage::Action::CONFIRM_READY){///////
         qDebug() << "ready is confirmed: "<<++received_message << data.sender;
         if(received_message==3){
             qDebug()<<"players are all ready to play!";
