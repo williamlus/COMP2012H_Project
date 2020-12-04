@@ -245,26 +245,26 @@ void ServerWindow::init_game()
                     int j = i/13;
                     switch(j){
                         case 0:
-                        color = 'S';
+                        color = 's';
                         break;
                         case 1:
-                        color = 'H';
+                        color = 'h';
                         break;
                         case 2:
-                        color = 'D';
+                        color = 'd';
                         break;
                         case 3:
-                        color = 'C';
+                        color = 'c';
                         break;
                     }
                 }
                 else if(i==52){
                     figure = figures_to_int[NUMBER_OF_FIGURES-1];
-                    color = 'B';
+                    color = 'b';
                 }
                 else{
                     figure = figures_to_int[NUMBER_OF_FIGURES-1];
-                    color = 'R';
+                    color = 'r';
                 }
                 set_of_cards.push_back(Card(color.toLatin1(),figure));
             }
