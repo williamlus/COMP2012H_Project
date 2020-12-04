@@ -33,6 +33,7 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
   Networking：
 
   * Datapackage
+  * ServerWindow
 
   GUI：
 
