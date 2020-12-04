@@ -162,6 +162,7 @@ void ServerWindow::sendData(QTcpSocket* socket, DataPackage data)
 
         socket->write(arr);
         ui->listWidget_dialogs->addItem("Send text to client: " + socket->peerAddress().toString() + ":" + QString::number(socket->peerPort()));
+        ui->listWidget_dialogs->addItem(data.to_string());
 
 }
 
