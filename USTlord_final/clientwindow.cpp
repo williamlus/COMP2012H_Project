@@ -88,6 +88,16 @@ void ClientWindow::received_from_playwindow(DataPackage data){
     }
 }
 
+void ClientWindow::set_port(QString port)
+{
+    ui->lineEdit_server_port->setText(port);
+}
+
+void ClientWindow::set_serverIP(QString ip)
+{
+    ui->lineEdit_serverIP->setText(ip);
+}
+
 void ClientWindow::on_pushButton_join_server_clicked()
 {
     if(socket==nullptr){
