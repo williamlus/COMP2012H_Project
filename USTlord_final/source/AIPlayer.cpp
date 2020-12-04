@@ -154,7 +154,7 @@ const CardsGroup AIPlayer::choose_hint(const CurrentPattern& cp){
 
 CardsGroup AIPlayer::play(const CurrentPattern& cp){
     CardsGroup cg=CardsGroup();
-    
+
     if(!deck->split_important_combination||cp.get_player_index()==id){
     this->calc_hints(cp);
     cg=this->choose_hint(cp);
@@ -174,7 +174,7 @@ CardsGroup AIPlayer::play(const CurrentPattern& cp){
 //use cin or hint (with loops) to Play cards according to current pattern, clear_cards, and reset data members
 
 bool AIPlayer::want_landlord(){
-    //if num_of_important_combination >=3, the probability of want_lanlord is 0.75
+    //if num_of_important_combination >=3, the probability of want_lanlord is 0.85
     //if num_of_important_combination==2, the probability of want_landload is 0.5
     //if num_of_important_combination<2, the probability of want_landlord is 0.3
     float prob = QRandomGenerator::global()->bounded(1.0);
@@ -182,7 +182,7 @@ bool AIPlayer::want_landlord(){
     int num_of_important_combination = deck->get_num_important_combination();
     qDebug() << "important combinations:" << num_of_important_combination;
     if(num_of_important_combination>=3){
-        return (prob<0.75)? true : false;
+        return (prob<0.85)? true : false;
     }
     else if(num_of_important_combination==2){
         return (prob<0.5)? true : false;
@@ -192,4 +192,3 @@ bool AIPlayer::want_landlord(){
     }
 
 }//choose to be landlord or not
-
