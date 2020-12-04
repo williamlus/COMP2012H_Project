@@ -35,7 +35,7 @@ void PlayWindow::receive_from_client(DataPackage data)
             CardPicture* landlord_card = set_of_cards[i]->get_card_picture();
             landlord_card->select(false);
             landlord_card->turn(true);
-            landlord_card->setGeometry(510+(i-52)*CARD_WIDTH, 160, CARD_WIDTH, CARD_HEIGHT);
+            landlord_card->setGeometry(510+(i-51)*CARD_WIDTH, 160, CARD_WIDTH, CARD_HEIGHT);
             landlord_card->show();
         }
         emit send_to_client(DataPackage(my_id,my_id,DataPackage::Action::DEAL_CARDS,DataPackage::Content::ACCEPT));
@@ -304,7 +304,7 @@ void PlayWindow::initialize_cards() {
             }
         }
         for(int i=51; i<NUMBER_OF_CARDS; i++) {
-            Card* card = set_of_cards[i++];
+            Card* card = set_of_cards[i];
             string pic_name = ":/card/images/" + to_string(card->get_index()+1) + ".png";
             QPixmap pic;
             pic.load(QString::fromStdString(pic_name));
