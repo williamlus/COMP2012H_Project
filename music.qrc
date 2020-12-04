@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/sound">
+        <file>sound/bkMusic.wav</file>
+        <file>sound/loseMusic.wav</file>
+        <file>sound/shuffleCardsMusic.wav</file>
+        <file>sound/win.wav</file>
+        <file>sound/zhadan.wav</file>
+        <file>sound/bgm2.wav</file>
+    </qresource>
+</RCC>
