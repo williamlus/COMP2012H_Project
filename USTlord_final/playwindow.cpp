@@ -1044,3 +1044,7 @@ void PlayWindow::closeEvent(QCloseEvent *event) {
     shuffle_music->stop();
     exit(0);
 }
+
+void PlayWindow::keyPressEvent(QKeyEvent *e) {
+   if(e->key() == Qt::Key_Enter) on_enter_button_clicked();
+}
