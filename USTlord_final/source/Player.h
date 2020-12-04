@@ -59,6 +59,7 @@ class Player {
       bool selected_can_beat(const CurrentPattern& cp);//check whether the player's selected cards can beat the last player's CardsGroup
       virtual CardsGroup play(const CurrentPattern& cp);//use cin or hint (with loops) to play cards according to current pattern, clear_cards, and reset data members
       void clear_cards(const CardsGroup& cg);//clear the played cards' pointers(don't delete)
+      void set_is_landlord();
 
 };
 
