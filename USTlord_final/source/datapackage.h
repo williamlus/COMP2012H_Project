@@ -8,17 +8,41 @@
 class DataPackage
 {
 public:
-    enum Action{NONE=-1,
-                GIVE_ID,//0,1,2
-                CONFIRM_READY,//request, accept, reject
-                DEAL_CARDS,//s3 h3...
-                CHOOSE_LANDLORD,//request, accept, reject, be_lanlord
-                LANDLORD_BONUS,//s3 h3...
-                PLAY_CARDS,//do_not_play, s3 h3...
-                ANNOUNCE,//win_game, lose_game, end_game
-                CHAT,//any QString
-                EXCEPTION//quit
-               };
+    enum Action{
+                    NONE=-1,
+                    GIVE_ID,
+                    CONFIRM_READY,
+                    DEAL_CARDS,
+                    CHOOSE_LANDLORD,
+                    LANDLORD_BONUS,
+                    PLAY_CARDS,
+                    ANNOUNCE,
+                    CHAT,
+                    EXCEPTION
+                   };
+        /*For each Action, defined the related content as following:
+         * NONE: ""
+         * GIVE_ID: 0,1,2
+         * CONFIRM_READY: Content::REQUEST, Content::ACCEPT, Content:: REJECT
+         * DEAL_CARDS: Content::DO_NOT_PLAY,
+                       "s3,h5"
+           rules for formatting a set of cards:
+           (char)color+(int)value or (char)color + (char)figure
+           Remark: only JOKER and A are in the form (char)color + (char)figure
+               color is defined as:
+               * s: SPADE
+               * h: HEART
+               * c: CLUB
+               * d: DIAMOND
+               * bW: BLACK_JOKER
+               * rW: RED_JOKER
+
+         * CHOOSE_LANDLORD: Content::REQUEST, Content::ACCEPT, Content:: REJECT, Content:: BE_LANDLORD
+         * LANDLORD_BONUS: bonus cards in formatted card form
+         * PLAY_CARDS: cards_to_play in formatted card form
+         * ANNOUNCE: Content:WIN_GAME, Content:: LOSE_GAME, Content:: END_GAME
+         * EXCEPTION::Content.quit
+         */
     struct Content{
         static const QString REQUEST;
         static const QString ACCEPT;
@@ -51,14 +75,17 @@ public:
     QVector<Card*> generate_cards();//generate cards if the content consists of cards
 };
 
-//QString DataPackage::Content::REQUEST = "request";
-//QString DataPackage::Content::ACCEPT="accept";
-//QString DataPackage::Content::REJECT="reject";
-//QString DataPackage::Content::BE_LANDLORD="be";
-//QString DataPackage::Content::DO_NOT_PLAY="noplay";
-//QString DataPackage::Content::WIN_GAME="win";
-//QString DataPackage::Content::LOSE_GAME="lose";
-//QString DataPackage::Content::END_GAME="end";
-//QString DataPackage::Content::QUIT="quit";
+/*
+  * REQUEST = "request";
+  * ACCEPT= "accept";
+  * REJECT="reject";
+  * BE_LANDLORD="be";
+  * DO_NOT_PLAY="noplay";
+  * WIN_GAME="win";
+  * LOSE_GAME="lose";
+  * END_GAME="end";
+  * QUIT="quit";
+*/
 
 #endif // DATAPACKAGE_H
+
