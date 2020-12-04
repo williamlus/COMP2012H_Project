@@ -224,12 +224,8 @@ void ServerWindow::choose_landlord(DataPackage data)
         //first anounce the landlord
         DataPackage data_landlord_id(-1,landlord_id,DataPackage::Action::CHOOSE_LANDLORD,DataPackage::Content::BE_LANDLORD);
 
-        //give bonus card
-        DataPackage data_bonus_cards(-1,-1,DataPackage::Action::LANDLORD_BONUS,bonus_cards);
-
         for(int i=0;i<3;++i){
             sendData(clients[i],data_landlord_id);
-            sendData(clients[i],data_bonus_cards);
         }
 
     }
