@@ -110,9 +110,9 @@ For example, since the two peasants come after one another, the first peasant mi
 
 
 **Transfer principle:** 
-      Using Transmission Control Protocol (TCP)
-      The one created room will simultaneously be SERVER and CLIENT, the rest two are just CLIENT
-      Before sending and after receiving the raw_data, the information is stored in user_defined object: **Datapackage**
+      Using Transmission Control Protocol (TCP)\
+      The one created room will simultaneously be SERVER and CLIENT, the rest two are just CLIENT\
+      Before sending and after receiving the raw_data, the information is stored in user_defined object: **Datapackage**\
       For more details of the usages of DataPackage, please refer to `DataPackage.h`
       
         class DataPackage
