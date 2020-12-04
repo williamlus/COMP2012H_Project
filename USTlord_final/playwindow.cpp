@@ -27,7 +27,10 @@
 void PlayWindow::receive_from_client(DataPackage data)
 {
     //TODO
-    if(data.action == DataPackage::DEAL_CARDS) {
+    if(data.action == DataPackage::CHAT) {
+        ui->chat_box->addItem(QString::fromStdString(players[data.actioner]->get_name())+":"+data.content);
+    }
+    else if(data.action == DataPackage::DEAL_CARDS) {
         set_of_cards = data.generate_cards();
         qDebug() << "number of cards:" << set_of_cards.size();///////
         initialize_cards();
@@ -173,6 +176,11 @@ PlayWindow::~PlayWindow()
 
 void PlayWindow::initialize_window() {
     setFixedSize(1200, 600);
+    if(mode == OFFLINE) {
+       ui->chat_box->setVisible(false);
+       ui->line_edit->setVisible(false);
+       ui->enter_button->setVisible(false);
+    }
     ui->info_bar->setStyleSheet("color:white;");
     ui->start_button->setStyleSheet(
                                           "QPushButton{"
@@ -652,10 +660,9 @@ void PlayWindow::on_give_up_button_clicked()
                 if(cp->get_player_index() == my_id){//last time still me, clear the current pattern stored.
                    hide_past_cards();
                     //recreate a new pattern.
-//                    if(!cp->get_cards().empty()){ delete cp;}
-//                    cp = new CurrentPattern();
-//                    cp->set_player_index((my_id+1)%NUMBER_OF_PLAYERS);
-                   cp->record(my_id,CardsGroup(),my_id==landlord_id);
+                   if(!cp->get_cards().empty()){ delete cp;}
+                   cp = new CurrentPattern();
+                   cp->set_player_index((my_id+1)%NUMBER_OF_PLAYERS);
                    hint_id=-1;
                  }
 
@@ -924,6 +931,12 @@ void PlayWindow::on_hit_button_clicked()
                 ui->give_up_button->setVisible(false);
             }
         }
+}
+
+void PlayWindow::on_enter_button_clicked() {
+    if(ui->line_edit->text().isEmpty()) return;
+    else send_to_client(DataPackage(my_id, my_id, DataPackage::CHAT, ui->line_edit->text()));
+    ui->line_edit->text().clear();
 }
 /*
  * Helper Functions

@@ -213,6 +213,39 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QListWidget" name="chat_box">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>170</y>
+      <width>300</width>
+      <height>200</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="line_edit">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>370</y>
+      <width>270</width>
+      <height>25</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="enter_button">
+    <property name="geometry">
+     <rect>
+      <x>1170</x>
+      <y>370</y>
+      <width>30</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>GO</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
