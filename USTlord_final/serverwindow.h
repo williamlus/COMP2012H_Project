@@ -58,6 +58,7 @@ private:
     QVector<DataPackage> data_received{};
     QString cards;
     QString bonus_cards;
+    QVector<QString> names={"","",""};
 };
 
 #endif // SERVERWINDOW_H
