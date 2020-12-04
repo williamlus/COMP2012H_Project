@@ -408,7 +408,7 @@ void PlayWindow::initialize_players(QVector<QString> names) { // initialize play
     player3_pic = new QLabel(this);
     player3_pic->setGeometry(PLAYER3_X, PLAYER3_Y, 84, 120);
     //set names displayed in ui.
-    ui->player0_name->setText("YOU");
+    ui->player0_name->setText("YOU"+ "#" +QString::number(my_id));
     ui->player0_name->setStyleSheet("color:white;");
     ui->player1_name->setText(QString::fromStdString(players[(my_id+1)%NUMBER_OF_PLAYERS]->get_name()));
     ui->player1_name->setStyleSheet("color:white;");
