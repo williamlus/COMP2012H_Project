@@ -846,7 +846,7 @@ void PlayWindow::set_chara_pic() {
     if(landlord_id == -1) return;
     QPixmap farmer_pixmap(":/icon/images/farmer.png");
     QPixmap lord_pixmap(":/icon/images/lord.png");
-    if(landlord_id == 0) {
+    if(landlord_id == my_id) {
         player1_pic->setPixmap(lord_pixmap);
         player1_pic->show();
     }
@@ -854,7 +854,7 @@ void PlayWindow::set_chara_pic() {
         player1_pic->setPixmap(farmer_pixmap);
         player1_pic->show();
     }
-    if(landlord_id == 1) {
+    if(landlord_id == (my_id+1)%3) {
         player2_pic->setPixmap(lord_pixmap);
         player2_pic->show();
     }
@@ -862,7 +862,7 @@ void PlayWindow::set_chara_pic() {
         player2_pic->setPixmap(farmer_pixmap);
         player2_pic->show();
     }
-    if(landlord_id == 2) {
+    if(landlord_id == (my_id+2)%3) {
         player3_pic->setPixmap(lord_pixmap);
         player3_pic->show();
     }
