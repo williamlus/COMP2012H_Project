@@ -1,5 +1,6 @@
 #include "clientwindow.h"
 #include "ui_clientwindow.h"
+#include <QMessageBox>
 
 ClientWindow::ClientWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -46,15 +47,26 @@ void ClientWindow::handle_server_message()
 //        qDebug()<< "data.action==DataPackage::Action::GIVE_ID?";/////
 //        qDebug() << (data.action==DataPackage::Action::GIVE_ID);//////////
         if(data.action==DataPackage::Action::GIVE_ID){
+            QMessageBox::information(this,"Start","Let's start!",QMessageBox::Ok,QMessageBox::Ok);
             id=data.content.toInt();
             ui->listWidget_dialogs->addItem("data.conent="+data.content);///////
-            DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
+            DataPackage data_to_send(id,id,DataPackage::GIVE_ID,ui->lineEdit_name->text()+"#"+QString::number(id));
             send_to_server(data_to_send);
-            play_window=new PlayWindow(id,this);
+        }////////
+        else if(data.action==DataPackage::Action::CONFIRM_READY){
+            QStringList names=data.content.split(QLatin1Char(','),Qt::SkipEmptyParts);
+            QVector<QString> names_vec{};
+            for(int i=0;i<names.size();i++){
+                names_vec.push_back(names[i]);
+                qDebug() << names_vec[i];
+            }
+            play_window=new PlayWindow(id,names_vec,this);
+            connect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
             play_window->show();/////////
 //            this->hide();
-            connect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
-        }
+            DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
+            send_to_server(data_to_send);
+        }/////////
         else if(play_window){
             ui->listWidget_dialogs->addItem("send msg to playwindow"+data.to_string());/////////////
             play_window->receive_from_client(DataPackage::parse(arr));
@@ -63,6 +75,8 @@ void ClientWindow::handle_server_message()
 }
 
 void ClientWindow::send_to_server(DataPackage data){
+    ui->listWidget_dialogs->addItem("Send to server"+data.to_string());//////
+    qDebug() << "Send to server"+data.to_string();
     if(socket){
         QByteArray arr=data.serialize();
         socket->write(arr);
