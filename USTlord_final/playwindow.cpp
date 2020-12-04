@@ -393,9 +393,9 @@ void PlayWindow::initialize_players() {
     //set names displayed in ui.
     ui->player0_name->setText("YOU");
     ui->player0_name->setStyleSheet("color:white;");
-    ui->player1_name->setText(QString::fromStdString(players[(my_id+1)%NUMBER_OF_PLAYERS]->get_name()));
+    ui->player1_name->setText("PLAYER 1");
     ui->player1_name->setStyleSheet("color:white;");
-    ui->player2_name->setText(QString::fromStdString(players[(my_id+2)%NUMBER_OF_PLAYERS]->get_name()));
+    ui->player2_name->setText("PLAYER 2");
     ui->player2_name->setStyleSheet("color:white;");
 }
 
