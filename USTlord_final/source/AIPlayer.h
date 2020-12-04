@@ -19,7 +19,7 @@ class AIPlayer : public Player {
       ~AIPlayer();
       const CardsGroup choose_hint(const CurrentPattern& cp);
       /*
-       * AI player with some common sense strategy:
+       * AI player with some common sense strategies:
 
        * if the AI player is the first one to play or the CurrentPattern is played by himself
          he will play cards with the following logic:
