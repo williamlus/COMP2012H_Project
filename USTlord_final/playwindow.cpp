@@ -781,6 +781,7 @@ void PlayWindow::on_hit_button_clicked()
             ui->info_bar->setText(QString::fromStdString("You play " + cp->get_cards_type().to_string()));
             update_player_cards(0);
 
+        current_selection.clear();
         ui->hit_button->setVisible(false);
         ui->hint_button->setVisible(false);
         ui->give_up_button->setVisible(false);
