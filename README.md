@@ -59,7 +59,7 @@ For example, since the two peasants come after one another, the first peasant mi
 
 * **AI Player Design**
 
-  AI Logic：
+  AI Logic：  
   
          const CardsGroup choose_hint(const CurrentPattern& cp);
     
