@@ -75,8 +75,11 @@ Apply OOP to develop a landlord game with GUI based on QT with followingfeatures
           bool want_landlord() override;//choose to be landlord or not automatically
       
     * the probability of choosing lord is determined by how good the cards in hand are
+    
          The evaluation is basically determined by the number of cards_combination
+         
          The cards_combination considered here are:
+         
          TRIO,BOMB, ROCKET
 
        
