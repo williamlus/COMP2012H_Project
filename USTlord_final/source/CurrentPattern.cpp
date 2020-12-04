@@ -20,7 +20,7 @@ void CurrentPattern::set_player_index(int id){
     this->player_index=id;
 }
 bool CurrentPattern::can_be_beaten_by(int id,const CardsGroup& cg) const{
-    if(this->get_cards().size()==0){return true;}
+    if(cg.is_valid() && this->get_cards().size()==0){return true;}
     if(this->player_index==id){
         if(cg.is_valid()){
             //cout << "Next round!\n";
