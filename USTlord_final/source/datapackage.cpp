@@ -71,7 +71,7 @@ DataPackage DataPackage::parse(QByteArray arr)
 
 void DataPackage::read(DataPackage& data, QString raw_data){
     //the format of raw_data should be:
-    //(int sender_id);(int actioner_id);(Action action);(QString content)
+    //sender:(int sender_id);actioner:(int actioner_id);(Action action);(QString content)
     //each seperated by ;
     //for the content part, if the content is cards
     //then it is seperated one COMMA
