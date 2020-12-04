@@ -41,6 +41,7 @@ void ClientWindow::handle_server_message()
         QByteArray arr=socket->readAll();
         ui->listWidget_dialogs->addItem(QString::fromStdString(arr.toStdString()));
         DataPackage data=DataPackage::parse(arr);
+        ui->listWidget_dialogs->addItem("Received from server:"+data.to_string());
         if(data.action==DataPackage::Action::GIVE_ID){
             id=data.content.toInt();
             DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
