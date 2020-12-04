@@ -78,12 +78,10 @@ void DataPackage::read(DataPackage& data, QString raw_data){
 
     //first split the raw_data into four parts
     QStringList derived_data = raw_data.split(QLatin1Char(';'));
-    data.sender = derived_data[0].toInt();
-    data.actioner = derived_data[1].toInt();
-    data.action = static_cast<Action>(derived_data[2].toInt());
-
-    derived_data[3] = derived_data[3].simplified();
-    data.content = derived_data[3];
+    data.sender = derived_data[0].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt();
+    data.actioner = derived_data[1].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt();
+    data.action = static_cast<Action>(derived_data[2].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt());
+    data.content = derived_data[3].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].simplified();
 
 }
 
