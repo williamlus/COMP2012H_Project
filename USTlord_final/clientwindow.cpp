@@ -44,6 +44,7 @@ void ClientWindow::handle_server_message()
             send_to_server(data_to_send);
             play_window=new PlayWindow(id,this);
             play_window->show();
+            //
             connect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
         }
         else if(play_window){
