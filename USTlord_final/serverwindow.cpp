@@ -168,7 +168,7 @@ void ServerWindow::sendData(QTcpSocket* socket, DataPackage data)
 void ServerWindow::give_id()
 {
     for(int i=0;i<3;++i){
-        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString(i));
+        DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString::number(i));
         sendData(clients[i],confirm_data);
 
     }
