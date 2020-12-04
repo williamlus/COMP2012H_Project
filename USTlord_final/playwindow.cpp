@@ -82,8 +82,9 @@ void PlayWindow::receive_from_client(DataPackage data)
         players[data.actioner]->set_selected_cards(players[data.actioner]->play(*cp).get_cards());
         hide_past_cards();
         sleep(200);
-        cp = new CurrentPattern(current_selection, data.actioner);
+        cp->record(data.actioner,current_selection,data.actioner==landlord_id);
         players[data.actioner]->clear_hint(); //clear the cards to be played in deck
+        hint_id = -1;
         players[data.actioner]->clear_cards(current_selection);
         vector<Card const*> empty_cards(0,nullptr);
         players[my_id]->set_selected_cards(empty_cards);
@@ -475,7 +476,8 @@ void PlayWindow::AIplayer_action(int active_AIplayer){
         sleep(300);
         reveal_current_selection();
         sleep(200);
-        cp = new CurrentPattern(tmp,active_AIplayer);
+        
+        cp->record(active_AIplayer,tmp,active_AIplayer==landlord_id);
         qDebug() << QString::fromStdString(" play " + cp->get_cards_type().to_string());
         ui->info_bar->setText(QString::fromStdString("Player ") +QString::number(active_AIplayer)+ QString::fromStdString(" plays " + cp->get_cards_type().to_string()));
         update_player_cards(active_AIplayer);
@@ -591,6 +593,7 @@ void PlayWindow::on_give_up_button_clicked()
             ui->hint_button->setVisible(false);
             ui->give_up_button->setVisible(false);
             players[0]->clear_hint();
+            hint_id = -1;
             
             if(cp->get_player_index() == 1){ hide_past_cards();}
             AIplayer_action(1);
@@ -771,8 +774,9 @@ void PlayWindow::on_hit_button_clicked()
     else {
             hide_past_cards();
             sleep(200);
-            cp = new CurrentPattern(current_selection, my_id);
+            cp->record(my_id,current_selection,my_id == landlord_id);
             players[my_id]->clear_hint(); //clear the cards to be played in deck
+            hint_id = -1;
             players[my_id]->clear_cards(current_selection);
             vector<Card const*> empty_cards(0,nullptr);
             players[my_id]->set_selected_cards(empty_cards);
