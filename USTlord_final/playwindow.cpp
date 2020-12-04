@@ -579,7 +579,8 @@ void PlayWindow::on_hint_button_clicked()
     if(players[my_id]->get_hints().size() == 0){
         ui->info_bar->setText("No hints.");
         sleep(1000);
-        ui->info_bar->setText("Your turn");
+        update_player_cards(my_id);
+        ui->info_bar->setText("Now it's your turn");
         return;
     }else{
         current_selection.clear();
@@ -617,12 +618,14 @@ void PlayWindow::on_give_up_button_clicked()
             ui->hint_button->setVisible(false);
             ui->give_up_button->setVisible(false);
             players[0]->clear_hint();
-            if(cp->get_player_index() == 1){
+            hint_id = -1;
+            if(cp->get_player_index() == my_id){
                 hide_past_cards();
                 cp = new CurrentPattern();
-                cp->set_player_index(1);
+                cp->set_player_index((my_id+1)%NUMBER_OF_PLAYERS);
                 hint_id=-1;
             }
+            if(cp->get_player_index() == my_id+1){ hide_past_cards();}
             AIplayer_action(1);
             sleep(300);
             if(players[1]->is_winner()){
@@ -630,11 +633,16 @@ void PlayWindow::on_give_up_button_clicked()
                 sleep(1000);
                 game_finished(1);
             }
-            if(cp->get_player_index() == 2){
-                hide_past_cards();
-                cp = new CurrentPattern();
-                cp->set_player_index(2);
-            }
+            if(cp->get_player_index() == my_id+2){
+                            hide_past_cards();
+                             if(!cp->get_cards().empty()){
+                                delete cp;
+                            }
+                            cp = new CurrentPattern();
+                            cp->set_player_index((my_id+2)%NUMBER_OF_PLAYERS);
+                        }
+
+                        if(cp->get_player_index() == my_id + 2){ hide_past_cards();}
             AIplayer_action(2);
             sleep(300);
             if(players[2]->is_winner()){
