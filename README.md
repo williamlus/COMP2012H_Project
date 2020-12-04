@@ -29,7 +29,7 @@ For example, since the two peasants come after one another, the first peasant mi
 
 4.**Bid high for landlord with the best hand.** 
 
-If a player has the best hand, bidding high for the position of landlord enables him to win a bigger pot.
+If a player has the best hand, bidding high for the position of landlord enables him to win a bigger pot.  
 (Reference: https://en.wikipedia.org/wiki/Dou_dizhu#Rules)
 
 
