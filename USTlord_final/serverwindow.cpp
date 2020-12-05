@@ -48,6 +48,9 @@ void ServerWindow::on_pushButton_stop_clicked()
         ui->listWidget_dialogs->addItem("Closing server");
         this->server->close();
     }
+    if(client_window){
+        client_window->close();
+    }
     ui->listWidget_dialogs->addItem("Disconnect all "+QString::number(clients.size())+" clients");
     for(int i=0;i<clients.size();++i){
         ui->listWidget_clients->addItem("Removed " + clients[i]->peerAddress().toString() + ":" + QString::number(clients[i]->peerPort()));
