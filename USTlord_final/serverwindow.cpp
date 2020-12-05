@@ -125,11 +125,17 @@ void ServerWindow::on_pushButton_start_game_clicked()
 void ServerWindow::handleConnection()
 {
     QTcpSocket* client=server->nextPendingConnection();
+    if(clients.size()==3){
+        ui->listWidget_dialogs->addItem("New connection"+client->peerAddress().toString() + ":" + QString::number(client->peerPort())+ " rejected");
+        ui->listWidget_dialogs->addItem("Clients remained: " + QString::number(clients.size()));
+        client->close();
+        return;
+    }
     connect(client,&QTcpSocket::stateChanged,this,&ServerWindow::handleStateChanged);
     connect(client,&QTcpSocket::readyRead,this,&ServerWindow::handle_clients_message);
     this->clients.push_back(client);
     ui->listWidget_dialogs->addItem("New connection"+client->peerAddress().toString() + ":" + QString::number(client->peerPort())+ " accepted");
-    ui->listWidget_dialogs->addItem("Clients left: " + QString::number(clients.size()));
+    ui->listWidget_dialogs->addItem("Clients remained: " + QString::number(clients.size()));
 //    //debugging
 //    DataPackage dd(-2,-2,DataPackage::Action::PLAY_CARDS,"s3,h4,d5,d6,rW,bW,s2,cA");
 //    client->write(dd.serialize());
