@@ -16,6 +16,7 @@ void ClientWindow::closeEvent(QCloseEvent *event){
         qDebug() << "Closing socket";
     }
     this->parentWidget()->show();
+    emit close_window();
     event->accept();
 }
 
