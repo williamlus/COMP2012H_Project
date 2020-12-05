@@ -63,6 +63,11 @@ void ClientWindow::handle_server_message()
             }
             play_window=new PlayWindow(id,names_vec,this);
             connect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
+            connect(play_window,&PlayWindow::close_window,[=](){
+                play_window=nullptr;
+                send_to_server(DataPackage(id,id,DataPackage::EXCEPTION,DataPackage::Content::QUIT));
+                ui->listWidget_dialogs->addItem("You exit the room");
+            });
             play_window->show();/////////
 //            this->hide();
             DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
