@@ -50,6 +50,7 @@ void ServerWindow::on_pushButton_stop_clicked()
     }
     ui->listWidget_dialogs->addItem("Disconnect all "+QString::number(clients.size())+" clients");
     for(int i=0;i<clients.size();++i){
+        ui->listWidget_clients->addItem("Removed " + clients[i]->peerAddress().toString() + ":" + QString::number(clients[i]->peerPort()));
         //disconnect signal and slot
         disconnect(clients[i],&QTcpSocket::stateChanged,this,&ServerWindow::handleStateChanged);
         disconnect(clients[i],&QTcpSocket::readyRead,this,&ServerWindow::handle_clients_message);
@@ -74,15 +75,24 @@ void ServerWindow::on_pushButton_create_clicked()
         foreach (auto& ip, ipVec){
             ui->listWidget_serverIP->addItem(ip);
         }
-        ////////////////////////
-        //create a client window
-        client_window=new ClientWindow(this);
-        client_window->move(this->pos()+QPoint(-50,100));///
-        client_window->show();
-        client_window->set_port(ui->lineEdit_port->text());
-        client_window->set_serverIP("127.0.0.1");
-        client_window->on_pushButton_join_server_clicked();
     }
+
+    ////////////////////////
+    //create a client window
+    if(client_window==nullptr){
+        client_window=new ClientWindow(this);
+        connect(client_window,&ClientWindow::close_window,[=](){
+            client_window=nullptr;
+            qDebug() << "Closing client";
+            on_pushButton_stop_clicked();
+        });
+    }
+    client_window->move(this->pos()+QPoint(-50,100));///
+    client_window->show();
+    client_window->set_port(ui->lineEdit_port->text());
+    client_window->set_serverIP("127.0.0.1");
+    client_window->on_pushButton_join_server_clicked();
+
     server->listen(QHostAddress::Any,ui->lineEdit_port->text().toInt());
     if(server->isListening()){
         ui->listWidget_dialogs->addItem("Server is listening to port: "+ui->lineEdit_port->text());
@@ -120,13 +130,16 @@ void ServerWindow::on_pushButton_start_game_clicked()
         }
 
     }
+    else{
+        ui->listWidget_dialogs->addItem("Need 3 players to start the game!");
+    }
 }
 
 void ServerWindow::handleConnection()
 {
     QTcpSocket* client=server->nextPendingConnection();
     if(clients.size()==3){
-        ui->listWidget_dialogs->addItem("New connection"+client->peerAddress().toString() + ":" + QString::number(client->peerPort())+ " rejected");
+        ui->listWidget_clients->addItem("New connection"+client->peerAddress().toString() + ":" + QString::number(client->peerPort())+ " rejected");
         ui->listWidget_dialogs->addItem("Clients remained: " + QString::number(clients.size()));
         client->close();
         return;
@@ -134,7 +147,7 @@ void ServerWindow::handleConnection()
     connect(client,&QTcpSocket::stateChanged,this,&ServerWindow::handleStateChanged);
     connect(client,&QTcpSocket::readyRead,this,&ServerWindow::handle_clients_message);
     this->clients.push_back(client);
-    ui->listWidget_dialogs->addItem("New connection"+client->peerAddress().toString() + ":" + QString::number(client->peerPort())+ " accepted");
+    ui->listWidget_clients->addItem("New connection"+client->peerAddress().toString() + ":" + QString::number(client->peerPort())+ " accepted");
     ui->listWidget_dialogs->addItem("Clients remained: " + QString::number(clients.size()));
 //    //debugging
 //    DataPackage dd(-2,-2,DataPackage::Action::PLAY_CARDS,"s3,h4,d5,d6,rW,bW,s2,cA");
@@ -147,11 +160,11 @@ void ServerWindow::handleStateChanged(QAbstractSocket::SocketState state)
         if(clients[i]->state()!=state){continue;}
         if(state==QAbstractSocket::SocketState::ConnectedState){
             qDebug() << clients[i]->peerAddress().toString() << ":" << QString(clients[i]->peerPort()) << " connected";
-            ui->listWidget_dialogs->addItem(clients[i]->peerAddress().toString() + ":" + QString::number(clients[i]->peerPort()) + " connected");
+            ui->listWidget_clients->addItem(clients[i]->peerAddress().toString() + ":" + QString::number(clients[i]->peerPort()) + " connected");
         }
         else if(state==QAbstractSocket::SocketState::UnconnectedState){
             qDebug() << "Removed " << clients[i]->peerAddress().toString() << ":" << clients[i]->peerPort();
-            ui->listWidget_dialogs->addItem("Removed " + clients[i]->peerAddress().toString() + ":" + QString::number(clients[i]->peerPort()));
+            ui->listWidget_clients->addItem("Removed " + clients[i]->peerAddress().toString() + ":" + QString::number(clients[i]->peerPort()));
             //disconnect signal and slot
             disconnect(clients[i],&QTcpSocket::stateChanged,this,&ServerWindow::handleStateChanged);
             disconnect(clients[i],&QTcpSocket::readyRead,this,&ServerWindow::handle_clients_message);
