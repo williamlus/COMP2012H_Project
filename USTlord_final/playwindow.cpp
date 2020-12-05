@@ -1059,9 +1059,10 @@ void PlayWindow::closeEvent(QCloseEvent *event) {
 //     qDebug() << "ahzeeee";
     bgm->stop();
     shuffle_music->stop();
-    this->close();
+//    this->close();
     this->parentWidget()->show();
     emit close_window();
+    event->accept();
 //    exit(0);
 }
 
