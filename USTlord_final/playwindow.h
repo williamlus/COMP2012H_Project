@@ -81,6 +81,7 @@ public slots:
 
 signals:
     void send_to_client(DataPackage data);
+    void close_window();
 
 private:
     Ui::PlayWindow *ui;
