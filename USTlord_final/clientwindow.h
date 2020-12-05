@@ -58,6 +58,9 @@ public slots:
     void on_pushButton_quit_clicked();
     //Close the ClientWindow
 
+signals:
+    void close_window();
+
 private:
     Ui::ClientWindow *ui;
     QTcpSocket *socket{nullptr};//Used to communicate with ServerWindow
