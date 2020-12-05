@@ -68,15 +68,23 @@ void ClientWindow::handle_server_message()
                 send_to_server(DataPackage(id,id,DataPackage::EXCEPTION,DataPackage::Content::QUIT));
                 ui->listWidget_dialogs->addItem("You exit the room");
                 disconnect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
+                qDebug() << "exit the room";
             });
             play_window->show();/////////
 //            this->hide();
             DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
             send_to_server(data_to_send);
-        }/////////
+        }
         else if(play_window){
-            ui->listWidget_dialogs->addItem("send msg to playwindow"+data.to_string());/////////////
-            play_window->receive_from_client(DataPackage::parse(arr));
+            if(data.action==DataPackage::Action::EXCEPTION){
+                if(data.content==DataPackage::Content::QUIT){
+                    play_window->close();
+                }
+            }
+            else{
+                ui->listWidget_dialogs->addItem("send msg to playwindow"+data.to_string());
+                play_window->receive_from_client(data);
+            }
         }
     }
 }
