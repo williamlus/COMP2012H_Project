@@ -265,7 +265,7 @@ void ServerWindow::choose_landlord(DataPackage data)
         //give bonus card
         //DataPackage data_bonus_cards(-1,-1,DataPackage::Action::LANDLORD_BONUS,bonus_cards);
 
-        for(int i=0;i<3;++i){
+        for(int i=0;i<clients.size();++i){
             sendData(clients[i],data_landlord_id);
             //sendData(clients[i],data_bonus_cards);////////////////////////
         }
@@ -350,7 +350,7 @@ void ServerWindow::receiveData(DataPackage data){
                 else{names_str+=names[i];}
             }
             DataPackage data(-1,-1,DataPackage::CONFIRM_READY,names_str);
-            for(int i=0;i<3;++i){
+            for(int i=0;i<clients.size();++i){
                 sendData(clients[i],data);
             }
         }
@@ -378,13 +378,13 @@ void ServerWindow::receiveData(DataPackage data){
     }
     else if(data.action==DataPackage::Action::PLAY_CARDS || data.action==DataPackage::Action::CHAT){
         DataPackage data_play(-1,data.actioner,data.action,data.content);
-        for(int i=0;i<3;++i){
+        for(int i=0;i<clients.size();++i){
             sendData(clients[i],data_play);
         }
     }
     else if(data.action==DataPackage::Action::ANNOUNCE){
         DataPackage data_end_game(-1,-1,DataPackage::Action::ANNOUNCE,DataPackage::Content::END_GAME);
-        for(int i=0;i<3;++i){
+        for(int i=0;i<clients.size();++i){
             sendData(clients[i],data_end_game);
         }
     }
@@ -393,7 +393,7 @@ void ServerWindow::receiveData(DataPackage data){
             ui->listWidget_dialogs->addItem("Someone leaves the room");
             ui->listWidget_dialogs->addItem("Exit the game");
             DataPackage data_end(-1,data.actioner,DataPackage::Action::EXCEPTION,DataPackage::Content::QUIT);
-            for(int i=0;i<3;++i){
+            for(int i=0;i<clients.size();++i){
                 sendData(clients[i],data_end);
             }
         }
