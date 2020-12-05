@@ -208,7 +208,7 @@ void ServerWindow::sendData(QTcpSocket* socket, DataPackage data)
 
 void ServerWindow::give_id()
 {
-    for(int i=0;i<3;++i){
+    for(int i=0;i<clients.size();++i){
         DataPackage confirm_data(-1,-1,DataPackage::Action::GIVE_ID,QString::number(i));//////////
         sendData(clients[i],confirm_data);
 
@@ -223,7 +223,7 @@ void ServerWindow::confirm_ready()
 void ServerWindow::deal_cards()
 {
     DataPackage data(-1,-1,DataPackage::Action::DEAL_CARDS,cards);
-    for(int i =0;i<3;++i){
+    for(int i =0;i<clients.size();++i){
 
         sendData(clients[i],data);
     }
