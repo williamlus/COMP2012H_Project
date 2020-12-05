@@ -1,6 +1,7 @@
 #include "source/datapackage.h"
 #include <QDebug>
 #include <QChar>
+#include <QString>
 
 DataPackage::DataPackage()
 {
@@ -101,11 +102,13 @@ void DataPackage::read(DataPackage& data, QString raw_data){/////////////
                 data.action = static_cast<Action>(sub_data[1].toInt());
                 break;
             case 3:
-                QString msg{};
-                for(int j=1;j<sub_data.size();++j){
-                    msg+=sub_data[j].simplified();
+                if(data.action==DataPackage::CHAT){
+                    int index=derived_data[i].indexOf(':');
+                    data.content=derived_data[i].mid(index+1);
                 }
-                data.content = msg;
+                else{
+                    data.content=sub_data[1];
+                }
                 break;
             }
         }
