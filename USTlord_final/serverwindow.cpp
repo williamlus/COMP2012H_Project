@@ -388,6 +388,16 @@ void ServerWindow::receiveData(DataPackage data){
             sendData(clients[i],data_end_game);
         }
     }
+    else if(data.action==DataPackage::Action::EXCEPTION){
+        if(data.content==DataPackage::Content::QUIT){
+            ui->listWidget_dialogs->addItem("Someone leaves the room");
+            ui->listWidget_dialogs->addItem("Exit the game");
+            DataPackage data_end(-1,data.actioner,DataPackage::Action::EXCEPTION,DataPackage::Content::QUIT);
+            for(int i=0;i<3;++i){
+                sendData(clients[i],data_end);
+            }
+        }
+    }
 }
 
 
