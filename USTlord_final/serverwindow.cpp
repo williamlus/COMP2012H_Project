@@ -14,6 +14,7 @@ void ServerWindow::closeEvent(QCloseEvent *event)
 {
     on_pushButton_stop_clicked();
     qDebug() << "Closing server window";
+    if(client_window){this->client_window->close();}
     //show the mainwindow
     this->parentWidget()->show();
     //allow to close the second window
