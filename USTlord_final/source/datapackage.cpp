@@ -86,12 +86,31 @@ void DataPackage::read(DataPackage& data, QString raw_data){/////////////
     //then it is seperated one COMMA
 
     //first split the raw_data into four parts
-    QStringList derived_data = raw_data.split(QLatin1Char(';'));
-    //derived_data[0].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt();////////////////
-    data.sender = derived_data[0].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt();
-    data.actioner = derived_data[1].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt();
-    data.action = static_cast<Action>(derived_data[2].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].toInt());
-    data.content = derived_data[3].split(QLatin1Char(':'),Qt::SkipEmptyParts)[1].simplified();
+    QStringList derived_data = raw_data.split(QLatin1Char(';'),Qt::SkipEmptyParts);
+    for(int i=0;i<derived_data.size();++i){
+        QStringList sub_data=derived_data[i].split(QLatin1Char(':'),Qt::SkipEmptyParts);
+        if(sub_data.size()>=2){
+            switch (i) {
+            case 0:
+                data.sender = sub_data[1].toInt();
+                break;
+            case 1:
+                data.actioner = sub_data[1].toInt();
+                break;
+            case 2:
+                data.action = static_cast<Action>(sub_data[1].toInt());
+                break;
+            case 3:
+                QString msg{};
+                for(int j=1;j<sub_data.size();++j){
+                    msg+=sub_data[j].simplified();
+                }
+                data.content = msg;
+                break;
+            }
+        }
+    }
+
 
 }
 
