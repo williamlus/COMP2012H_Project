@@ -408,7 +408,7 @@ void PlayWindow::initialize_players(QVector<QString> names) { // initialize play
     player3_pic = new QLabel(this);
     player3_pic->setGeometry(PLAYER3_X, PLAYER3_Y, 84, 120);
     //set names displayed in ui.
-    ui->player0_name->setText("YOU"+ "#" +QString::number(my_id));
+    ui->player0_name->setText("YOU #" +QString::number(my_id));
     ui->player0_name->setStyleSheet("color:white;");
     ui->player1_name->setText(QString::fromStdString(players[(my_id+1)%NUMBER_OF_PLAYERS]->get_name()));
     ui->player1_name->setStyleSheet("color:white;");
@@ -578,7 +578,7 @@ void PlayWindow::choose_landlord(){ //handle choose landlord game process
         else{
            ui->info_bar->setText("Now it's your turn.");
         }
-        players[my_id]->set_turn_end(false);
+        players[landlord_id]->set_turn_end(false);
         sleep(1000);
         ui->hit_button->setVisible(true);
         ui->hint_button->setVisible(true);
@@ -849,7 +849,7 @@ void PlayWindow::on_hint_button_clicked() //handle hint generation and display w
     }
 }
 
-void PlayWindow::on_give_up_button_clicked() //handle give up action when player click give up 
+void PlayWindow::on_give_up_button_clicked() //handle give up action when player click give up
 {
         ui->info_bar->setText("You give up, next player's turn.");
         sleep(1000);
@@ -862,7 +862,7 @@ void PlayWindow::on_give_up_button_clicked() //handle give up action when player
             players[my_id]->get_deck()->get_cards()[i]->get_card_picture()->select(false);
         }
         update_player_cards(my_id);
-    
+
         if(mode == OFFLINE) {
             if(players[my_id]->turn_end()){ // player action finished
                 ui->hit_button->setVisible(false);
