@@ -67,6 +67,7 @@ void ClientWindow::handle_server_message()
                 play_window=nullptr;
                 send_to_server(DataPackage(id,id,DataPackage::EXCEPTION,DataPackage::Content::QUIT));
                 ui->listWidget_dialogs->addItem("You exit the room");
+                disconnect(play_window,&PlayWindow::send_to_client,this,&ClientWindow::received_from_playwindow);
             });
             play_window->show();/////////
 //            this->hide();
