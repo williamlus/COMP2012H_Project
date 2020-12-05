@@ -76,6 +76,7 @@ void ServerWindow::on_pushButton_create_clicked()
         ////////////////////////
         //create a client window
         client_window=new ClientWindow(this);
+        client_window->move(this->pos()+QPoint(-50,100));///
         client_window->show();
         client_window->set_port(ui->lineEdit_port->text());
         client_window->set_serverIP("127.0.0.1");
