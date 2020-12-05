@@ -27,7 +27,12 @@
 void PlayWindow::receive_from_client(DataPackage data)
 {
     //TODO
-    if(data.action == DataPackage::CHAT) {
+    if(data.action==DataPackage::EXCEPTION){
+        if(data.content==DataPackage::Content::QUIT){
+            this->close();
+        }
+    }
+    else if(data.action == DataPackage::CHAT) {
         ui->chat_box->addItem(QString::fromStdString(players[data.actioner]->get_name())+":"+data.content);
     }
     else if(data.action == DataPackage::DEAL_CARDS) {
