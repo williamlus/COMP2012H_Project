@@ -74,17 +74,10 @@ void ClientWindow::handle_server_message()
 //            this->hide();
             DataPackage data_to_send(id,-1,DataPackage::Action::CONFIRM_READY,DataPackage::Content::ACCEPT);
             send_to_server(data_to_send);
-        }
+        }/////////
         else if(play_window){
-            if(data.action==DataPackage::Action::EXCEPTION){
-                if(data.content==DataPackage::Content::QUIT){
-                    play_window->close();
-                }
-            }
-            else{
-                ui->listWidget_dialogs->addItem("send msg to playwindow"+data.to_string());
-                play_window->receive_from_client(data);
-            }
+            ui->listWidget_dialogs->addItem("send msg to playwindow"+data.to_string());/////////////
+            play_window->receive_from_client(data);
         }
     }
 }
