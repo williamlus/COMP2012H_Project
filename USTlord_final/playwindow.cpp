@@ -578,7 +578,7 @@ void PlayWindow::choose_landlord(){ //handle choose landlord game process
         else{
            ui->info_bar->setText("Now it's your turn.");
         }
-
+        players[landlord_id]->set_turn_end(false);
         sleep(1000);
         ui->hit_button->setVisible(true);
         ui->hint_button->setVisible(true);
