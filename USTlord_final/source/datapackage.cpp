@@ -112,6 +112,12 @@ void DataPackage::read(DataPackage& data, QString raw_data){/////////////
                 break;
             }
         }
+        else if(sub_data.size()==1 && data.action==DataPackage::CHAT){
+            if(sub_data[0].size()+1<derived_data[i].size()){
+                int index=derived_data[i].indexOf(':');
+                data.content=derived_data[i].mid(index+1);
+            }
+        }
     }
 
 
