@@ -3,6 +3,7 @@
 By COMP2012H 2020FALL Group21, ZHENG Hantao, SU Hong, LU Weiqi, GUO Bingcan
 
 
+![USTlord 2022_11_5 19_42_51](https://user-images.githubusercontent.com/67042315/200118232-d7e20a93-01f5-4643-b3e9-708ccf1ea124.png)
 
 ### 1. Introduction
 
