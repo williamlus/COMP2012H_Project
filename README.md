@@ -3,7 +3,7 @@
 By COMP2012H 2020FALL Group21, ZHENG Hantao, SU Hong, LU Weiqi, GUO Bingcan
 
 ### 0. Installation
-Windows version of this game is in the folder [release/Windows_version](release/Windows_version). Download this project and double click [USTlord_final2.exe](release/Windows_version/USTlord_final2.exe) to start the game.
+Windows version of this game is in [this repository](https://github.com/williamlus/COMP-2012H). Download that repository and double click [start.exe](https://github.com/williamlus/COMP-2012H/start.exe) to start the game.
 
 ![USTlord 2022_11_5 19_42_51](https://user-images.githubusercontent.com/67042315/200118232-d7e20a93-01f5-4643-b3e9-708ccf1ea124.png)
 
